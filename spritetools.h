@@ -13,8 +13,7 @@ typedef struct {
 	unsigned int xPos;
 	unsigned int yPos;
 	unsigned int speed;
-	bool player;
-	bool ai;
+	unsigned int control;
 	bool openSlot;
 } entity;
 
@@ -41,13 +40,14 @@ void st_entity_init(entity ent[], int total){
 }
 
 //Adds an entity to the first open slot available
-bool st_entity_add(entity ent[], int total, st_anim anim, int x, int y, int speed, bool player, bool ai){
+bool st_entity_add(entity ent[], int total, st_anim anim, int x, int y, int speed, int control){
 	for(int i=0; i<total; i++){
 		if(ent[i].openSlot){
 			ent[i].anim = anim;
 			ent[i].xPos = x;
 			ent[i].yPos = y;
 			ent[i].speed = speed;
+			ent[slot].control = control;
 			ent[i].player = player;
 			ent[i].ai = ai;
 			ent[i].openSlot = false;
@@ -58,11 +58,12 @@ bool st_entity_add(entity ent[], int total, st_anim anim, int x, int y, int spee
 }
 
 //Sets an entity to the selected slot
-void st_entity_set(entity ent[], int slot, st_anim anim, int x, int y, int speed, bool player, bool ai){
+void st_entity_set(entity ent[], int slot, st_anim anim, int x, int y, int speed, int control){
 	ent[slot].anim = anim;
 	ent[slot].xPos = x;
 	ent[slot].yPos = y;
 	ent[slot].speed = speed;
+	ent[slot].control = control;
 	ent[slot].player = player;
 	ent[slot].ai = ai;
 	ent[slot].openSlot = false;
@@ -83,11 +84,11 @@ void st_entity_render(entity ent[], int total){
 }
 
 //Gets player input and moves entities accordingly
-void st_entity_player_input(entity ent[], int total, int input){
+void st_entity_player_input(entity ent[], int total){
 	u32 kHeld = hidKeysHeld();
 	for(int i = 0; i<total; i++){
 		if(ent[i].player){
-			switch(input){
+			switch(ent[i].control){
 			case 1 : //CPad
 			if(kHeld & KEY_CPAD_UP) ent[i].yPos-=ent[i].speed;
 			if(kHeld & KEY_CPAD_DOWN) ent[i].yPos+=ent[i].speed;
