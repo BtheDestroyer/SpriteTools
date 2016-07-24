@@ -12,7 +12,9 @@ typedef struct {
 	st_anim anim;
 	unsigned int xPos;
 	unsigned int yPos;
-	unsigned int speed;
+	int xHotspot;
+	int yHotspot;
+	int speed;
 	unsigned int control;
 	bool openSlot;
 } st_ent;
@@ -63,12 +65,14 @@ st_anim st_entity_getanim(st_ent ent){
 }
 
 //Adds an st_ent to the first open slot available
-bool st_entity_add(st_ent ent[], int total, st_anim anim, int x, int y, int speed, int control){
+bool st_entity_add(st_ent ent[], int total, st_anim anim, int x, int y, int xhot, int yhot, int speed, int control){
 	for(int i=0; i<total; i++){
 		if(ent[i].openSlot){
 			ent[i].anim = anim;
 			ent[i].xPos = x;
 			ent[i].yPos = y;
+			ent[i].xHotspot = xHotspot;
+			ent[i].yHotspot = yHotspot;
 			ent[i].speed = speed;
 			ent[slot].control = control;
 			ent[i].player = player;
@@ -85,6 +89,8 @@ void st_entity_set(st_ent ent[], int slot, st_anim anim, int x, int y, int speed
 	ent[slot].anim = anim;
 	ent[slot].xPos = x;
 	ent[slot].yPos = y;
+	ent[i].xHotspot = xHotspot;
+	ent[i].yHotspot = yHotspot;
 	ent[slot].speed = speed;
 	ent[slot].control = control;
 	ent[slot].player = player;
@@ -101,7 +107,7 @@ void st_entity_remove(st_ent ent[], int slot){
 void st_entity_render(st_ent ent[], int total){
 	for(int i=0; i<total; i++){
 		if(ent[i].openSlot==false){
-			st_animation_frame_current(ent[i].anim, ent[i].xPos, ent[i].yPos);
+			st_animation_frame_current(ent[i].anim, ent[i].xPos-ent[i].xHotspot, ent[i].yPos-ent[i].yHotspot);
 		}
 	}
 }
@@ -151,7 +157,7 @@ void st_entity_player_input(st_ent ent[], int total){
 			hidTouchRead(&touch);
 			if(kHeld & KEY_TOUCH){
 				ent[i].xPos += 0.5+(float)(touch.px-160)/(120.0/(float)ent[i].speed);
-				ent[i].yPos += 0.5+(float)(touch.py-120)/(120.0/(float)ent[i].speed);
+				ent[i].yPos += 0.5+(float)(touch.py-120)/(105.0/(float)ent[i].speed);
 			}
 			break;
 			case 0 : //DPad
