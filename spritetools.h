@@ -57,6 +57,11 @@ void st_entity_init(entity ent[], int total){
 	}
 }
 
+//returns the animation of given entity
+st_anim st_entity_getanim(entity ent){
+	return ent.anim;
+}
+
 //Adds an entity to the first open slot available
 bool st_entity_add(entity ent[], int total, st_anim anim, int x, int y, int speed, int control){
 	for(int i=0; i<total; i++){
