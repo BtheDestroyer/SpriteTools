@@ -23,6 +23,7 @@ typedef struct {
 	int yHotspot;             //vertical offset when rendering
 	int speed;                //speed offset when moving
 	int dir;                  //direction facing. 0=down, 1=right, 2=up, 3=left.
+	bool moving;              //determines if the entity is moving
 	unsigned int control;     //determines built-in control method. 0=static, 1-7=player controlled
 	bool openSlot;            //tells st_entity_add() if this entity can be written to and st_entity_render() if it should be rendered
 } st_ent;
@@ -73,23 +74,24 @@ st_anim st_entity_getanim(st_ent ent){
 }
 
 //Adds an st_ent to the first open slot available
-bool st_entity_add(st_ent ent[], int total, st_anim anim0, st_anim anim1, st_anim anim2, st_anim anim3, st_anim anim4, st_anim anim5, st_anim anim6, st_anim anim7, int x, int y, int xhot, int yhot, int speed, int dir, int control){
+bool st_entity_add(st_ent ent[], int total, st_anim anim0, st_anim anim1, st_anim anim2, st_anim anim3, st_anim anim4, st_anim anim5, st_anim anim6, st_anim anim7, int x, int y, int xhot, int yhot, int speed, int dir, bool moving, int control){
 	for(int i=0; i<total; i++){
 		if(ent[i].openSlot){
-			animStandingDown = anim0;
-			animStandingUp = anim1;
-			animStandingLeft = anim2;
-			animStandingRight = anim3;
-			animWalkingDown = anim4;
-			animWalkingUp = anim5;
-			animWalkingLeft = anim6;
-			animWalkingRight = anim7;
+			ent[i].animStandingDown = anim0;
+			ent[i].animStandingUp = anim1;
+			ent[i].animStandingLeft = anim2;
+			ent[i].animStandingRight = anim3;
+			ent[i].animWalkingDown = anim4;
+			ent[i].animWalkingUp = anim5;
+			ent[i].animWalkingLeft = anim6;
+			ent[i].animWalkingRight = anim7;
 			ent[i].xPos = x;
 			ent[i].yPos = y;
 			ent[i].xHotspot = xHotspot;
 			ent[i].yHotspot = yHotspot;
 			ent[i].speed = speed;
 			ent[i].dir = dir;
+			ent[i].moving = moving;
 			ent[slot].control = control;
 			ent[i].player = player;
 			ent[i].ai = ai;
@@ -101,21 +103,22 @@ bool st_entity_add(st_ent ent[], int total, st_anim anim0, st_anim anim1, st_ani
 }
 
 //Sets an st_ent to the selected slot
-void st_entity_set(st_ent ent[], int slot, st_anim anim0, st_anim anim1, st_anim anim2, st_anim anim3, st_anim anim4, st_anim anim5, st_anim anim6, st_anim anim7, int x, int y, int speed, int dir, int control){
-	animStandingDown = anim0;
-	animStandingUp = anim1;
-	animStandingLeft = anim2;
-	animStandingRight = anim3;
-	animWalkingDown = anim4;
-	animWalkingUp = anim5;
-	animWalkingLeft = anim6;
-	animWalkingRight = anim7;
+void st_entity_set(st_ent ent[], int slot, st_anim anim0, st_anim anim1, st_anim anim2, st_anim anim3, st_anim anim4, st_anim anim5, st_anim anim6, st_anim anim7, int x, int y, int xhot, int yhot,  int speed, int dir, bool moving, int control){
+	ent[i].animStandingDown = anim0;
+	ent[i].animStandingUp = anim1;
+	ent[i].animStandingLeft = anim2;
+	ent[i].animStandingRight = anim3;
+	ent[i].animWalkingDown = anim4;
+	ent[i].animWalkingUp = anim5;
+	ent[i].animWalkingLeft = anim6;
+	ent[i].animWalkingRight = anim7;
 	ent[slot].xPos = x;
 	ent[slot].yPos = y;
 	ent[i].xHotspot = xHotspot;
 	ent[i].yHotspot = yHotspot;
 	ent[slot].speed = speed;
 	ent[i].dir = dir;
+	ent[i].moving = moving;
 	ent[slot].control = control;
 	ent[slot].player = player;
 	ent[slot].ai = ai;
