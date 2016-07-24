@@ -87,7 +87,37 @@ void st_entity_init(st_ent ent[], int total){
 
 //returns the animation of given st_ent
 st_anim st_entity_getanim(st_ent ent){
-	return ent.anim;
+	for(int i=0; i<total; i++){
+		if(ent.openSlot==false){
+			if(ent.moving){
+				//entity is moving, render walking animation by direction
+				switch(ent.dir){
+					case(0) :
+					return ent.animWalkingDown;
+					case(1) :
+					return ent.animWalkingRight;
+					case(2) :
+					return ent.animWalkingUp;
+					case(3) :
+					default :
+					return ent.animWalkingLeft;
+				}
+			}else{
+				//entity is not moving, render standing animation by direction
+				switch(ent.dir){
+					case(0) :
+					return ent.animStandingDown;
+					case(1) :
+					return ent.animStandingRight;
+					case(2) :
+					return ent.animStandingUp;
+					case(3) :
+					default :
+					return ent.animStandingLeft;
+				}
+			}
+		}
+	}
 }
 
 //Adds an st_ent to the first open slot available. returns false if no slot is open
@@ -110,8 +140,6 @@ bool st_entity_add(st_ent ent[], int total, st_anim anim0, st_anim anim1, st_ani
 			ent[i].dir = dir;
 			ent[i].moving = moving;
 			ent[slot].control = control;
-			ent[i].player = player;
-			ent[i].ai = ai;
 			ent[i].openSlot = false;
 			return true;
 		}
@@ -121,24 +149,22 @@ bool st_entity_add(st_ent ent[], int total, st_anim anim0, st_anim anim1, st_ani
 
 //Sets an st_ent to the selected slot
 void st_entity_set(st_ent ent[], int slot, st_anim anim0, st_anim anim1, st_anim anim2, st_anim anim3, st_anim anim4, st_anim anim5, st_anim anim6, st_anim anim7, int x, int y, int xhot, int yhot, int speed, int dir, bool moving, int control){
-	ent[i].animStandingDown = anim0;
-	ent[i].animStandingUp = anim1;
-	ent[i].animStandingLeft = anim2;
-	ent[i].animStandingRight = anim3;
-	ent[i].animWalkingDown = anim4;
-	ent[i].animWalkingUp = anim5;
-	ent[i].animWalkingLeft = anim6;
-	ent[i].animWalkingRight = anim7;
+	ent[slot].animStandingDown = anim0;
+	ent[slot].animStandingUp = anim1;
+	ent[slot].animStandingLeft = anim2;
+	ent[slot].animStandingRight = anim3;
+	ent[slot].animWalkingDown = anim4;
+	ent[slot].animWalkingUp = anim5;
+	ent[slot].animWalkingLeft = anim6;
+	ent[slot].animWalkingRight = anim7;
 	ent[slot].xPos = x;
 	ent[slot].yPos = y;
-	ent[i].xHotspot = xHot;
-	ent[i].yHotspot = yHot;
+	ent[slot].xHotspot = xHot;
+	ent[slot].yHotspot = yHot;
 	ent[slot].speed = speed;
-	ent[i].dir = dir;
-	ent[i].moving = moving;
+	ent[slot].dir = dir;
+	ent[slot].moving = moving;
 	ent[slot].control = control;
-	ent[slot].player = player;
-	ent[slot].ai = ai;
 	ent[slot].openSlot = false;
 }
 
@@ -166,8 +192,8 @@ void st_entity_render(st_ent ent[], int total){
 					case(3) :
 					default :
 					st_animation_frame_current(ent[i].animWalkingLeft, ent[i].xPos-ent[i].xHotspot, ent[i].yPos-ent[i].yHotspot);
-		}
-		}else{
+				}
+			}else{
 				//entity is not moving, render standing animation by direction
 				switch(ent[i].dir){
 					case(0) :
@@ -182,8 +208,8 @@ void st_entity_render(st_ent ent[], int total){
 					case(3) :
 					default :
 					st_animation_frame_current(ent[i].animStandingLeft, ent[i].xPos-ent[i].xHotspot, ent[i].yPos-ent[i].yHotspot);
-		}
-		}
+				}
+			}
 		}
 	}
 }
@@ -192,7 +218,7 @@ void st_entity_render(st_ent ent[], int total){
 void st_entity_move_player(st_ent ent[], int total){
 	u32 kHeld = hidKeysHeld();
 	for(int i = 0; i<total; i++){
-			switch(ent[i].control){
+		switch(ent[i].control){
 			case 1 : //DPad
 			if(kHeld & KEY_DUP)ent[i].yPos-=ent[i].speed;
 			if(kHeld & KEY_DDOWN)ent[i].yPos+=ent[i].speed;
@@ -257,6 +283,6 @@ void st_entity_move_player(st_ent ent[], int total){
 			}else{ent[i].moving = false}
 			break;
 			default :
+		}
 	}
-}
 }
