@@ -15,7 +15,7 @@ typedef struct {
 	unsigned int speed;
 	unsigned int control;
 	bool openSlot;
-} entity;
+} st_ent;
 
 //displays selected frame of animation at selected X and Y coordinates
 void st_animation_frame(st_anim anim, int frame, int xrend, int yrend){
@@ -50,20 +50,20 @@ void st_animation_frame_set(st_anim anim, int frame){
 	}
 }
 
-//Initializes default value(s) for entity arrays
-void st_entity_init(entity ent[], int total){
+//Initializes default value(s) for st_ent arrays
+void st_entity_init(st_ent ent[], int total){
 	for(int i=0; i<total; i++){
 		ent[i].openSlot = true;
 	}
 }
 
-//returns the animation of given entity
-st_anim st_entity_getanim(entity ent){
+//returns the animation of given st_ent
+st_anim st_entity_getanim(st_ent ent){
 	return ent.anim;
 }
 
-//Adds an entity to the first open slot available
-bool st_entity_add(entity ent[], int total, st_anim anim, int x, int y, int speed, int control){
+//Adds an st_ent to the first open slot available
+bool st_entity_add(st_ent ent[], int total, st_anim anim, int x, int y, int speed, int control){
 	for(int i=0; i<total; i++){
 		if(ent[i].openSlot){
 			ent[i].anim = anim;
@@ -80,8 +80,8 @@ bool st_entity_add(entity ent[], int total, st_anim anim, int x, int y, int spee
 	return false;
 }
 
-//Sets an entity to the selected slot
-void st_entity_set(entity ent[], int slot, st_anim anim, int x, int y, int speed, int control){
+//Sets an st_ent to the selected slot
+void st_entity_set(st_ent ent[], int slot, st_anim anim, int x, int y, int speed, int control){
 	ent[slot].anim = anim;
 	ent[slot].xPos = x;
 	ent[slot].yPos = y;
@@ -92,13 +92,13 @@ void st_entity_set(entity ent[], int slot, st_anim anim, int x, int y, int speed
 	ent[slot].openSlot = false;
 }
 
-//Opens the selected slot in an entity array
-void st_entity_remove(entity ent[], int slot){
+//Opens the selected slot in an st_ent array
+void st_entity_remove(st_ent ent[], int slot){
 	ent[slot].openSlot = true;
 }
 
-//Renders all entities
-void st_entity_render(entity ent[], int total){
+//Renders all st_ents
+void st_entity_render(st_ent ent[], int total){
 	for(int i=0; i<total; i++){
 		if(ent[i].openSlot==false){
 			st_animation_frame_current(ent[i].anim, ent[i].xPos, ent[i].yPos);
@@ -106,8 +106,8 @@ void st_entity_render(entity ent[], int total){
 	}
 }
 
-//Gets player input and moves entities accordingly
-void st_entity_player_input(entity ent[], int total){
+//Gets player input and moves st_ents accordingly
+void st_entity_player_input(st_ent ent[], int total){
 	u32 kHeld = hidKeysHeld();
 	for(int i = 0; i<total; i++){
 		if(ent[i].player){
