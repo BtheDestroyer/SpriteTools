@@ -73,7 +73,7 @@ st_anim st_entity_getanim(st_ent ent){
 	return ent.anim;
 }
 
-//Adds an st_ent to the first open slot available
+//Adds an st_ent to the first open slot available. returns false if no slot is open
 bool st_entity_add(st_ent ent[], int total, st_anim anim0, st_anim anim1, st_anim anim2, st_anim anim3, st_anim anim4, st_anim anim5, st_anim anim6, st_anim anim7, int x, int y, int xhot, int yhot, int speed, int dir, bool moving, int control){
 	for(int i=0; i<total; i++){
 		if(ent[i].openSlot){
@@ -103,7 +103,7 @@ bool st_entity_add(st_ent ent[], int total, st_anim anim0, st_anim anim1, st_ani
 }
 
 //Sets an st_ent to the selected slot
-void st_entity_set(st_ent ent[], int slot, st_anim anim0, st_anim anim1, st_anim anim2, st_anim anim3, st_anim anim4, st_anim anim5, st_anim anim6, st_anim anim7, int x, int y, int xhot, int yhot,  int speed, int dir, bool moving, int control){
+void st_entity_set(st_ent ent[], int slot, st_anim anim0, st_anim anim1, st_anim anim2, st_anim anim3, st_anim anim4, st_anim anim5, st_anim anim6, st_anim anim7, int x, int y, int xhot, int yhot, int speed, int dir, bool moving, int control){
 	ent[i].animStandingDown = anim0;
 	ent[i].animStandingUp = anim1;
 	ent[i].animStandingLeft = anim2;
@@ -134,56 +134,101 @@ void st_entity_remove(st_ent ent[], int slot){
 void st_entity_render(st_ent ent[], int total){
 	for(int i=0; i<total; i++){
 		if(ent[i].openSlot==false){
-			st_animation_frame_current(ent[i].anim, ent[i].xPos-ent[i].xHotspot, ent[i].yPos-ent[i].yHotspot);
+			if(ent[i].moving){
+				//entity is moving, render walking animation by direction
+				switch(ent[i].dir){
+					case(0) :
+					st_animation_frame_current(ent[i].animWalkingDown, ent[i].xPos-ent[i].xHotspot, ent[i].yPos-ent[i].yHotspot);
+					break;
+					case(1) :
+					st_animation_frame_current(ent[i].animWalkingRight, ent[i].xPos-ent[i].xHotspot, ent[i].yPos-ent[i].yHotspot);
+					break;
+					case(2) :
+					st_animation_frame_current(ent[i].animWalkingUp, ent[i].xPos-ent[i].xHotspot, ent[i].yPos-ent[i].yHotspot);
+					break;
+					case(3) :
+					default :
+					st_animation_frame_current(ent[i].animWalkingLeft, ent[i].xPos-ent[i].xHotspot, ent[i].yPos-ent[i].yHotspot);
+		}
+		}else{
+				//entity is not moving, render standing animation by direction
+				switch(ent[i].dir){
+					case(0) :
+					st_animation_frame_current(ent[i].animStandingDown, ent[i].xPos-ent[i].xHotspot, ent[i].yPos-ent[i].yHotspot);
+					break;
+					case(1) :
+					st_animation_frame_current(ent[i].animStandingRight, ent[i].xPos-ent[i].xHotspot, ent[i].yPos-ent[i].yHotspot);
+					break;
+					case(2) :
+					st_animation_frame_current(ent[i].animStandingUp, ent[i].xPos-ent[i].xHotspot, ent[i].yPos-ent[i].yHotspot);
+					break;
+					case(3) :
+					default :
+					st_animation_frame_current(ent[i].animStandingLeft, ent[i].xPos-ent[i].xHotspot, ent[i].yPos-ent[i].yHotspot);
+		}
+		}
 		}
 	}
 }
 
 //Gets player input and moves st_ents accordingly
-void st_entity_player_input(st_ent ent[], int total){
+void st_entity_move_player(st_ent ent[], int total){
 	u32 kHeld = hidKeysHeld();
 	for(int i = 0; i<total; i++){
-		if(ent[i].player){
 			switch(ent[i].control){
 			case 1 : //DPad
 			if(kHeld & KEY_DUP)ent[i].yPos-=ent[i].speed;
 			if(kHeld & KEY_DDOWN)ent[i].yPos+=ent[i].speed;
 			if(kHeld & KEY_DLEFT)ent[i].xPos-=ent[i].speed;
 			if(kHeld & KEY_DRIGHT)ent[i].xPos+=ent[i].speed;
+			if(kHeld & KEY_DUP || kHeld & KEY_DDOWN || kHeld & KEY_DLEFT || kHeld & KEY_DRIGHT){ ent[i].moving = true;
+			}else{ ent[i].moving = false;}
 			break;
 			case 2 : //CPad
 			if(kHeld & KEY_CPAD_UP) ent[i].yPos-=ent[i].speed;
 			if(kHeld & KEY_CPAD_DOWN) ent[i].yPos+=ent[i].speed;
 			if(kHeld & KEY_CPAD_LEFT) ent[i].xPos-=ent[i].speed;
 			if(kHeld & KEY_CPAD_RIGHT) ent[i].xPos+=ent[i].speed;
+			if(kHeld & KEY_CPAD_UP || kHeld & KEY_CPAD_DOWN || kHeld & KEY_CPAD_LEFT || kHeld & KEY_CPAD_RIGHT){ ent[i].moving = true;
+			}else{ ent[i].moving = false;}
 			break;
 			case 3 : //CPad OR DPad
 			if(kHeld & KEY_UP) ent[i].yPos-=ent[i].speed;
 			if(kHeld & KEY_DOWN) ent[i].yPos+=ent[i].speed;
 			if(kHeld & KEY_LEFT) ent[i].xPos-=ent[i].speed;
 			if(kHeld & KEY_RIGHT) ent[i].xPos+=ent[i].speed;
+			if(kHeld & KEY_UP || kHeld & KEY_DOWN || kHeld & KEY_LEFT || kHeld & KEY_RIGHT){ ent[i].moving = true;
+			}else{ ent[i].moving = false;}
 			break;
 			case 4 : //CStick
 			if(kHeld & KEY_CSTICK_UP) ent[i].yPos-=ent[i].speed;
 			if(kHeld & KEY_CSTICK_DOWN) ent[i].yPos+=ent[i].speed;
 			if(kHeld & KEY_CSTICK_LEFT) ent[i].xPos-=ent[i].speed;
 			if(kHeld & KEY_CSTICK_RIGHT) ent[i].xPos+=ent[i].speed;
+			if(kHeld & KEY_CPAD_UP || kHeld & KEY_CPAD_DOWN || kHeld & KEY_CPAD_LEFT || kHeld & KEY_CPAD_RIGHT){ ent[i].moving = true;
+			}else{ ent[i].moving = false;}
 			break;
 			case 5 : //ABXY
 			if(kHeld & KEY_X) ent[i].yPos-=ent[i].speed;
 			if(kHeld & KEY_B) ent[i].yPos+=ent[i].speed;
 			if(kHeld & KEY_Y) ent[i].xPos-=ent[i].speed;
 			if(kHeld & KEY_A) ent[i].xPos+=ent[i].speed;
+			if(kHeld & KEY_X || kHeld & KEY_B || kHeld & KEY_Y || kHeld & KEY_A){ ent[i].moving = true;
+			}else{ ent[i].moving = false;}
 			break;
 			case 6 : //LR
 			if(kHeld & KEY_L) ent[i].xPos-=ent[i].speed;
 			if(kHeld & KEY_R) ent[i].xPos+=ent[i].speed;
+			if(kHeld & KEY_L || kHeld & KEY_R){ ent[i].moving = true;
+			}else{ ent[i].moving = false;}
 			break;
 			case 7 : //LR+ZLZR
 			if(kHeld & KEY_ZL) ent[i].yPos-=ent[i].speed;
 			if(kHeld & KEY_ZR) ent[i].yPos+=ent[i].speed;
 			if(kHeld & KEY_L) ent[i].xPos-=ent[i].speed;
 			if(kHeld & KEY_R) ent[i].xPos+=ent[i].speed;
+			if(kHeld & KEY_L || kHeld & KEY_R || kHeld & KEY_ZL || kHeld & KEY_ZR){ ent[i].moving = true;
+			}else{ ent[i].moving = false;}
 			break;
 			case 8 : //Touchscreen
 			touchPosition touch;
@@ -191,10 +236,10 @@ void st_entity_player_input(st_ent ent[], int total){
 			if(kHeld & KEY_TOUCH){
 				ent[i].xPos += 0.5+(float)(touch.px-160)/(120.0/(float)ent[i].speed);
 				ent[i].yPos += 0.5+(float)(touch.py-120)/(105.0/(float)ent[i].speed);
-			}
+				ent[i].moving = true;
+			}else{ent[i].moving = false}
 			break;
 			default :
-		}
 	}
 }
 }
