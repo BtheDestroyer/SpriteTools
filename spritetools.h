@@ -52,6 +52,23 @@ void st_animation_frame_current_nochange(st_anim anim, int xrend, int yrend){
 	sf2d_draw_texture_part(anim.texture, xrend, yrend, anim.xleft + (anim.width*anim.currentframe), anim.ytop, anim.width, anim.height);
 }
 
+//displays previous frame of animation at selected X and Y coordinates, then subtracts 1 from currentframe
+void st_animation_frame_previous(st_anim anim, int xrend, int yrend){
+	anim.currentframe--;
+	//loops animation if needed
+	if(anim.currentframe < 0){
+		anim.currentframe = anim.frames;
+	}
+	sf2d_draw_texture_part(anim.texture, xrend, yrend, anim.xleft + (anim.width*anim.currentframe), anim.ytop, anim.width, anim.height);
+}
+
+//displays previous frame of animation at selected X and Y coordinates, then subtracts 1 from currentframe
+void st_animation_frame_previous_nochange(st_anim anim, int xrend, int yrend){
+	anim.currentframe--;
+	sf2d_draw_texture_part(anim.texture, xrend, yrend, anim.xleft + (anim.width*anim.currentframe), anim.ytop, anim.width, anim.height);
+	anim.currentframe++;
+}
+
 //changes current frame to given int
 void st_animation_frame_set(st_anim anim, int frame){
 	anim.currentframe=frame;
