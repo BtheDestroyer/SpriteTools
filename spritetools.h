@@ -87,34 +87,32 @@ void st_entity_init(st_ent ent[], int total){
 
 //returns the animation of given st_ent
 st_anim st_entity_getanim(st_ent ent){
-	for(int i=0; i<total; i++){
-		if(ent.openSlot==false){
-			if(ent.moving){
+	if(ent.openSlot==false){
+		if(ent.moving){
 				//entity is moving, render walking animation by direction
-				switch(ent.dir){
-					case(0) :
-					return ent.animWalkingDown;
-					case(1) :
-					return ent.animWalkingRight;
-					case(2) :
-					return ent.animWalkingUp;
-					case(3) :
-					default :
-					return ent.animWalkingLeft;
-				}
-			}else{
+			switch(ent.dir){
+				case(0) :
+				return ent.animWalkingDown;
+				case(1) :
+				return ent.animWalkingRight;
+				case(2) :
+				return ent.animWalkingUp;
+				case(3) :
+				default :
+				return ent.animWalkingLeft;
+			}
+		}else{
 				//entity is not moving, render standing animation by direction
-				switch(ent.dir){
-					case(0) :
-					return ent.animStandingDown;
-					case(1) :
-					return ent.animStandingRight;
-					case(2) :
-					return ent.animStandingUp;
-					case(3) :
-					default :
-					return ent.animStandingLeft;
-				}
+			switch(ent.dir){
+				case(0) :
+				return ent.animStandingDown;
+				case(1) :
+				return ent.animStandingRight;
+				case(2) :
+				return ent.animStandingUp;
+				case(3) :
+				default :
+				return ent.animStandingLeft;
 			}
 		}
 	}
@@ -134,8 +132,8 @@ bool st_entity_add(st_ent ent[], int total, st_anim anim0, st_anim anim1, st_ani
 			ent[i].animWalkingRight = anim7;
 			ent[i].xPos = x;
 			ent[i].yPos = y;
-			ent[i].xHotspot = xHot;
-			ent[i].yHotspot = yHot;
+			ent[i].xHotspot = xhot;
+			ent[i].yHotspot = yhot;
 			ent[i].speed = speed;
 			ent[i].dir = dir;
 			ent[i].moving = moving;
@@ -159,8 +157,8 @@ void st_entity_set(st_ent ent[], int slot, st_anim anim0, st_anim anim1, st_anim
 	ent[slot].animWalkingRight = anim7;
 	ent[slot].xPos = x;
 	ent[slot].yPos = y;
-	ent[slot].xHotspot = xHot;
-	ent[slot].yHotspot = yHot;
+	ent[slot].xHotspot = xhot;
+	ent[slot].yHotspot = yhot;
 	ent[slot].speed = speed;
 	ent[slot].dir = dir;
 	ent[slot].moving = moving;
