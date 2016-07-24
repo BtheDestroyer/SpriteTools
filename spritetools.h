@@ -137,7 +137,7 @@ bool st_entity_add(st_ent ent[], int total, st_anim anim0, st_anim anim1, st_ani
 			ent[i].speed = speed;
 			ent[i].dir = dir;
 			ent[i].moving = moving;
-			ent[slot].control = control;
+			ent[i].control = control;
 			ent[i].openSlot = false;
 			return true;
 		}
@@ -214,6 +214,7 @@ void st_entity_render(st_ent ent[], int total){
 
 //Gets player input and moves st_ents accordingly
 void st_entity_move_player(st_ent ent[], int total){
+	touchPosition touch;
 	u32 kHeld = hidKeysHeld();
 	for(int i = 0; i<total; i++){
 		switch(ent[i].control){
@@ -272,15 +273,15 @@ void st_entity_move_player(st_ent ent[], int total){
 			}else{ ent[i].moving = false;}
 			break;
 			case 8 : //Touchscreen
-			touchPosition touch;
 			hidTouchRead(&touch);
 			if(kHeld & KEY_TOUCH){
 				ent[i].xPos += 0.5+(float)(touch.px-160)/(120.0/(float)ent[i].speed);
 				ent[i].yPos += 0.5+(float)(touch.py-120)/(105.0/(float)ent[i].speed);
 				ent[i].moving = true;
-			}else{ent[i].moving = false}
+			}else{ent[i].moving = false;}
 			break;
 			default :
+			break;
 		}
 	}
 }
