@@ -19,6 +19,10 @@ typedef struct {
 
 //displays selected frame of animation at selected X and Y coordinates
 void st_animation_frame(st_anim anim, int frame, int xrend, int yrend){
+	//prevents currentframe from being too high
+	if(frame > anim.frames){
+		frame = anim.frames;
+	}
 	sf2d_draw_texture_part(anim.texture, xrend, yrend, anim.xleft + (anim.width*frame), anim.ytop, anim.width, anim.height);
 }
 
@@ -29,6 +33,20 @@ void st_animation_frame_current(st_anim anim, int xrend, int yrend){
 	//loops animation if needed
 	if(anim.currentframe > anim.frames){
 		anim.currentframe = 0;
+	}
+}
+
+//displays current frame of animation at selected X and Y coordinates
+void st_animation_frame_current_nochange(st_anim anim, int xrend, int yrend){
+	sf2d_draw_texture_part(anim.texture, xrend, yrend, anim.xleft + (anim.width*anim.currentframe), anim.ytop, anim.width, anim.height);
+}
+
+//changes current frame to given int
+void st_animation_frame_set(st_anim anim, int frame){
+	anim.currentframe=frame;
+	//prevents currentframe from being too high
+	if(anim.currentframe > anim.frames){
+		anim.currentframe = anim.frames;
 	}
 }
 
