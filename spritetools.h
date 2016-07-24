@@ -9,7 +9,14 @@ typedef struct {
 } st_anim;
 
 typedef struct {
-	st_anim anim;
+	st_anim animStandingDown;
+	st_anim animStandingUp;
+	st_anim animStandingLeft;
+	st_anim animStandingRight;
+	st_anim animWalkingDown;
+	st_anim animWalkingUp;
+	st_anim animWalkingLeft;
+	st_anim animWalkingRight;
 	unsigned int xPos;
 	unsigned int yPos;
 	int xHotspot;
