@@ -87,50 +87,42 @@ void st_entity_player_input(entity ent[], int total, int input){
 	u32 kHeld = hidKeysHeld();
 	for(int i = 0; i<total; i++){
 		if(ent[i].player){
-		printf("Ent %d - controlled with ",i);
 			switch(input){
 			case 1 : //CPad
-			printf("CPAD        \n");
 			if(kHeld & KEY_CPAD_UP) ent[i].yPos-=ent[i].speed;
 			if(kHeld & KEY_CPAD_DOWN) ent[i].yPos+=ent[i].speed;
 			if(kHeld & KEY_CPAD_LEFT) ent[i].xPos-=ent[i].speed;
 			if(kHeld & KEY_CPAD_RIGHT) ent[i].xPos+=ent[i].speed;
 			break;
 			case 2 : //CPad OR DPad
-			printf("CPAD OR DPAD\n");
 			if(kHeld & KEY_UP) ent[i].yPos-=ent[i].speed;
 			if(kHeld & KEY_DOWN) ent[i].yPos+=ent[i].speed;
 			if(kHeld & KEY_LEFT) ent[i].xPos-=ent[i].speed;
 			if(kHeld & KEY_RIGHT) ent[i].xPos+=ent[i].speed;
 			break;
 			case 3 : //CStick
-			printf("CSTICK      \n");
 			if(kHeld & KEY_CSTICK_UP) ent[i].yPos-=ent[i].speed;
 			if(kHeld & KEY_CSTICK_DOWN) ent[i].yPos+=ent[i].speed;
 			if(kHeld & KEY_CSTICK_LEFT) ent[i].xPos-=ent[i].speed;
 			if(kHeld & KEY_CSTICK_RIGHT) ent[i].xPos+=ent[i].speed;
 			break;
 			case 4 : //ABXY
-			printf("ABXY        \n");
 			if(kHeld & KEY_X) ent[i].yPos-=ent[i].speed;
 			if(kHeld & KEY_B) ent[i].yPos+=ent[i].speed;
 			if(kHeld & KEY_Y) ent[i].xPos-=ent[i].speed;
 			if(kHeld & KEY_A) ent[i].xPos+=ent[i].speed;
 			break;
 			case 5 : //LR
-			printf("LR          \n");
 			if(kHeld & KEY_L) ent[i].xPos-=ent[i].speed;
 			if(kHeld & KEY_R) ent[i].xPos+=ent[i].speed;
 			break;
 			case 6 : //LR+ZLZR
-			printf("LR+ZLZR     \n");
 			if(kHeld & KEY_ZL) ent[i].yPos-=ent[i].speed;
 			if(kHeld & KEY_ZR) ent[i].yPos+=ent[i].speed;
 			if(kHeld & KEY_L) ent[i].xPos-=ent[i].speed;
 			if(kHeld & KEY_R) ent[i].xPos+=ent[i].speed;
 			break;
 			case 7 : //Touchscreen
-			printf("Touchscreen \n");
 			touchPosition touch;
 			hidTouchRead(&touch);
 			if(kHeld & KEY_TOUCH){
@@ -140,7 +132,6 @@ void st_entity_player_input(entity ent[], int total, int input){
 			break;
 			case 0 : //DPad
 			default :
-			printf("DPAD        \n");
 			if(kHeld & KEY_DUP)ent[i].yPos-=ent[i].speed;
 			if(kHeld & KEY_DDOWN)ent[i].yPos+=ent[i].speed;
 			if(kHeld & KEY_DLEFT)ent[i].xPos-=ent[i].speed;
