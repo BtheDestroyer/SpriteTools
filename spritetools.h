@@ -1,6 +1,8 @@
 typedef struct {
 	unsigned int frames;      //number of frames in the animation
 	unsigned int currentframe;//current frame of the animation for use in st_animation_frame_current()
+	unsigned int framepause;  //number of frames to wait before displaying the next frame of the anim
+	unsigned int pausedframes;//number of frames paused with st_animation_play()
 	unsigned int ytop;        //top pixel of the first frame in the spritesheet
 	unsigned int xleft;       //left pixel of the first frame in the spritesheet
 	unsigned int width;       //width of each frame in the animation
@@ -39,7 +41,7 @@ void st_animation_frame(st_anim anim, int frame, int xrend, int yrend){
 
 //displays current frame of animation at selected X and Y coordinates, then adds 1 to currentframe
 void st_animation_frame_current(st_anim anim, int xrend, int yrend){
-	sf2d_draw_texture_part(anim.texture, xrend, yrend, anim.xleft + (anim.width*anim.currentframe), anim.ytop, anim.width, anim.height);
+	sf2d_draw_texture_part(anim.texture, xrend, yrend, anim.xleft + (anim.width*(anim.currentframe/anim.framepause)), anim.ytop, anim.width, anim.height);
 	anim.currentframe++;
 	//loops animation if needed
 	if(anim.currentframe > anim.frames){
@@ -78,11 +80,40 @@ void st_animation_frame_set(st_anim anim, int frame){
 	}
 }
 
+//displays current frame of animation at selected X and Y coordinates, then adds 1 to currentframe
+void st_animation_play(st_anim anim, int xrend, int yrend){
+	sf2d_draw_texture_part(anim.texture, xrend, yrend, anim.xleft + (anim.width*(anim.currentframe/anim.framepause)), anim.ytop, anim.width, anim.height);
+	//counts paused frames and continues animation if needed
+	printf("anim.pausedframes=%d >> ",anim.pausedframes);
+	anim.pausedframes++;
+	printf("%d >> ",anim.pausedframes);
+	if(anim.pausedframes > anim.framepause){
+		anim.pausedframes = 0;
+		anim.currentframe++;
+	}
+	printf("%d >> \n",anim.pausedframes);
+	//loops animation if needed
+	if(anim.currentframe > anim.frames){
+		anim.currentframe = 0;
+	}
+}
+
+//Prints the st_anim's structure
+void st_animation_print(st_anim anim){
+	printf("anim{\nframes=%d,\ncurrentframe=%d,\nframepause=%d,\npausedframes=%d,\nytop=%d,\nxleft=%d,\nwidth=%d,\nheight=%d}",anim.frames,anim.currentframe,anim.framepause,anim.pausedframes,anim.ytop,anim.xleft,anim.width,anim.height);
+}
+
+
 //Initializes default value(s) for st_ent arrays
 void st_entity_init(st_ent ent[], int total){
 	for(int i=0; i<total; i++){
 		ent[i].openSlot = true;
 	}
+}
+
+//Prints the st_ent's structure
+void st_entity_print(st_ent ent){
+	printf("Ent{\n%d,\n%d,\n%d,\n%d,\n%d,\n%d,\n%d,\n%d,\n%d}",ent.xPos,ent.yPos,ent.xHotspot,ent.yHotspot,ent.speed, ent.dir,ent.moving,ent.control,ent.openSlot);
 }
 
 //returns the animation of given st_ent
@@ -179,33 +210,33 @@ void st_entity_render(st_ent ent[], int total){
 				//entity is moving, render walking animation by direction
 				switch(ent[i].dir){
 					case(0) :
-					st_animation_frame_current(ent[i].animWalkingDown, ent[i].xPos-ent[i].xHotspot, ent[i].yPos-ent[i].yHotspot);
+					st_animation_play(ent[i].animWalkingDown, ent[i].xPos-ent[i].xHotspot, ent[i].yPos-ent[i].yHotspot);
 					break;
 					case(1) :
-					st_animation_frame_current(ent[i].animWalkingRight, ent[i].xPos-ent[i].xHotspot, ent[i].yPos-ent[i].yHotspot);
+					st_animation_play(ent[i].animWalkingRight, ent[i].xPos-ent[i].xHotspot, ent[i].yPos-ent[i].yHotspot);
 					break;
 					case(2) :
-					st_animation_frame_current(ent[i].animWalkingUp, ent[i].xPos-ent[i].xHotspot, ent[i].yPos-ent[i].yHotspot);
+					st_animation_play(ent[i].animWalkingUp, ent[i].xPos-ent[i].xHotspot, ent[i].yPos-ent[i].yHotspot);
 					break;
 					case(3) :
 					default :
-					st_animation_frame_current(ent[i].animWalkingLeft, ent[i].xPos-ent[i].xHotspot, ent[i].yPos-ent[i].yHotspot);
+					st_animation_play(ent[i].animWalkingLeft, ent[i].xPos-ent[i].xHotspot, ent[i].yPos-ent[i].yHotspot);
 				}
 			}else{
 				//entity is not moving, render standing animation by direction
 				switch(ent[i].dir){
 					case(0) :
-					st_animation_frame_current(ent[i].animStandingDown, ent[i].xPos-ent[i].xHotspot, ent[i].yPos-ent[i].yHotspot);
+					st_animation_play(ent[i].animStandingDown, ent[i].xPos-ent[i].xHotspot, ent[i].yPos-ent[i].yHotspot);
 					break;
 					case(1) :
-					st_animation_frame_current(ent[i].animStandingRight, ent[i].xPos-ent[i].xHotspot, ent[i].yPos-ent[i].yHotspot);
+					st_animation_play(ent[i].animStandingRight, ent[i].xPos-ent[i].xHotspot, ent[i].yPos-ent[i].yHotspot);
 					break;
 					case(2) :
-					st_animation_frame_current(ent[i].animStandingUp, ent[i].xPos-ent[i].xHotspot, ent[i].yPos-ent[i].yHotspot);
+					st_animation_play(ent[i].animStandingUp, ent[i].xPos-ent[i].xHotspot, ent[i].yPos-ent[i].yHotspot);
 					break;
 					case(3) :
 					default :
-					st_animation_frame_current(ent[i].animStandingLeft, ent[i].xPos-ent[i].xHotspot, ent[i].yPos-ent[i].yHotspot);
+					st_animation_play(ent[i].animStandingLeft, ent[i].xPos-ent[i].xHotspot, ent[i].yPos-ent[i].yHotspot);
 				}
 			}
 		}
