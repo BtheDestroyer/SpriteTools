@@ -219,56 +219,56 @@ void st_entity_move_player(st_ent ent[], int total){
 	for(int i = 0; i<total; i++){
 		switch(ent[i].control){
 			case 1 : //DPad
-			if(kHeld & KEY_DUP)ent[i].yPos-=ent[i].speed;
-			if(kHeld & KEY_DDOWN)ent[i].yPos+=ent[i].speed;
-			if(kHeld & KEY_DLEFT)ent[i].xPos-=ent[i].speed;
-			if(kHeld & KEY_DRIGHT)ent[i].xPos+=ent[i].speed;
+			if(kHeld & KEY_DUP){ent[i].yPos-=ent[i].speed; ent[i].dir = 2; }
+			if(kHeld & KEY_DDOWN){ent[i].yPos+=ent[i].speed; ent[i].dir = 0; }
+			if(kHeld & KEY_DLEFT){ent[i].xPos-=ent[i].speed; ent[i].dir = 3; }
+			if(kHeld & KEY_DRIGHT){ent[i].xPos+=ent[i].speed; ent[i].dir = 1; }
 			if(kHeld & KEY_DUP || kHeld & KEY_DDOWN || kHeld & KEY_DLEFT || kHeld & KEY_DRIGHT){ ent[i].moving = true;
 			}else{ ent[i].moving = false;}
 			break;
 			case 2 : //CPad
-			if(kHeld & KEY_CPAD_UP) ent[i].yPos-=ent[i].speed;
-			if(kHeld & KEY_CPAD_DOWN) ent[i].yPos+=ent[i].speed;
-			if(kHeld & KEY_CPAD_LEFT) ent[i].xPos-=ent[i].speed;
-			if(kHeld & KEY_CPAD_RIGHT) ent[i].xPos+=ent[i].speed;
+			if(kHeld & KEY_CPAD_UP){ ent[i].yPos-=ent[i].speed; ent[i].dir = 2; }
+			if(kHeld & KEY_CPAD_DOWN){ ent[i].yPos+=ent[i].speed; ent[i].dir = 0; }
+			if(kHeld & KEY_CPAD_LEFT){ ent[i].xPos-=ent[i].speed; ent[i].dir = 3; }
+			if(kHeld & KEY_CPAD_RIGHT){ ent[i].xPos+=ent[i].speed; ent[i].dir = 1; }
 			if(kHeld & KEY_CPAD_UP || kHeld & KEY_CPAD_DOWN || kHeld & KEY_CPAD_LEFT || kHeld & KEY_CPAD_RIGHT){ ent[i].moving = true;
 			}else{ ent[i].moving = false;}
 			break;
 			case 3 : //CPad OR DPad
-			if(kHeld & KEY_UP) ent[i].yPos-=ent[i].speed;
-			if(kHeld & KEY_DOWN) ent[i].yPos+=ent[i].speed;
-			if(kHeld & KEY_LEFT) ent[i].xPos-=ent[i].speed;
-			if(kHeld & KEY_RIGHT) ent[i].xPos+=ent[i].speed;
+			if(kHeld & KEY_UP){ ent[i].yPos-=ent[i].speed; ent[i].dir = 2; }
+			if(kHeld & KEY_DOWN){ ent[i].yPos+=ent[i].speed; ent[i].dir = 0; }
+			if(kHeld & KEY_LEFT){ ent[i].xPos-=ent[i].speed; ent[i].dir = 3; }
+			if(kHeld & KEY_RIGHT){ ent[i].xPos+=ent[i].speed; ent[i].dir = 1; }
 			if(kHeld & KEY_UP || kHeld & KEY_DOWN || kHeld & KEY_LEFT || kHeld & KEY_RIGHT){ ent[i].moving = true;
 			}else{ ent[i].moving = false;}
 			break;
 			case 4 : //CStick
-			if(kHeld & KEY_CSTICK_UP) ent[i].yPos-=ent[i].speed;
-			if(kHeld & KEY_CSTICK_DOWN) ent[i].yPos+=ent[i].speed;
-			if(kHeld & KEY_CSTICK_LEFT) ent[i].xPos-=ent[i].speed;
-			if(kHeld & KEY_CSTICK_RIGHT) ent[i].xPos+=ent[i].speed;
+			if(kHeld & KEY_CSTICK_UP){ ent[i].yPos-=ent[i].speed; ent[i].dir = 2; }
+			if(kHeld & KEY_CSTICK_DOWN){ ent[i].yPos+=ent[i].speed; ent[i].dir = 0; }
+			if(kHeld & KEY_CSTICK_LEFT){ ent[i].xPos-=ent[i].speed; ent[i].dir = 3; }
+			if(kHeld & KEY_CSTICK_RIGHT){ ent[i].xPos+=ent[i].speed; ent[i].dir = 1; }
 			if(kHeld & KEY_CPAD_UP || kHeld & KEY_CPAD_DOWN || kHeld & KEY_CPAD_LEFT || kHeld & KEY_CPAD_RIGHT){ ent[i].moving = true;
 			}else{ ent[i].moving = false;}
 			break;
 			case 5 : //ABXY
-			if(kHeld & KEY_X) ent[i].yPos-=ent[i].speed;
-			if(kHeld & KEY_B) ent[i].yPos+=ent[i].speed;
-			if(kHeld & KEY_Y) ent[i].xPos-=ent[i].speed;
-			if(kHeld & KEY_A) ent[i].xPos+=ent[i].speed;
+			if(kHeld & KEY_X){ ent[i].yPos-=ent[i].speed; ent[i].dir = 2; }
+			if(kHeld & KEY_B){ ent[i].yPos+=ent[i].speed; ent[i].dir = 0; }
+			if(kHeld & KEY_Y){ ent[i].xPos-=ent[i].speed; ent[i].dir = 3; }
+			if(kHeld & KEY_A){ ent[i].xPos+=ent[i].speed; ent[i].dir = 1; }
 			if(kHeld & KEY_X || kHeld & KEY_B || kHeld & KEY_Y || kHeld & KEY_A){ ent[i].moving = true;
 			}else{ ent[i].moving = false;}
 			break;
 			case 6 : //LR
-			if(kHeld & KEY_L) ent[i].xPos-=ent[i].speed;
-			if(kHeld & KEY_R) ent[i].xPos+=ent[i].speed;
+			if(kHeld & KEY_L){ ent[i].xPos-=ent[i].speed; ent[i].dir = 3; }
+			if(kHeld & KEY_R){ ent[i].xPos+=ent[i].speed; ent[i].dir = 1; }
 			if(kHeld & KEY_L || kHeld & KEY_R){ ent[i].moving = true;
 			}else{ ent[i].moving = false;}
 			break;
 			case 7 : //LR+ZLZR
-			if(kHeld & KEY_ZL) ent[i].yPos-=ent[i].speed;
-			if(kHeld & KEY_ZR) ent[i].yPos+=ent[i].speed;
-			if(kHeld & KEY_L) ent[i].xPos-=ent[i].speed;
-			if(kHeld & KEY_R) ent[i].xPos+=ent[i].speed;
+			if(kHeld & KEY_ZL){ ent[i].yPos-=ent[i].speed; ent[i].dir = 2; }
+			if(kHeld & KEY_ZR){ ent[i].yPos+=ent[i].speed; ent[i].dir = 0; }
+			if(kHeld & KEY_L){ ent[i].xPos-=ent[i].speed; ent[i].dir = 3; }
+			if(kHeld & KEY_R){ ent[i].xPos+=ent[i].speed; ent[i].dir = 1; }
 			if(kHeld & KEY_L || kHeld & KEY_R || kHeld & KEY_ZL || kHeld & KEY_ZR){ ent[i].moving = true;
 			}else{ ent[i].moving = false;}
 			break;
