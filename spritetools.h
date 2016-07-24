@@ -104,8 +104,8 @@ bool st_entity_add(st_ent ent[], int total, st_anim anim0, st_anim anim1, st_ani
 			ent[i].animWalkingRight = anim7;
 			ent[i].xPos = x;
 			ent[i].yPos = y;
-			ent[i].xHotspot = xHotspot;
-			ent[i].yHotspot = yHotspot;
+			ent[i].xHotspot = xHot;
+			ent[i].yHotspot = yHot;
 			ent[i].speed = speed;
 			ent[i].dir = dir;
 			ent[i].moving = moving;
@@ -131,8 +131,8 @@ void st_entity_set(st_ent ent[], int slot, st_anim anim0, st_anim anim1, st_anim
 	ent[i].animWalkingRight = anim7;
 	ent[slot].xPos = x;
 	ent[slot].yPos = y;
-	ent[i].xHotspot = xHotspot;
-	ent[i].yHotspot = yHotspot;
+	ent[i].xHotspot = xHot;
+	ent[i].yHotspot = yHot;
 	ent[slot].speed = speed;
 	ent[i].dir = dir;
 	ent[i].moving = moving;
