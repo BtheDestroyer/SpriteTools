@@ -125,6 +125,13 @@ void st_entity_print(st_ent ent){
 	printf("Ent{\n%d,\n%d,\n%d,\n%d,\n%d,\n%d,\n%d,\n%d,\n%d}",ent.xPos,ent.yPos,ent.xHotspot,ent.yHotspot,ent.speed, ent.dir,ent.moving,ent.control,ent.openSlot);
 }
 
+//Prints the given slots of an st_ent array
+void st_entity_print_array(st_ent ent[], int total){
+	for(int i = 0; i < total; i++){
+		printf("Ent[%d]{%d,%d,%d,%d,%d,%d,%d,%d,%d}\n",i,ent[i].xPos,ent[i].yPos,ent[i].xHotspot,ent[i].yHotspot,ent[i].speed, ent[i].dir,ent[i].moving,ent[i].control,ent[i].openSlot);
+	}
+}
+
 //returns the appropriate st_anim of given st_ent
 st_anim st_entity_getanim(st_ent ent){
 	if(ent.openSlot==false){
