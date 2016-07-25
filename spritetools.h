@@ -37,12 +37,22 @@ typedef struct {
 	int xPos;                 //x position of the center of the screen
 	int yPos;                 //y position of the center of the screen
 	float zoom;               //how stretched/offset sprites on screen should be 1.0 for default
-	st_ent follow;            //which entitiy is to be followed with st_camera_follow() and related functions
+	float rot;                //how rotated the camera should be on a scale of 0.0 to 1.0. 0.0 for default
+	st_ent *follow;            //which entitiy is to be followed with st_camera_move_follow() and related functions
 } st_cam;
 
-//changes current frame to given int
+st_cam *st_MainCamera;
+
+//returns an st_anim
 st_anim st_animation_create(sf2d_texture *texture, int frames, int framepause, int ytop, int xleft, int width, int height){
-	return {frames, 0, framepause, 0, ytop, xleft, width, height, texture};
+	st_anim anim = {frames, 0, framepause, 0, ytop, xleft, width, height, texture};
+	return anim;
+}
+
+//returns an st_anim with less inputs than st_animation_create
+st_anim st_animation_create_simple(sf2d_texture *texture, int frames, int width, int height){
+	st_anim anim = {frames, 0, 0, 0, 0, 0, width, height, texture};
+	return anim;
 }
 
 //displays selected frame of animation at selected X and Y coordinates
@@ -374,4 +384,94 @@ void st_entity_move_player(st_ent ent[], int total){
 			break;
 		}
 	}
+}
+
+//returns an st_cam
+st_cam st_camera_create(int xPos, int yPos, float zoom, float rot, st_ent *follow){
+	st_cam cam = {xPos, yPos, zoom, rot, follow};
+	return cam;
+}
+
+//returns an st_cam with less inputs than st_camera_create
+st_cam st_camera_create_simple(int xPos, int yPos){
+	st_cam cam = {xPos, yPos, 1.0, 0.0, NULL};
+	return cam;
+}
+
+//sets the main camera to the supplied cam.
+void st_camera_setmain(st_cam* cam){
+	st_MainCamera = cam;
+}
+
+//moves an st_cam to given position
+void st_camera_move(st_cam *pcam, int xPos, int yPos){
+	st_cam cam = *pcam;
+	cam.xPos = xPos;
+	cam.yPos = yPos;
+	*pcam = cam;
+}
+
+//moves an st_cam to given x position
+void st_camera_move_x(st_cam *pcam, int xPos){
+	st_cam cam = *pcam;
+	cam.xPos = xPos;
+	*pcam = cam;
+}
+
+//moves an st_cam to given y position
+void st_camera_move_y(st_cam *pcam, int yPos){
+	st_cam cam = *pcam;
+	cam.yPos = yPos;
+	*pcam = cam;
+}
+
+//moves an st_cam to given st_ent's position
+void st_camera_move_ent(st_cam *pcam, st_ent ent){
+	st_cam cam = *pcam;
+	cam.xPos = ent.xPos;
+	cam.yPos = ent.yPos;
+	*pcam = cam;
+}
+
+//moves an st_cam to given st_ent's position
+void st_camera_move_ent_offset(st_cam *pcam, st_ent ent, int xOff, int yOff){
+	st_cam cam = *pcam;
+	cam.xPos = ent.xPos+xOff;
+	cam.yPos = ent.yPos+yOff;
+	*pcam = cam;
+}
+
+//moves an st_cam the st_ent it's following
+void st_camera_move_follow(st_cam *pcam){
+	st_cam cam = *pcam;
+	st_ent ent = *cam.follow;
+	cam.xPos = ent.xPos;
+	cam.yPos = ent.yPos;
+	*pcam = cam;
+}
+
+//moves an st_cam to the st_ent it's following with an x and y offset
+void st_camera_move_follow_offset(st_cam *pcam, int xOff, int yOff){
+	st_cam cam = *pcam;
+	st_ent ent = *cam.follow;
+	cam.xPos = ent.xPos+xOff;
+	cam.yPos = ent.yPos+yOff;
+	*pcam = cam;
+}
+
+//changes what st_ent an st_cam is following
+void st_camera_follow(st_cam *pcam, st_ent *pent){
+	st_cam cam = *pcam;
+	cam.follow = pent;
+	*pcam = cam;
+}
+
+//changes what st_ent an st_cam is following and moves it there
+void st_camera_follow_move(st_cam *pcam, st_ent *pent){
+	st_cam cam = *pcam;
+	cam.follow = pent;
+	st_ent ent = *pent;
+	cam.yPos = ent.yPos;
+	cam.xPos = ent.xPos;
+	*pcam = cam;
 }
