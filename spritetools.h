@@ -33,6 +33,11 @@ typedef struct {
 	bool openSlot;            //tells st_entity_add() if this entity can be written to and st_entity_render() if it should be rendered
 } st_ent;
 
+//changes current frame to given int
+st_anim st_animation_create(sf2d_texture *texture, int frames, int framepause, int ytop, int xleft, int width, int height){
+	return {frames, 0, framepause, 0, ytop, xleft, width, height, texture};
+}
+
 //displays selected frame of animation at selected X and Y coordinates
 void st_animation_frame(st_anim anim, int frame, int xrend, int yrend){
 	//prevents currentframe from being too high
@@ -125,7 +130,7 @@ void st_entity_print(st_ent ent){
 	printf("Ent{\n%d,\n%d,\n%d,\n%d,\n%d,\n%d,\n%d,\n%d,\n%d}",ent.xPos,ent.yPos,ent.xHotspot,ent.yHotspot,ent.speed, ent.dir,ent.moving,ent.control,ent.openSlot);
 }
 
-//Prints the given slots of an st_ent array
+//Prints the given slots' structure of an st_ent array
 void st_entity_print_array(st_ent ent[], int total){
 	for(int i = 0; i < total; i++){
 		printf("Ent[%d]{%d,%d,%d,%d,%d,%d,%d,%d,%d}\n",i,ent[i].xPos,ent[i].yPos,ent[i].xHotspot,ent[i].yHotspot,ent[i].speed, ent[i].dir,ent[i].moving,ent[i].control,ent[i].openSlot);
@@ -184,6 +189,33 @@ bool st_entity_add(st_ent ent[], int total, st_anim anim0, st_anim anim1, st_ani
 			ent[i].speed = speed;
 			ent[i].dir = dir;
 			ent[i].moving = moving;
+			ent[i].control = control;
+			ent[i].openSlot = false;
+			return true;
+		}
+	}
+	return false;
+}
+
+//Adds an st_ent to the first open slot available. returns false if no slot is open
+bool st_entity_add_simple(st_ent ent[], int total, st_anim anim0, int x, int y, int xhot, int yhot, int speed, int control){
+	for(int i=0; i<total; i++){
+		if(ent[i].openSlot){
+			ent[i].animStandingDown = anim0;
+			ent[i].animStandingUp = anim0;
+			ent[i].animStandingLeft = anim0;
+			ent[i].animStandingRight = anim0;
+			ent[i].animWalkingDown = anim0;
+			ent[i].animWalkingUp = anim0;
+			ent[i].animWalkingLeft = anim0;
+			ent[i].animWalkingRight = anim0;
+			ent[i].xPos = x;
+			ent[i].yPos = y;
+			ent[i].xHotspot = xhot;
+			ent[i].yHotspot = yhot;
+			ent[i].speed = speed;
+			ent[i].dir = 0;
+			ent[i].moving = false;
 			ent[i].control = control;
 			ent[i].openSlot = false;
 			return true;
