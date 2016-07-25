@@ -29,7 +29,7 @@ typedef struct {
 	int speed;                //speed offset when moving
 	int dir;                  //direction facing. 0=down, 1=right, 2=up, 3=left.
 	bool moving;              //determines if the entity is moving
-	unsigned int control;     //determines built-in control method. 0=static, 1-8=player controlled
+	unsigned int control;     //determines built-in control method. 0=static, 1-8=player controlled, 9-10=reserved for player control, 11-20=reserved for ai control
 	bool openSlot;            //tells st_entity_add() if this entity can be written to and st_entity_render() if it should be rendered
 } st_ent;
 
