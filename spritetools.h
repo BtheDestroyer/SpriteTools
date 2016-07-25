@@ -114,14 +114,11 @@ void st_animation_play(st_anim *panim, int xrend, int yrend){
 	st_anim anim = *panim;
 	sf2d_draw_texture_part(anim.texture, xrend, yrend, anim.xleft + (anim.width*(anim.currentframe/anim.framepause)), anim.ytop, anim.width, anim.height);
 	//counts paused frames and continues animation if needed
-	printf("anim.pausedframes=%d >> ",anim.pausedframes);
 	anim.pausedframes++;
-	printf("%d >> ",anim.pausedframes);
 	if(anim.pausedframes > anim.framepause){
 		anim.pausedframes = 0;
 		anim.currentframe++;
 	}
-	printf("%d >> \n",anim.pausedframes);
 	//loops animation if needed
 	if(anim.currentframe > anim.frames){
 		anim.currentframe = 0;
