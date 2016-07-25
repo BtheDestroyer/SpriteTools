@@ -3,7 +3,7 @@
 
 typedef struct {
 	unsigned int frames;      //number of frames in the animation
-	unsigned int currentframe;//current frame of the animation for use in st_animation_frame_current()
+	unsigned int currentframe;//current frame of the animation for use in st_animation_frame_current() and related functions
 	unsigned int framepause;  //number of frames to wait before displaying the next frame of the anim
 	unsigned int pausedframes;//number of frames paused with st_animation_play()
 	unsigned int ytop;        //top pixel of the first frame in the spritesheet
@@ -32,6 +32,13 @@ typedef struct {
 	unsigned int control;     //determines built-in control method. 0=static, 1-8=player controlled, 9-10=reserved for player control, 11-20=reserved for ai control
 	bool openSlot;            //tells st_entity_add() if this entity can be written to and st_entity_render() if it should be rendered
 } st_ent;
+
+typedef struct {
+	int xPos;                 //x position of the center of the screen
+	int yPos;                 //y position of the center of the screen
+	float zoom;               //how stretched/offset sprites on screen should be 1.0 for default
+	st_ent follow;            //which entitiy is to be followed with st_camera_follow() and related functions
+} st_cam;
 
 //changes current frame to given int
 st_anim st_animation_create(sf2d_texture *texture, int frames, int framepause, int ytop, int xleft, int width, int height){
