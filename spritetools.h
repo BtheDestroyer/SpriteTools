@@ -1,3 +1,6 @@
+#include <stdlib.h>
+#include <sf2d.h>
+
 typedef struct {
 	unsigned int frames;      //number of frames in the animation
 	unsigned int currentframe;//current frame of the animation for use in st_animation_frame_current()
@@ -26,7 +29,7 @@ typedef struct {
 	int speed;                //speed offset when moving
 	int dir;                  //direction facing. 0=down, 1=right, 2=up, 3=left.
 	bool moving;              //determines if the entity is moving
-	unsigned int control;     //determines built-in control method. 0=static, 1-7=player controlled
+	unsigned int control;     //determines built-in control method. 0=static, 1-8=player controlled
 	bool openSlot;            //tells st_entity_add() if this entity can be written to and st_entity_render() if it should be rendered
 } st_ent;
 
@@ -122,7 +125,7 @@ void st_entity_print(st_ent ent){
 	printf("Ent{\n%d,\n%d,\n%d,\n%d,\n%d,\n%d,\n%d,\n%d,\n%d}",ent.xPos,ent.yPos,ent.xHotspot,ent.yHotspot,ent.speed, ent.dir,ent.moving,ent.control,ent.openSlot);
 }
 
-//returns the animation of given st_ent
+//returns the appropriate st_anim of given st_ent
 st_anim st_entity_getanim(st_ent ent){
 	if(ent.openSlot==false){
 		if(ent.moving){
@@ -315,6 +318,10 @@ void st_entity_move_player(st_ent ent[], int total){
 				ent[i].xPos += 0.5+(float)(touch.px-160)/(120.0/(float)ent[i].speed);
 				ent[i].yPos += 0.5+(float)(touch.py-120)/(105.0/(float)ent[i].speed);
 				ent[i].moving = true;
+				if(touch.px-160 < -1*abs(touch.py-120))ent[i].dir = 3; 
+				if(touch.px-160 >= abs(touch.py-120))ent[i].dir = 1;
+				if(touch.py-120 >= abs(touch.px-160))ent[i].dir = 0;
+				if(touch.py-120 < -1*abs(touch.px-160))ent[i].dir = 2; 
 			}else{ent[i].moving = false;}
 			break;
 			default :
