@@ -476,7 +476,7 @@ void st_camera_follow_move(st_cam *pcam, st_ent *pent){
 	*pcam = cam;
 }
 
-//changes what st_ent an st_cam is following and moves it there
+//adds a float to an st_cam's rotation
 void st_camera_rotate(st_cam *pcam, float rot){
 	st_cam cam = *pcam;
 	cam.rot += rot;
@@ -487,7 +487,7 @@ void st_camera_rotate(st_cam *pcam, float rot){
 	*pcam = cam;
 }
 
-//changes what st_ent an st_cam is following and moves it there
+//sets an st_cam's rotation to a float
 void st_camera_rotate_set(st_cam *pcam, float rot){
 	st_cam cam = *pcam;
 	cam.rot = rot;
@@ -495,5 +495,19 @@ void st_camera_rotate_set(st_cam *pcam, float rot){
 	while(cam.rot > 1.0){
 		cam.rot -= 1.0;
 	}
+	*pcam = cam;
+}
+
+//adds a float to an st_cam's zoom
+void st_camera_zoom(st_cam *pcam, float zoom){
+	st_cam cam = *pcam;
+	cam.zoom += zoom;
+	*pcam = cam;
+}
+
+//sets an st_cam's zoom to a float
+void st_camera_zoom_set(st_cam *pcam, float zoom){
+	st_cam cam = *pcam;
+	cam.zoom = zoom;
 	*pcam = cam;
 }
