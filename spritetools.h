@@ -475,3 +475,25 @@ void st_camera_follow_move(st_cam *pcam, st_ent *pent){
 	cam.xPos = ent.xPos;
 	*pcam = cam;
 }
+
+//changes what st_ent an st_cam is following and moves it there
+void st_camera_rotate(st_cam *pcam, float rot){
+	st_cam cam = *pcam;
+	cam.rot += rot;
+	//wraps rotation
+	while(cam.rot > 1.0){
+		cam.rot -= 1.0;
+	}
+	*pcam = cam;
+}
+
+//changes what st_ent an st_cam is following and moves it there
+void st_camera_rotate_set(st_cam *pcam, float rot){
+	st_cam cam = *pcam;
+	cam.rot = rot;
+	//wraps rotation
+	while(cam.rot > 1.0){
+		cam.rot -= 1.0;
+	}
+	*pcam = cam;
+}
