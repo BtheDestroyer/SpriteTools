@@ -40,13 +40,15 @@ void st_animation_frame(st_anim anim, int frame, int xrend, int yrend){
 }
 
 //displays current frame of animation at selected X and Y coordinates, then adds 1 to currentframe
-void st_animation_frame_current(st_anim anim, int xrend, int yrend){
-	sf2d_draw_texture_part(anim.texture, xrend, yrend, anim.xleft + (anim.width*(anim.currentframe/anim.framepause)), anim.ytop, anim.width, anim.height);
-	anim.currentframe++;
+void st_animation_frame_current(st_anim *panim, int xrend, int yrend){
+	st_anim animmod = *panim;
+	sf2d_draw_texture_part(animmod.texture, xrend, yrend, animmod.xleft + (animmod.width*(animmod.currentframe/ animmod.framepause)), animmod.ytop, animmod.width, animmod.height);
+	animmod.currentframe++;
 	//loops animation if needed
-	if(anim.currentframe > anim.frames){
-		anim.currentframe = 0;
+	if(animmod.currentframe > animmod.frames){
+		animmod.currentframe = 0;
 	}
+	*panim = animmod;
 }
 
 //displays current frame of animation at selected X and Y coordinates
@@ -55,13 +57,15 @@ void st_animation_frame_current_nochange(st_anim anim, int xrend, int yrend){
 }
 
 //displays previous frame of animation at selected X and Y coordinates, then subtracts 1 from currentframe
-void st_animation_frame_previous(st_anim anim, int xrend, int yrend){
+void st_animation_frame_previous(st_anim *panim, int xrend, int yrend){
+	st_anim anim = *panim;
 	anim.currentframe--;
 	//loops animation if needed
 	if(anim.currentframe < 0){
 		anim.currentframe = anim.frames;
 	}
 	sf2d_draw_texture_part(anim.texture, xrend, yrend, anim.xleft + (anim.width*anim.currentframe), anim.ytop, anim.width, anim.height);
+	*panim = anim;
 }
 
 //displays previous frame of animation at selected X and Y coordinates, then subtracts 1 from currentframe
@@ -81,7 +85,8 @@ void st_animation_frame_set(st_anim anim, int frame){
 }
 
 //displays current frame of animation at selected X and Y coordinates, then adds 1 to currentframe
-void st_animation_play(st_anim anim, int xrend, int yrend){
+void st_animation_play(st_anim *panim, int xrend, int yrend){
+	st_anim anim = *panim;
 	sf2d_draw_texture_part(anim.texture, xrend, yrend, anim.xleft + (anim.width*(anim.currentframe/anim.framepause)), anim.ytop, anim.width, anim.height);
 	//counts paused frames and continues animation if needed
 	printf("anim.pausedframes=%d >> ",anim.pausedframes);
@@ -96,6 +101,7 @@ void st_animation_play(st_anim anim, int xrend, int yrend){
 	if(anim.currentframe > anim.frames){
 		anim.currentframe = 0;
 	}
+	*panim = anim;
 }
 
 //Prints the st_anim's structure
@@ -210,33 +216,33 @@ void st_entity_render(st_ent ent[], int total){
 				//entity is moving, render walking animation by direction
 				switch(ent[i].dir){
 					case(0) :
-					st_animation_play(ent[i].animWalkingDown, ent[i].xPos-ent[i].xHotspot, ent[i].yPos-ent[i].yHotspot);
+					st_animation_play(&ent[i].animWalkingDown, ent[i].xPos-ent[i].xHotspot, ent[i].yPos-ent[i].yHotspot);
 					break;
 					case(1) :
-					st_animation_play(ent[i].animWalkingRight, ent[i].xPos-ent[i].xHotspot, ent[i].yPos-ent[i].yHotspot);
+					st_animation_play(&ent[i].animWalkingRight, ent[i].xPos-ent[i].xHotspot, ent[i].yPos-ent[i].yHotspot);
 					break;
 					case(2) :
-					st_animation_play(ent[i].animWalkingUp, ent[i].xPos-ent[i].xHotspot, ent[i].yPos-ent[i].yHotspot);
+					st_animation_play(&ent[i].animWalkingUp, ent[i].xPos-ent[i].xHotspot, ent[i].yPos-ent[i].yHotspot);
 					break;
 					case(3) :
 					default :
-					st_animation_play(ent[i].animWalkingLeft, ent[i].xPos-ent[i].xHotspot, ent[i].yPos-ent[i].yHotspot);
+					st_animation_play(&ent[i].animWalkingLeft, ent[i].xPos-ent[i].xHotspot, ent[i].yPos-ent[i].yHotspot);
 				}
 			}else{
 				//entity is not moving, render standing animation by direction
 				switch(ent[i].dir){
 					case(0) :
-					st_animation_play(ent[i].animStandingDown, ent[i].xPos-ent[i].xHotspot, ent[i].yPos-ent[i].yHotspot);
+					st_animation_play(&ent[i].animStandingDown, ent[i].xPos-ent[i].xHotspot, ent[i].yPos-ent[i].yHotspot);
 					break;
 					case(1) :
-					st_animation_play(ent[i].animStandingRight, ent[i].xPos-ent[i].xHotspot, ent[i].yPos-ent[i].yHotspot);
+					st_animation_play(&ent[i].animStandingRight, ent[i].xPos-ent[i].xHotspot, ent[i].yPos-ent[i].yHotspot);
 					break;
 					case(2) :
-					st_animation_play(ent[i].animStandingUp, ent[i].xPos-ent[i].xHotspot, ent[i].yPos-ent[i].yHotspot);
+					st_animation_play(&ent[i].animStandingUp, ent[i].xPos-ent[i].xHotspot, ent[i].yPos-ent[i].yHotspot);
 					break;
 					case(3) :
 					default :
-					st_animation_play(ent[i].animStandingLeft, ent[i].xPos-ent[i].xHotspot, ent[i].yPos-ent[i].yHotspot);
+					st_animation_play(&ent[i].animStandingLeft, ent[i].xPos-ent[i].xHotspot, ent[i].yPos-ent[i].yHotspot);
 				}
 			}
 		}
@@ -250,56 +256,56 @@ void st_entity_move_player(st_ent ent[], int total){
 	for(int i = 0; i<total; i++){
 		switch(ent[i].control){
 			case 1 : //DPad
-			if(kHeld & KEY_DUP){ent[i].yPos-=ent[i].speed; ent[i].dir = 2; }
 			if(kHeld & KEY_DDOWN){ent[i].yPos+=ent[i].speed; ent[i].dir = 0; }
-			if(kHeld & KEY_DLEFT){ent[i].xPos-=ent[i].speed; ent[i].dir = 3; }
 			if(kHeld & KEY_DRIGHT){ent[i].xPos+=ent[i].speed; ent[i].dir = 1; }
+			if(kHeld & KEY_DUP){ent[i].yPos-=ent[i].speed; ent[i].dir = 2; }
+			if(kHeld & KEY_DLEFT){ent[i].xPos-=ent[i].speed; ent[i].dir = 3; }
 			if(kHeld & KEY_DUP || kHeld & KEY_DDOWN || kHeld & KEY_DLEFT || kHeld & KEY_DRIGHT){ ent[i].moving = true;
 			}else{ ent[i].moving = false;}
 			break;
 			case 2 : //CPad
-			if(kHeld & KEY_CPAD_UP){ ent[i].yPos-=ent[i].speed; ent[i].dir = 2; }
 			if(kHeld & KEY_CPAD_DOWN){ ent[i].yPos+=ent[i].speed; ent[i].dir = 0; }
-			if(kHeld & KEY_CPAD_LEFT){ ent[i].xPos-=ent[i].speed; ent[i].dir = 3; }
 			if(kHeld & KEY_CPAD_RIGHT){ ent[i].xPos+=ent[i].speed; ent[i].dir = 1; }
+			if(kHeld & KEY_CPAD_UP){ ent[i].yPos-=ent[i].speed; ent[i].dir = 2; }
+			if(kHeld & KEY_CPAD_LEFT){ ent[i].xPos-=ent[i].speed; ent[i].dir = 3; }
 			if(kHeld & KEY_CPAD_UP || kHeld & KEY_CPAD_DOWN || kHeld & KEY_CPAD_LEFT || kHeld & KEY_CPAD_RIGHT){ ent[i].moving = true;
 			}else{ ent[i].moving = false;}
 			break;
 			case 3 : //CPad OR DPad
-			if(kHeld & KEY_UP){ ent[i].yPos-=ent[i].speed; ent[i].dir = 2; }
 			if(kHeld & KEY_DOWN){ ent[i].yPos+=ent[i].speed; ent[i].dir = 0; }
-			if(kHeld & KEY_LEFT){ ent[i].xPos-=ent[i].speed; ent[i].dir = 3; }
 			if(kHeld & KEY_RIGHT){ ent[i].xPos+=ent[i].speed; ent[i].dir = 1; }
+			if(kHeld & KEY_UP){ ent[i].yPos-=ent[i].speed; ent[i].dir = 2; }
+			if(kHeld & KEY_LEFT){ ent[i].xPos-=ent[i].speed; ent[i].dir = 3; }
 			if(kHeld & KEY_UP || kHeld & KEY_DOWN || kHeld & KEY_LEFT || kHeld & KEY_RIGHT){ ent[i].moving = true;
 			}else{ ent[i].moving = false;}
 			break;
 			case 4 : //CStick
-			if(kHeld & KEY_CSTICK_UP){ ent[i].yPos-=ent[i].speed; ent[i].dir = 2; }
 			if(kHeld & KEY_CSTICK_DOWN){ ent[i].yPos+=ent[i].speed; ent[i].dir = 0; }
-			if(kHeld & KEY_CSTICK_LEFT){ ent[i].xPos-=ent[i].speed; ent[i].dir = 3; }
 			if(kHeld & KEY_CSTICK_RIGHT){ ent[i].xPos+=ent[i].speed; ent[i].dir = 1; }
+			if(kHeld & KEY_CSTICK_UP){ ent[i].yPos-=ent[i].speed; ent[i].dir = 2; }
+			if(kHeld & KEY_CSTICK_LEFT){ ent[i].xPos-=ent[i].speed; ent[i].dir = 3; }
 			if(kHeld & KEY_CPAD_UP || kHeld & KEY_CPAD_DOWN || kHeld & KEY_CPAD_LEFT || kHeld & KEY_CPAD_RIGHT){ ent[i].moving = true;
 			}else{ ent[i].moving = false;}
 			break;
 			case 5 : //ABXY
-			if(kHeld & KEY_X){ ent[i].yPos-=ent[i].speed; ent[i].dir = 2; }
 			if(kHeld & KEY_B){ ent[i].yPos+=ent[i].speed; ent[i].dir = 0; }
-			if(kHeld & KEY_Y){ ent[i].xPos-=ent[i].speed; ent[i].dir = 3; }
 			if(kHeld & KEY_A){ ent[i].xPos+=ent[i].speed; ent[i].dir = 1; }
+			if(kHeld & KEY_X){ ent[i].yPos-=ent[i].speed; ent[i].dir = 2; }
+			if(kHeld & KEY_Y){ ent[i].xPos-=ent[i].speed; ent[i].dir = 3; }
 			if(kHeld & KEY_X || kHeld & KEY_B || kHeld & KEY_Y || kHeld & KEY_A){ ent[i].moving = true;
 			}else{ ent[i].moving = false;}
 			break;
 			case 6 : //LR
-			if(kHeld & KEY_L){ ent[i].xPos-=ent[i].speed; ent[i].dir = 3; }
 			if(kHeld & KEY_R){ ent[i].xPos+=ent[i].speed; ent[i].dir = 1; }
+			if(kHeld & KEY_L){ ent[i].xPos-=ent[i].speed; ent[i].dir = 3; }
 			if(kHeld & KEY_L || kHeld & KEY_R){ ent[i].moving = true;
 			}else{ ent[i].moving = false;}
 			break;
 			case 7 : //LR+ZLZR
-			if(kHeld & KEY_ZL){ ent[i].yPos-=ent[i].speed; ent[i].dir = 2; }
 			if(kHeld & KEY_ZR){ ent[i].yPos+=ent[i].speed; ent[i].dir = 0; }
-			if(kHeld & KEY_L){ ent[i].xPos-=ent[i].speed; ent[i].dir = 3; }
 			if(kHeld & KEY_R){ ent[i].xPos+=ent[i].speed; ent[i].dir = 1; }
+			if(kHeld & KEY_ZL){ ent[i].yPos-=ent[i].speed; ent[i].dir = 2; }
+			if(kHeld & KEY_L){ ent[i].xPos-=ent[i].speed; ent[i].dir = 3; }
 			if(kHeld & KEY_L || kHeld & KEY_R || kHeld & KEY_ZL || kHeld & KEY_ZR){ ent[i].moving = true;
 			}else{ ent[i].moving = false;}
 			break;
