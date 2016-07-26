@@ -39,8 +39,8 @@ typedef struct {
 	int xPos;                 //x position of the center of the screen
 	int yPos;                 //y position of the center of the screen
 	float zoom;               //how stretched/offset sprites on screen should be 1.0 for default
-	float rot;                //how rotated the camera should be on a scale of 0.0 to 1.0. 0.0 for default
-	st_ent *follow;            //which entitiy is to be followed with st_camera_move_follow() and related functions
+	float rot;                //how rotated the camera should be in radians
+	st_ent *follow;           //which entitiy is to be followed with st_camera_move_follow() and related functions
 } st_cam;
 
 st_cam *st_MainCamera;
