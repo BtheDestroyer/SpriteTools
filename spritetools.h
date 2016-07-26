@@ -101,12 +101,14 @@ void st_animation_frame_previous_nochange(st_anim anim, int xrend, int yrend){
 }
 
 //changes current frame to given int
-void st_animation_frame_set(st_anim anim, int frame){
+void st_animation_frame_set(st_anim *panim, int frame){
+	st_anim anim = *panim;
 	anim.currentframe=frame;
 	//prevents currentframe from being too high
 	if(anim.currentframe > anim.frames){
 		anim.currentframe = anim.frames;
 	}
+	*panim = anim;
 }
 
 //displays current frame of animation at selected X and Y coordinates, then adds 1 to currentframe
