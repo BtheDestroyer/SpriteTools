@@ -1,9 +1,11 @@
 #include <stdlib.h>
 #include <sf2d.h>
+#include <math.h>
+#include <stdio.h>
 
 typedef struct {
 	unsigned int frames;      //number of frames in the animation
-	unsigned int currentframe;//current frame of the animation for use in st_animation_frame_current()
+	unsigned int currentframe;//current frame of the animation for use in st_animation_frame_current() and related functions
 	unsigned int framepause;  //number of frames to wait before displaying the next frame of the anim
 	unsigned int pausedframes;//number of frames paused with st_animation_play()
 	unsigned int ytop;        //top pixel of the first frame in the spritesheet
@@ -29,9 +31,31 @@ typedef struct {
 	int speed;                //speed offset when moving
 	int dir;                  //direction facing. 0=down, 1=right, 2=up, 3=left.
 	bool moving;              //determines if the entity is moving
-	unsigned int control;     //determines built-in control method. 0=static, 1-8=player controlled
+	unsigned int control;     //determines built-in control method. 0=static, 1-8=player controlled, 9-10=reserved for player control, 11-20=reserved for ai control
 	bool openSlot;            //tells st_entity_add() if this entity can be written to and st_entity_render() if it should be rendered
 } st_ent;
+
+typedef struct {
+	int xPos;                 //x position of the center of the screen
+	int yPos;                 //y position of the center of the screen
+	float zoom;               //how stretched/offset sprites on screen should be 1.0 for default
+	float rot;                //how rotated the camera should be on a scale of 0.0 to 1.0. 0.0 for default
+	st_ent *follow;            //which entitiy is to be followed with st_camera_move_follow() and related functions
+} st_cam;
+
+st_cam *st_MainCamera;
+
+//returns an st_anim
+st_anim st_animation_create(sf2d_texture *texture, int frames, int framepause, int ytop, int xleft, int width, int height){
+	st_anim anim = {frames, 0, framepause, 0, ytop, xleft, width, height, texture};
+	return anim;
+}
+
+//returns an st_anim with less inputs than st_animation_create
+st_anim st_animation_create_simple(sf2d_texture *texture, int frames, int width, int height){
+	st_anim anim = {frames, 0, 0, 0, 0, 0, width, height, texture};
+	return anim;
+}
 
 //displays selected frame of animation at selected X and Y coordinates
 void st_animation_frame(st_anim anim, int frame, int xrend, int yrend){
@@ -45,7 +69,7 @@ void st_animation_frame(st_anim anim, int frame, int xrend, int yrend){
 //displays current frame of animation at selected X and Y coordinates, then adds 1 to currentframe
 void st_animation_frame_current(st_anim *panim, int xrend, int yrend){
 	st_anim animmod = *panim;
-	sf2d_draw_texture_part(animmod.texture, xrend, yrend, animmod.xleft + (animmod.width*(animmod.currentframe/ animmod.framepause)), animmod.ytop, animmod.width, animmod.height);
+	sf2d_draw_texture_part(animmod.texture, xrend, yrend, animmod.xleft + (animmod.width*(animmod.currentframe)), animmod.ytop, animmod.width, animmod.height);
 	animmod.currentframe++;
 	//loops animation if needed
 	if(animmod.currentframe > animmod.frames){
@@ -79,27 +103,43 @@ void st_animation_frame_previous_nochange(st_anim anim, int xrend, int yrend){
 }
 
 //changes current frame to given int
-void st_animation_frame_set(st_anim anim, int frame){
+void st_animation_frame_set(st_anim *panim, int frame){
+	st_anim anim = *panim;
 	anim.currentframe=frame;
 	//prevents currentframe from being too high
 	if(anim.currentframe > anim.frames){
 		anim.currentframe = anim.frames;
 	}
+	*panim = anim;
 }
 
 //displays current frame of animation at selected X and Y coordinates, then adds 1 to currentframe
 void st_animation_play(st_anim *panim, int xrend, int yrend){
 	st_anim anim = *panim;
-	sf2d_draw_texture_part(anim.texture, xrend, yrend, anim.xleft + (anim.width*(anim.currentframe/anim.framepause)), anim.ytop, anim.width, anim.height);
+	sf2d_draw_texture_part(anim.texture, xrend, yrend, anim.xleft + (anim.width*(anim.currentframe)), anim.ytop, anim.width, anim.height);
 	//counts paused frames and continues animation if needed
-	printf("anim.pausedframes=%d >> ",anim.pausedframes);
 	anim.pausedframes++;
-	printf("%d >> ",anim.pausedframes);
 	if(anim.pausedframes > anim.framepause){
 		anim.pausedframes = 0;
 		anim.currentframe++;
 	}
-	printf("%d >> \n",anim.pausedframes);
+	//loops animation if needed
+	if(anim.currentframe > anim.frames){
+		anim.currentframe = 0;
+	}
+	*panim = anim;
+}
+
+//displays current frame of animation at selected X and Y coordinates and stretches it a certain amount, then adds 1 to currentframe
+void st_animation_play_stretch(st_anim *panim, int xrend, int yrend, float stretch){
+	st_anim anim = *panim;
+	sf2d_draw_texture_part_scale(anim.texture, xrend, yrend, anim.xleft + (anim.width*(anim.currentframe)), anim.ytop, anim.width, anim.height, stretch, stretch);
+	//counts paused frames and continues animation if needed
+	anim.pausedframes++;
+	if(anim.pausedframes > anim.framepause){
+		anim.pausedframes = 0;
+		anim.currentframe++;
+	}
 	//loops animation if needed
 	if(anim.currentframe > anim.frames){
 		anim.currentframe = 0;
@@ -123,6 +163,13 @@ void st_entity_init(st_ent ent[], int total){
 //Prints the st_ent's structure
 void st_entity_print(st_ent ent){
 	printf("Ent{\n%d,\n%d,\n%d,\n%d,\n%d,\n%d,\n%d,\n%d,\n%d}",ent.xPos,ent.yPos,ent.xHotspot,ent.yHotspot,ent.speed, ent.dir,ent.moving,ent.control,ent.openSlot);
+}
+
+//Prints the given slots' structure of an st_ent array
+void st_entity_print_array(st_ent ent[], int total){
+	for(int i = 0; i < total; i++){
+		printf("Ent[%d]{%d,%d,%d,%d,%d,%d,%d,%d,%d}\n",i,ent[i].xPos,ent[i].yPos,ent[i].xHotspot,ent[i].yHotspot,ent[i].speed, ent[i].dir,ent[i].moving,ent[i].control,ent[i].openSlot);
+	}
 }
 
 //returns the appropriate st_anim of given st_ent
@@ -177,6 +224,33 @@ bool st_entity_add(st_ent ent[], int total, st_anim anim0, st_anim anim1, st_ani
 			ent[i].speed = speed;
 			ent[i].dir = dir;
 			ent[i].moving = moving;
+			ent[i].control = control;
+			ent[i].openSlot = false;
+			return true;
+		}
+	}
+	return false;
+}
+
+//Adds an st_ent to the first open slot available. returns false if no slot is open
+bool st_entity_add_simple(st_ent ent[], int total, st_anim anim0, int x, int y, int xhot, int yhot, int speed, int control){
+	for(int i=0; i<total; i++){
+		if(ent[i].openSlot){
+			ent[i].animStandingDown = anim0;
+			ent[i].animStandingUp = anim0;
+			ent[i].animStandingLeft = anim0;
+			ent[i].animStandingRight = anim0;
+			ent[i].animWalkingDown = anim0;
+			ent[i].animWalkingUp = anim0;
+			ent[i].animWalkingLeft = anim0;
+			ent[i].animWalkingRight = anim0;
+			ent[i].xPos = x;
+			ent[i].yPos = y;
+			ent[i].xHotspot = xhot;
+			ent[i].yHotspot = yhot;
+			ent[i].speed = speed;
+			ent[i].dir = 0;
+			ent[i].moving = false;
 			ent[i].control = control;
 			ent[i].openSlot = false;
 			return true;
@@ -246,6 +320,418 @@ void st_entity_render(st_ent ent[], int total){
 					case(3) :
 					default :
 					st_animation_play(&ent[i].animStandingLeft, ent[i].xPos-ent[i].xHotspot, ent[i].yPos-ent[i].yHotspot);
+				}
+			}
+		}
+	}
+}
+
+//Renders all st_ents in relation to an st_cam
+void st_entity_render_camera(st_ent ent[], int total, st_cam cam){
+	for(int i=0; i<total; i++){
+		if(ent[i].openSlot==false){
+			float c = cos(cam.rot);
+			float s = sin(cam.rot);
+
+			int xrend = (ent[i].xPos - ent[i].xHotspot - cam.xPos);
+			int yrend = (ent[i].yPos - ent[i].yHotspot - cam.yPos);
+			float px2 = (float)xrend * c - (float)yrend * s;
+			float py2 = (float)xrend * s + (float)yrend * c;
+			xrend = px2*cam.zoom + 200;
+			yrend = py2*cam.zoom + 120;
+			if(sf2d_get_current_screen() == GFX_BOTTOM){
+				xrend = px2*cam.zoom + 160;
+			}
+			if(ent[i].moving){
+				//entity is moving, render walking animation by direction
+				switch(ent[i].dir){
+					case(0) :
+					st_animation_play_stretch(&ent[i].animWalkingDown, xrend, yrend, cam.zoom);
+					break;
+					case(1) :
+					st_animation_play_stretch(&ent[i].animWalkingRight, xrend, yrend, cam.zoom);
+					break;
+					case(2) :
+					st_animation_play_stretch(&ent[i].animWalkingUp, xrend, yrend, cam.zoom);
+					break;
+					case(3) :
+					default :
+					st_animation_play_stretch(&ent[i].animWalkingLeft, xrend, yrend, cam.zoom);
+				}
+			}else{
+				//entity is not moving, render standing animation by direction
+				switch(ent[i].dir){
+					case(0) :
+					st_animation_play_stretch(&ent[i].animStandingDown, xrend, yrend, cam.zoom);
+					break;
+					case(1) :
+					st_animation_play_stretch(&ent[i].animStandingRight, xrend, yrend, cam.zoom);
+					break;
+					case(2) :
+					st_animation_play_stretch(&ent[i].animStandingUp, xrend, yrend, cam.zoom);
+					break;
+					case(3) :
+					default :
+					st_animation_play_stretch(&ent[i].animStandingLeft, xrend, yrend, cam.zoom);
+				}
+			}
+		}
+	}
+}
+
+//Renders all st_ents in relation to an st_cam WITHOUT stretching
+void st_entity_render_camera_nostretch(st_ent ent[], int total, st_cam cam){
+	for(int i=0; i<total; i++){
+		if(ent[i].openSlot==false){
+			float c = cos(cam.rot);
+			float s = sin(cam.rot);
+
+			int xrend = (ent[i].xPos - ent[i].xHotspot - cam.xPos);
+			int yrend = (ent[i].yPos - ent[i].yHotspot - cam.yPos);
+			float px2 = (float)xrend * c - (float)yrend * s;
+			float py2 = (float)xrend * s + (float)yrend * c;
+			xrend = px2 + 200;
+			yrend = py2 + 120;
+			if(sf2d_get_current_screen() == GFX_BOTTOM){
+				xrend = px2 + 160;
+			}
+			if(ent[i].moving){
+				//entity is moving, render walking animation by direction
+				switch(ent[i].dir){
+					case(0) :
+					st_animation_play(&ent[i].animWalkingDown, xrend, yrend);
+					break;
+					case(1) :
+					st_animation_play(&ent[i].animWalkingRight, xrend, yrend);
+					break;
+					case(2) :
+					st_animation_play(&ent[i].animWalkingUp, xrend, yrend);
+					break;
+					case(3) :
+					default :
+					st_animation_play(&ent[i].animWalkingLeft, xrend, yrend);
+				}
+			}else{
+				//entity is not moving, render standing animation by direction
+				switch(ent[i].dir){
+					case(0) :
+					st_animation_play(&ent[i].animStandingDown, xrend, yrend);
+					break;
+					case(1) :
+					st_animation_play(&ent[i].animStandingRight, xrend, yrend);
+					break;
+					case(2) :
+					st_animation_play(&ent[i].animStandingUp, xrend, yrend);
+					break;
+					case(3) :
+					default :
+					st_animation_play(&ent[i].animStandingLeft, xrend, yrend);
+				}
+			}
+		}
+	}
+}
+
+//Renders all st_ents in relation to an st_cam WITHOUT rotation
+void st_entity_render_camera_norotation(st_ent ent[], int total, st_cam cam){
+	for(int i=0; i<total; i++){
+		if(ent[i].openSlot==false){
+
+			int xrend = (ent[i].xPos - ent[i].xHotspot - cam.xPos);
+			int yrend = (ent[i].yPos - ent[i].yHotspot - cam.yPos);
+			xrend = xrend*cam.zoom + 200;
+			yrend = yrend*cam.zoom + 120;
+			if(sf2d_get_current_screen() == GFX_BOTTOM){
+				xrend = xrend*cam.zoom + 160;
+			}
+			if(ent[i].moving){
+				//entity is moving, render walking animation by direction
+				switch(ent[i].dir){
+					case(0) :
+					st_animation_play_stretch(&ent[i].animWalkingDown, xrend, yrend, cam.zoom);
+					break;
+					case(1) :
+					st_animation_play_stretch(&ent[i].animWalkingRight, xrend, yrend, cam.zoom);
+					break;
+					case(2) :
+					st_animation_play_stretch(&ent[i].animWalkingUp, xrend, yrend, cam.zoom);
+					break;
+					case(3) :
+					default :
+					st_animation_play_stretch(&ent[i].animWalkingLeft, xrend, yrend, cam.zoom);
+				}
+			}else{
+				//entity is not moving, render standing animation by direction
+				switch(ent[i].dir){
+					case(0) :
+					st_animation_play_stretch(&ent[i].animStandingDown, xrend, yrend, cam.zoom);
+					break;
+					case(1) :
+					st_animation_play_stretch(&ent[i].animStandingRight, xrend, yrend, cam.zoom);
+					break;
+					case(2) :
+					st_animation_play_stretch(&ent[i].animStandingUp, xrend, yrend, cam.zoom);
+					break;
+					case(3) :
+					default :
+					st_animation_play_stretch(&ent[i].animStandingLeft, xrend, yrend, cam.zoom);
+				}
+			}
+		}
+	}
+}
+
+//Renders all st_ents in relation to an st_cam WITHOUT stretching OR rotation
+void st_entity_render_camera_nostretch_norotation(st_ent ent[], int total, st_cam cam){
+	for(int i=0; i<total; i++){
+		if(ent[i].openSlot==false){
+
+			int xrend = (ent[i].xPos - ent[i].xHotspot - cam.xPos);
+			int yrend = (ent[i].yPos - ent[i].yHotspot - cam.yPos);
+			xrend = xrend + 200;
+			yrend = yrend + 120;
+			if(sf2d_get_current_screen() == GFX_BOTTOM){
+				xrend = xrend + 160;
+			}
+			if(ent[i].moving){
+				//entity is moving, render walking animation by direction
+				switch(ent[i].dir){
+					case(0) :
+					st_animation_play(&ent[i].animWalkingDown, xrend, yrend);
+					break;
+					case(1) :
+					st_animation_play(&ent[i].animWalkingRight, xrend, yrend);
+					break;
+					case(2) :
+					st_animation_play(&ent[i].animWalkingUp, xrend, yrend);
+					break;
+					case(3) :
+					default :
+					st_animation_play(&ent[i].animWalkingLeft, xrend, yrend);
+				}
+			}else{
+				//entity is not moving, render standing animation by direction
+				switch(ent[i].dir){
+					case(0) :
+					st_animation_play(&ent[i].animStandingDown, xrend, yrend);
+					break;
+					case(1) :
+					st_animation_play(&ent[i].animStandingRight, xrend, yrend);
+					break;
+					case(2) :
+					st_animation_play(&ent[i].animStandingUp, xrend, yrend);
+					break;
+					case(3) :
+					default :
+					st_animation_play(&ent[i].animStandingLeft, xrend, yrend);
+				}
+			}
+		}
+	}
+}
+
+//Renders all st_ents in relation to the main st_cam
+void st_entity_render_camera_main(st_ent ent[], int total){
+	st_cam cam = *st_MainCamera;
+	for(int i=0; i<total; i++){
+		if(ent[i].openSlot==false){
+			float c = cos(cam.rot);
+			float s = sin(cam.rot);
+
+			int xrend = (ent[i].xPos - ent[i].xHotspot - cam.xPos);
+			int yrend = (ent[i].yPos - ent[i].yHotspot - cam.yPos);
+			float px2 = (float)xrend * c - (float)yrend * s;
+			float py2 = (float)xrend * s + (float)yrend * c;
+			xrend = px2*cam.zoom + 200;
+			yrend = py2*cam.zoom + 120;
+			if(sf2d_get_current_screen() == GFX_BOTTOM){
+				xrend = px2 + 160;
+			}
+			if(ent[i].moving){
+				//entity is moving, render walking animation by direction
+				switch(ent[i].dir){
+					case(0) :
+					st_animation_play_stretch(&ent[i].animWalkingDown, xrend, yrend, cam.zoom);
+					break;
+					case(1) :
+					st_animation_play_stretch(&ent[i].animWalkingRight, xrend, yrend, cam.zoom);
+					break;
+					case(2) :
+					st_animation_play_stretch(&ent[i].animWalkingUp, xrend, yrend, cam.zoom);
+					break;
+					case(3) :
+					default :
+					st_animation_play_stretch(&ent[i].animWalkingLeft, xrend, yrend, cam.zoom);
+				}
+			}else{
+				//entity is not moving, render standing animation by direction
+				switch(ent[i].dir){
+					case(0) :
+					st_animation_play_stretch(&ent[i].animStandingDown, xrend, yrend, cam.zoom);
+					break;
+					case(1) :
+					st_animation_play_stretch(&ent[i].animStandingRight, xrend, yrend, cam.zoom);
+					break;
+					case(2) :
+					st_animation_play_stretch(&ent[i].animStandingUp, xrend, yrend, cam.zoom);
+					break;
+					case(3) :
+					default :
+					st_animation_play_stretch(&ent[i].animStandingLeft, xrend, yrend, cam.zoom);
+				}
+			}
+		}
+	}
+}
+
+//Renders all st_ents in relation to the main st_cam WITHOUT stretching
+void st_entity_render_camera_main_nostretch(st_ent ent[], int total){
+	st_cam cam = *st_MainCamera;
+	for(int i=0; i<total; i++){
+		if(ent[i].openSlot==false){
+			float c = cos(cam.rot);
+			float s = sin(cam.rot);
+
+			int xrend = (ent[i].xPos - ent[i].xHotspot - cam.xPos);
+			int yrend = (ent[i].yPos - ent[i].yHotspot - cam.yPos);
+			float px2 = (float)xrend * c - (float)yrend * s;
+			float py2 = (float)xrend * s + (float)yrend * c;
+			xrend = px2 + 200;
+			yrend = py2 + 120;
+			if(sf2d_get_current_screen() == GFX_BOTTOM){
+				xrend = px2 + 160;
+			}
+			if(ent[i].moving){
+				//entity is moving, render walking animation by direction
+				switch(ent[i].dir){
+					case(0) :
+					st_animation_play(&ent[i].animWalkingDown, xrend, yrend);
+					break;
+					case(1) :
+					st_animation_play(&ent[i].animWalkingRight, xrend, yrend);
+					break;
+					case(2) :
+					st_animation_play(&ent[i].animWalkingUp, xrend, yrend);
+					break;
+					case(3) :
+					default :
+					st_animation_play(&ent[i].animWalkingLeft, xrend, yrend);
+				}
+			}else{
+				//entity is not moving, render standing animation by direction
+				switch(ent[i].dir){
+					case(0) :
+					st_animation_play(&ent[i].animStandingDown, xrend, yrend);
+					break;
+					case(1) :
+					st_animation_play(&ent[i].animStandingRight, xrend, yrend);
+					break;
+					case(2) :
+					st_animation_play(&ent[i].animStandingUp, xrend, yrend);
+					break;
+					case(3) :
+					default :
+					st_animation_play(&ent[i].animStandingLeft, xrend, yrend);
+				}
+			}
+		}
+	}
+}
+
+//Renders all st_ents in relation to the main st_cam WITHOUT rotation
+void st_entity_render_camera_main_norotation(st_ent ent[], int total){
+	st_cam cam = *st_MainCamera;
+	for(int i=0; i<total; i++){
+		if(ent[i].openSlot==false){
+
+			int xrend = (ent[i].xPos - ent[i].xHotspot - cam.xPos);
+			int yrend = (ent[i].yPos - ent[i].yHotspot - cam.yPos);
+			xrend = xrend*cam.zoom + 200;
+			yrend = yrend*cam.zoom + 120;
+			if(sf2d_get_current_screen() == GFX_BOTTOM){
+				xrend = xrend*cam.zoom + 160;
+			}
+			if(ent[i].moving){
+				//entity is moving, render walking animation by direction
+				switch(ent[i].dir){
+					case(0) :
+					st_animation_play_stretch(&ent[i].animWalkingDown, xrend, yrend, cam.zoom);
+					break;
+					case(1) :
+					st_animation_play_stretch(&ent[i].animWalkingRight, xrend, yrend, cam.zoom);
+					break;
+					case(2) :
+					st_animation_play_stretch(&ent[i].animWalkingUp, xrend, yrend, cam.zoom);
+					break;
+					case(3) :
+					default :
+					st_animation_play_stretch(&ent[i].animWalkingLeft, xrend, yrend, cam.zoom);
+				}
+			}else{
+				//entity is not moving, render standing animation by direction
+				switch(ent[i].dir){
+					case(0) :
+					st_animation_play_stretch(&ent[i].animStandingDown, xrend, yrend, cam.zoom);
+					break;
+					case(1) :
+					st_animation_play_stretch(&ent[i].animStandingRight, xrend, yrend, cam.zoom);
+					break;
+					case(2) :
+					st_animation_play_stretch(&ent[i].animStandingUp, xrend, yrend, cam.zoom);
+					break;
+					case(3) :
+					default :
+					st_animation_play_stretch(&ent[i].animStandingLeft, xrend, yrend, cam.zoom);
+				}
+			}
+		}
+	}
+}
+
+//Renders all st_ents in relation to the main WITHOUT stretching OR rotation
+void st_entity_render_camera_main_nostretch_norotation(st_ent ent[], int total){
+	st_cam cam = *st_MainCamera;
+	for(int i=0; i<total; i++){
+		if(ent[i].openSlot==false){
+
+			int xrend = (ent[i].xPos - ent[i].xHotspot - cam.xPos);
+			int yrend = (ent[i].yPos - ent[i].yHotspot - cam.yPos);
+			xrend = xrend + 200;
+			yrend = yrend + 120;
+			if(sf2d_get_current_screen() == GFX_BOTTOM){
+				xrend = xrend + 160;
+			}
+			if(ent[i].moving){
+				//entity is moving, render walking animation by direction
+				switch(ent[i].dir){
+					case(0) :
+					st_animation_play(&ent[i].animWalkingDown, xrend, yrend);
+					break;
+					case(1) :
+					st_animation_play(&ent[i].animWalkingRight, xrend, yrend);
+					break;
+					case(2) :
+					st_animation_play(&ent[i].animWalkingUp, xrend, yrend);
+					break;
+					case(3) :
+					default :
+					st_animation_play(&ent[i].animWalkingLeft, xrend, yrend);
+				}
+			}else{
+				//entity is not moving, render standing animation by direction
+				switch(ent[i].dir){
+					case(0) :
+					st_animation_play(&ent[i].animStandingDown, xrend, yrend);
+					break;
+					case(1) :
+					st_animation_play(&ent[i].animStandingRight, xrend, yrend);
+					break;
+					case(2) :
+					st_animation_play(&ent[i].animStandingUp, xrend, yrend);
+					break;
+					case(3) :
+					default :
+					st_animation_play(&ent[i].animStandingLeft, xrend, yrend);
 				}
 			}
 		}
@@ -328,4 +814,130 @@ void st_entity_move_player(st_ent ent[], int total){
 			break;
 		}
 	}
+}
+
+//returns an st_cam
+st_cam st_camera_create(int xPos, int yPos, float zoom, float rot, st_ent *follow){
+	st_cam cam = {xPos, yPos, zoom, rot, follow};
+	return cam;
+}
+
+//returns an st_cam with less inputs than st_camera_create
+st_cam st_camera_create_simple(int xPos, int yPos){
+	st_cam cam = {xPos, yPos, 1.0, 0.0, NULL};
+	return cam;
+}
+
+//sets the main camera to the supplied cam.
+void st_camera_setmain(st_cam* cam){
+	st_MainCamera = cam;
+}
+
+//moves an st_cam to given position
+void st_camera_move(st_cam *pcam, int xPos, int yPos){
+	st_cam cam = *pcam;
+	cam.xPos = xPos;
+	cam.yPos = yPos;
+	*pcam = cam;
+}
+
+//moves an st_cam to given x position
+void st_camera_move_x(st_cam *pcam, int xPos){
+	st_cam cam = *pcam;
+	cam.xPos = xPos;
+	*pcam = cam;
+}
+
+//moves an st_cam to given y position
+void st_camera_move_y(st_cam *pcam, int yPos){
+	st_cam cam = *pcam;
+	cam.yPos = yPos;
+	*pcam = cam;
+}
+
+//moves an st_cam to given st_ent's position
+void st_camera_move_ent(st_cam *pcam, st_ent ent){
+	st_cam cam = *pcam;
+	cam.xPos = ent.xPos;
+	cam.yPos = ent.yPos;
+	*pcam = cam;
+}
+
+//moves an st_cam to given st_ent's position
+void st_camera_move_ent_offset(st_cam *pcam, st_ent ent, int xOff, int yOff){
+	st_cam cam = *pcam;
+	cam.xPos = ent.xPos+xOff;
+	cam.yPos = ent.yPos+yOff;
+	*pcam = cam;
+}
+
+//moves an st_cam the st_ent it's following
+void st_camera_move_follow(st_cam *pcam){
+	st_cam cam = *pcam;
+	st_ent ent = *cam.follow;
+	cam.xPos = ent.xPos;
+	cam.yPos = ent.yPos;
+	*pcam = cam;
+}
+
+//moves an st_cam to the st_ent it's following with an x and y offset
+void st_camera_move_follow_offset(st_cam *pcam, int xOff, int yOff){
+	st_cam cam = *pcam;
+	st_ent ent = *cam.follow;
+	cam.xPos = ent.xPos+xOff;
+	cam.yPos = ent.yPos+yOff;
+	*pcam = cam;
+}
+
+//changes what st_ent an st_cam is following
+void st_camera_follow(st_cam *pcam, st_ent *pent){
+	st_cam cam = *pcam;
+	cam.follow = pent;
+	*pcam = cam;
+}
+
+//changes what st_ent an st_cam is following and moves it there
+void st_camera_follow_move(st_cam *pcam, st_ent *pent){
+	st_cam cam = *pcam;
+	cam.follow = pent;
+	st_ent ent = *pent;
+	cam.yPos = ent.yPos;
+	cam.xPos = ent.xPos;
+	*pcam = cam;
+}
+
+//adds a float to an st_cam's rotation
+void st_camera_rotate(st_cam *pcam, float rot){
+	st_cam cam = *pcam;
+	cam.rot += rot;
+	//wraps rotation
+	while(cam.rot > 1.0){
+		cam.rot -= 1.0;
+	}
+	*pcam = cam;
+}
+
+//sets an st_cam's rotation to a float
+void st_camera_rotate_set(st_cam *pcam, float rot){
+	st_cam cam = *pcam;
+	cam.rot = rot;
+	//wraps rotation
+	while(cam.rot > 1.0){
+		cam.rot -= 1.0;
+	}
+	*pcam = cam;
+}
+
+//adds a float to an st_cam's zoom
+void st_camera_zoom(st_cam *pcam, float zoom){
+	st_cam cam = *pcam;
+	cam.zoom += zoom;
+	*pcam = cam;
+}
+
+//sets an st_cam's zoom to a float
+void st_camera_zoom_set(st_cam *pcam, float zoom){
+	st_cam cam = *pcam;
+	cam.zoom = zoom;
+	*pcam = cam;
 }
