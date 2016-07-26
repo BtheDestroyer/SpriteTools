@@ -67,7 +67,7 @@ void st_animation_frame(st_anim anim, int frame, int xrend, int yrend){
 //displays current frame of animation at selected X and Y coordinates, then adds 1 to currentframe
 void st_animation_frame_current(st_anim *panim, int xrend, int yrend){
 	st_anim animmod = *panim;
-	sf2d_draw_texture_part(animmod.texture, xrend, yrend, animmod.xleft + (animmod.width*(animmod.currentframe/ animmod.framepause)), animmod.ytop, animmod.width, animmod.height);
+	sf2d_draw_texture_part(animmod.texture, xrend, yrend, animmod.xleft + (animmod.width*(animmod.currentframe)), animmod.ytop, animmod.width, animmod.height);
 	animmod.currentframe++;
 	//loops animation if needed
 	if(animmod.currentframe > animmod.frames){
@@ -112,7 +112,7 @@ void st_animation_frame_set(st_anim anim, int frame){
 //displays current frame of animation at selected X and Y coordinates, then adds 1 to currentframe
 void st_animation_play(st_anim *panim, int xrend, int yrend){
 	st_anim anim = *panim;
-	sf2d_draw_texture_part(anim.texture, xrend, yrend, anim.xleft + (anim.width*(anim.currentframe/anim.framepause)), anim.ytop, anim.width, anim.height);
+	sf2d_draw_texture_part(anim.texture, xrend, yrend, anim.xleft + (anim.width*(anim.currentframe)), anim.ytop, anim.width, anim.height);
 	//counts paused frames and continues animation if needed
 	anim.pausedframes++;
 	if(anim.pausedframes > anim.framepause){
