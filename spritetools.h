@@ -1,5 +1,7 @@
 #include <stdlib.h>
 #include <sf2d.h>
+#include <math.h>
+#include <stdio.h>
 
 typedef struct {
 	unsigned int frames;      //number of frames in the animation
@@ -311,37 +313,46 @@ void st_entity_render(st_ent ent[], int total){
 void st_entity_render_camera(st_ent ent[], int total, st_cam cam){
 	for(int i=0; i<total; i++){
 		if(ent[i].openSlot==false){
+			float xrend = (ent[i].xPos-ent[i].xHotspot-cam.xPos);
+			float yrend = (ent[i].yPos-ent[i].yHotspot-cam.yPos);
+			int xrend2 = xrend*cos(cam.rot) - yrend*sin(cam.rot);
+			int yrend2 = xrend*sin(cam.rot) + yrend*cos(cam.rot);
+			xrend = xrend2+200;
+			yrend = yrend2+120;
+			if(sf2d_get_current_screen() == GFX_BOTTOM){
+				xrend = xrend2+160;
+			}
 			if(ent[i].moving){
 				//entity is moving, render walking animation by direction
 				switch(ent[i].dir){
 					case(0) :
-					st_animation_play(&ent[i].animWalkingDown, ent[i].xPos-ent[i].xHotspot-cam.xPos+200, ent[i].yPos-ent[i].yHotspot-cam.yPos+120);
+					st_animation_play(&ent[i].animWalkingDown, xrend, yrend);
 					break;
 					case(1) :
-					st_animation_play(&ent[i].animWalkingRight, ent[i].xPos-ent[i].xHotspot-cam.xPos+200, ent[i].yPos-ent[i].yHotspot-cam.yPos+120);
+					st_animation_play(&ent[i].animWalkingRight, xrend, yrend);
 					break;
 					case(2) :
-					st_animation_play(&ent[i].animWalkingUp, ent[i].xPos-ent[i].xHotspot-cam.xPos+200, ent[i].yPos-ent[i].yHotspot-cam.yPos+120);
+					st_animation_play(&ent[i].animWalkingUp, xrend, yrend);
 					break;
 					case(3) :
 					default :
-					st_animation_play(&ent[i].animWalkingLeft, ent[i].xPos-ent[i].xHotspot-cam.xPos+200, ent[i].yPos-ent[i].yHotspot-cam.yPos+120);
+					st_animation_play(&ent[i].animWalkingLeft, xrend, yrend);
 				}
 			}else{
 				//entity is not moving, render standing animation by direction
 				switch(ent[i].dir){
 					case(0) :
-					st_animation_play(&ent[i].animStandingDown, ent[i].xPos-ent[i].xHotspot-cam.xPos+200, ent[i].yPos-ent[i].yHotspot-cam.yPos+120);
+					st_animation_play(&ent[i].animStandingDown, xrend, yrend);
 					break;
 					case(1) :
-					st_animation_play(&ent[i].animStandingRight, ent[i].xPos-ent[i].xHotspot-cam.xPos+200, ent[i].yPos-ent[i].yHotspot-cam.yPos+120);
+					st_animation_play(&ent[i].animStandingRight, xrend, yrend);
 					break;
 					case(2) :
-					st_animation_play(&ent[i].animStandingUp, ent[i].xPos-ent[i].xHotspot-cam.xPos+200, ent[i].yPos-ent[i].yHotspot-cam.yPos+120);
+					st_animation_play(&ent[i].animStandingUp, xrend, yrend);
 					break;
 					case(3) :
 					default :
-					st_animation_play(&ent[i].animStandingLeft, ent[i].xPos-ent[i].xHotspot-cam.xPos+200, ent[i].yPos-ent[i].yHotspot-cam.yPos+120);
+					st_animation_play(&ent[i].animStandingLeft, xrend, yrend);
 				}
 			}
 		}
@@ -353,37 +364,49 @@ void st_entity_render_camera_main(st_ent ent[], int total){
 	st_cam cam = *st_MainCamera;
 	for(int i=0; i<total; i++){
 		if(ent[i].openSlot==false){
+			float c = cos(cam.rot);
+			float s = sin(cam.rot);
+
+			int xrend = (ent[i].xPos - ent[i].xHotspot - cam.xPos);
+			int yrend = (ent[i].yPos - ent[i].yHotspot - cam.yPos);
+			float px2 = (float)xrend * c - (float)yrend * s;
+			float py2 = (float)xrend * s + (float)yrend * c;
+			xrend = px2 + 200;
+			yrend = py2 + 120;
+			if(sf2d_get_current_screen() == GFX_BOTTOM){
+				xrend = px2 + 160;
+			}
 			if(ent[i].moving){
 				//entity is moving, render walking animation by direction
 				switch(ent[i].dir){
 					case(0) :
-					st_animation_play(&ent[i].animWalkingDown, ent[i].xPos-ent[i].xHotspot-cam.xPos+200, ent[i].yPos-ent[i].yHotspot-cam.yPos+120);
+					st_animation_play(&ent[i].animWalkingDown, xrend, yrend);
 					break;
 					case(1) :
-					st_animation_play(&ent[i].animWalkingRight, ent[i].xPos-ent[i].xHotspot-cam.xPos+200, ent[i].yPos-ent[i].yHotspot-cam.yPos+120);
+					st_animation_play(&ent[i].animWalkingRight, xrend, yrend);
 					break;
 					case(2) :
-					st_animation_play(&ent[i].animWalkingUp, ent[i].xPos-ent[i].xHotspot-cam.xPos+200, ent[i].yPos-ent[i].yHotspot-cam.yPos+120);
+					st_animation_play(&ent[i].animWalkingUp, xrend, yrend);
 					break;
 					case(3) :
 					default :
-					st_animation_play(&ent[i].animWalkingLeft, ent[i].xPos-ent[i].xHotspot-cam.xPos+200, ent[i].yPos-ent[i].yHotspot-cam.yPos+120);
+					st_animation_play(&ent[i].animWalkingLeft, xrend, yrend);
 				}
 			}else{
 				//entity is not moving, render standing animation by direction
 				switch(ent[i].dir){
 					case(0) :
-					st_animation_play(&ent[i].animStandingDown, ent[i].xPos-ent[i].xHotspot-cam.xPos+200, ent[i].yPos-ent[i].yHotspot-cam.yPos+120);
+					st_animation_play(&ent[i].animStandingDown, xrend, yrend);
 					break;
 					case(1) :
-					st_animation_play(&ent[i].animStandingRight, ent[i].xPos-ent[i].xHotspot-cam.xPos+200, ent[i].yPos-ent[i].yHotspot-cam.yPos+120);
+					st_animation_play(&ent[i].animStandingRight, xrend, yrend);
 					break;
 					case(2) :
-					st_animation_play(&ent[i].animStandingUp, ent[i].xPos-ent[i].xHotspot-cam.xPos+200, ent[i].yPos-ent[i].yHotspot-cam.yPos+120);
+					st_animation_play(&ent[i].animStandingUp, xrend, yrend);
 					break;
 					case(3) :
 					default :
-					st_animation_play(&ent[i].animStandingLeft, ent[i].xPos-ent[i].xHotspot-cam.xPos+200, ent[i].yPos-ent[i].yHotspot-cam.yPos+120);
+					st_animation_play(&ent[i].animStandingLeft, xrend, yrend);
 				}
 			}
 		}
