@@ -911,8 +911,11 @@ void st_camera_rotate(st_cam *pcam, float rot){
 	st_cam cam = *pcam;
 	cam.rot += rot;
 	//wraps rotation
-	while(cam.rot > 1.0){
-		cam.rot -= 1.0;
+	while(cam.rot > 2*3.14159265359){
+		cam.rot -= 2*3.14159265359;
+	}
+	while(cam.rot < 0){
+		cam.rot += 2*3.14159265359;
 	}
 	*pcam = cam;
 }
@@ -924,6 +927,9 @@ void st_camera_rotate_set(st_cam *pcam, float rot){
 	//wraps rotation
 	while(cam.rot > 1.0){
 		cam.rot -= 1.0;
+	}
+	while(cam.rot < 0){
+		cam.rot += 2*3.14159265359;
 	}
 	*pcam = cam;
 }
