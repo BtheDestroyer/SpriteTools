@@ -1091,6 +1091,15 @@ void st_camera_zoom_set(st_cam *pcam, float zoom){
 	*pcam = cam;
 }
 
+//Initializes a room with the proper variables
+void st_room_init(st_room *proom){
+	st_room room = *proom;
+	for(int i=0; i<RoomCameras; i++){
+		room.openCam[i] = true;
+	}
+	*proom = room;
+}
+
 //Returns a room's background
 st_anim st_room_background_get(st_room room){
 	return room.background;
