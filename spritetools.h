@@ -1108,7 +1108,7 @@ st_ent st_room_get_entity(st_room room, int index){
 
 //Returns a room's background
 void st_room_set_background(st_room *proom, st_anim background){
-	room = *proom;
+	st_room room = *proom;
 	room.background = background;
 	*proom = room;
 }
