@@ -810,6 +810,8 @@ void st_entity_setcollision(st_ent ent[], int slot, bool collision){
 
 //returns true if an entity is colliding with another entity
 bool st_entity_colliding_entity(st_ent ent0, st_ent ent1){
+	if(ent0.noCollide) return false;
+	if(ent1.noCollide) return false;
 	st_anim anim0 = st_entity_getanim(ent0);
 	st_anim anim1 = st_entity_getanim(ent1);
 	int left0 = ent0.xPos;
@@ -821,7 +823,7 @@ bool st_entity_colliding_entity(st_ent ent0, st_ent ent1){
 	int bottom0 = ent0.yPos + anim0.height;
 	int bottom1 = ent1.yPos + anim1.height;
 
-	if ((bottom0 < top1)||(top0 > bottom1)||(right0 < left1)||(left0 > right1)){
+	if((bottom0 < top1)||(top0 > bottom1)||(right0 < left1)||(left0 > right1)){
 		return true;
 	}else{
 		return false;
@@ -830,8 +832,8 @@ bool st_entity_colliding_entity(st_ent ent0, st_ent ent1){
 
 //returns true if an entity is colliding with a rectangle
 bool st_entity_colliding_rectangle(st_ent ent0, int left1, int top1, int width, int height){
+	if(ent0.noCollide) return false;
 	st_anim anim0 = st_entity_getanim(ent0);
-	st_anim anim1 = st_entity_getanim(ent1);
 	int left0 = ent0.xPos;
 	int right0 = ent0.xPos + anim0.width;
 	int right1 = left1 + width;
@@ -839,7 +841,7 @@ bool st_entity_colliding_rectangle(st_ent ent0, int left1, int top1, int width, 
 	int bottom0 = ent0.yPos + anim0.height;
 	int bottom1 = top1 + height;
 
-	if ((bottom0 < top1)||(top0 > bottom1)||(right0 < left1)||(left0 > right1)){
+	if((bottom0 < top1)||(top0 > bottom1)||(right0 < left1)||(left0 > right1)){
 		return true;
 	}else{
 		return false;
@@ -848,14 +850,14 @@ bool st_entity_colliding_rectangle(st_ent ent0, int left1, int top1, int width, 
 
 //same as st_entity_colliding_rectangle but uses four positions instead of two with dimensions
 bool st_entity_colliding_rectangle_pos(st_ent ent0, int left1, int top1, int right1, int bottom1){
+	if(ent0.noCollide) return false;
 	st_anim anim0 = st_entity_getanim(ent0);
-	st_anim anim1 = st_entity_getanim(ent1);
 	int left0 = ent0.xPos;
 	int right0 = ent0.xPos + anim0.width;
 	int top0 = ent0.yPos;
 	int bottom0 = ent0.yPos + anim0.height;
 
-	if ((bottom0 < top1)||(top0 > bottom1)||(right0 < left1)||(left0 > right1)){
+	if((bottom0 < top1)||(top0 > bottom1)||(right0 < left1)||(left0 > right1)){
 		return true;
 	}else{
 		return false;
