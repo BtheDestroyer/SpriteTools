@@ -810,8 +810,7 @@ void st_entity_setcollision(st_ent ent[], int slot, bool collision){
 
 //returns true if an entity is colliding with another entity
 bool st_entity_colliding_entity(st_ent ent0, st_ent ent1){
-	if(ent0.noCollide) return false;
-	if(ent1.noCollide) return false;
+	if(ent0.noCollide || ent1.noCollide) return false;
 	st_anim anim0 = st_entity_getanim(ent0);
 	st_anim anim1 = st_entity_getanim(ent1);
 	int left0 = ent0.xPos;
