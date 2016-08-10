@@ -1,16 +1,21 @@
 #ifndef SPRITETOOLS_H
+#define SPRITETOOLS_H
 
 #ifndef STDLIB_H
 #include <stdlib.h>
+#define STDLIB_H
 #endif
 #ifndef SF2D_H
 #include <sf2d.h>
+#define SF2D_H
 #endif
 #ifndef MATH_H
 #include <math.h>
+#define MATH_H
 #endif
 #ifndef STDIO_H
 #include <stdio.h>
+#define STDIO_H
 #endif
 
 typedef struct {
