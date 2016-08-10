@@ -33,6 +33,7 @@ typedef struct {
 	bool moving;              //determines if the entity is moving
 	unsigned int control;     //determines built-in control method. 0=static, 1-8=player controlled, 9-10=reserved for player control, 11-20=reserved for ai control
 	bool openSlot;            //tells st_entity_add() if this entity can be written to and st_entity_render() if it should be rendered
+	bool noCollide;           //if true, st_entity_colliding() will always return false
 } st_ent;
 
 typedef struct {
@@ -42,6 +43,12 @@ typedef struct {
 	float rot;                //how rotated the camera should be in radians
 	st_ent *follow;           //which entitiy is to be followed with st_camera_move_follow() and related functions
 } st_cam;
+
+typedef struct {
+	st_cam cameras[16];       //array of cameras in the room
+	st_ent entities[1024];    //array of entities in the room
+	st_anim background;       //background of the room (located at 0,0)
+} st_room;
 
 st_cam *st_MainCamera;
 
@@ -946,4 +953,27 @@ void st_camera_zoom_set(st_cam *pcam, float zoom){
 	st_cam cam = *pcam;
 	cam.zoom = zoom;
 	*pcam = cam;
+}
+
+//returns a prepared st_room
+st_room st_room_create(st_anim background, st_cam cameras[16], st_ent entities[1024]){
+	st_room room = {
+		cameras, entities, background
+	};
+	return room;
+}
+
+//returns a room's background
+st_anim st_room_get_background(st_room room){
+	return room.background;
+}
+
+//returns a room's camera
+st_cam st_room_get_camera(st_room room, int index){
+	return room.cameras[index];
+}
+
+//returns a room's entity
+st_anim st_room_get_entity(st_room room, int index){
+	return room.entities[index];
 }
