@@ -49,6 +49,7 @@ typedef struct {
 	bool openCam[16];         //list of open camera slots
 	st_ent entities[1024];    //array of entities in the room
 	st_anim background;       //background of the room (located at 0,0)
+	st_cam *CurrentCam;       //current camera of the room
 } st_room;
 
 st_cam *st_MainCamera;
@@ -212,6 +213,40 @@ st_anim st_entity_getanim(st_ent ent){
 			}
 		}
 	}
+}
+
+//Returns the number of open slots in an st_ent array
+int st_entity_slots_open(st_ent ent[], int total){
+	int openSlots = 0;
+	for(int i=0; i<total; i++){
+		if(ent[i].openSlot) openSlots++;
+	}
+	return openSlots;
+}
+
+//Returns the first open slot of an entity array
+int st_entity_slots_open_first(st_ent ent[], int total){
+	for(int i=0; i<total; i++){
+		if(ent[i].openSlot) return i;
+	}
+}
+
+//Returns the number of taken slots in an st_ent array
+int st_entity_slots_taken(st_ent ent[], int total){
+	int openSlots = 0;
+	for(int i=0; i<total; i++){
+		if(ent[i].openSlot) openSlots++;
+	}
+	return total - openSlots;
+}
+
+//Returns the number of the last taken slot in an st_ent array
+int st_entity_slots_taken_last(st_ent ent[], int total){
+	int takenSlot = 0;
+	for(int i=0; i<total; i++){
+		if(ent[i].openSlot == false) takenSlot = i;
+	}
+	return takenSlot;
 }
 
 //Adds an st_ent to the first open slot available. returns false if no slot is open
