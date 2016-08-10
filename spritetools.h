@@ -54,26 +54,6 @@ typedef struct {
 
 st_cam *st_MainCamera;
 
-//returns width of current screen
-int st_screen_width_current(){
-	if(sf2d_get_current_screen() == GFX_TOP){
-		return 400;
-	}else if(sf2d_get_current_screen() == GFX_BOTTOM){
-		return 320;
-	}else{
-		return NULL;
-	}
-}
-
-//returns height of current screen (240 unless no screen is selected)
-int st_screen_height_current(){
-	if(sf2d_get_current_screen() == GFX_TOP || sf2d_get_current_screen() == GFX_BOTTOM){
-		return 240;
-	}else{
-		return NULL;
-	}
-}
-
 //returns an st_anim
 st_anim st_animation_create(sf2d_texture *texture, int frames, int framepause, int ytop, int xleft, int width, int height){
 	st_anim anim = {frames, 0, framepause, 0, ytop, xleft, width, height, texture};
@@ -1102,9 +1082,7 @@ bool st_room_add_camera(st_room room, st_cam camera){
 
 //renders a room with it's CurrentCamera
 void st_room_render(st_room room){
-	st_cam cam = *room.CurrentCam;
-	st_animation_play(&room.background, -st_screen_width_current() - cam.xPos, -st_screen_height_current() - cam.yPos);
-	st_entity_render_camera(room.entities, 1024, cam);
+	st_entity_render_camera(room.entities, 1024, *room.CurrentCam);
 }
 
 //renders a room with a specified camera
