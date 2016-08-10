@@ -64,7 +64,6 @@ typedef struct {
 
 typedef struct {
 	st_cam cameras[RoomCameras];       //array of cameras in the room
-	bool openCam[RoomCameras];         //list of open camera slots
 	st_ent entities[RoomEntities];    //array of entities in the room
 	st_anim background;       //background of the room (located at 0,0)
 	st_cam *CurrentCam;       //current camera of the room
@@ -78,8 +77,6 @@ int st_screen_width_current(){
 		return 400;
 	}else if(sf2d_get_current_screen() == GFX_BOTTOM){
 		return 320;
-	}else{
-		return NULL;
 	}
 }
 
@@ -87,8 +84,6 @@ int st_screen_width_current(){
 int st_screen_height_current(){
 	if(sf2d_get_current_screen() == GFX_TOP || sf2d_get_current_screen() == GFX_BOTTOM){
 		return 240;
-	}else{
-		return NULL;
 	}
 }
 
@@ -1091,15 +1086,6 @@ void st_camera_zoom_set(st_cam *pcam, float zoom){
 	*pcam = cam;
 }
 
-//Initializes a room with the proper variables
-void st_room_init(st_room *proom){
-	st_room room = *proom;
-	for(int i=0; i<RoomCameras; i++){
-		room.openCam[i] = true;
-	}
-	*proom = room;
-}
-
 //Returns a room's background
 st_anim st_room_background_get(st_room room){
 	return room.background;
@@ -1123,19 +1109,24 @@ void st_room_background_set(st_room *proom, st_anim background){
 }
 
 //Sets an entity in a room's entity array
-void st_room_entity_set(st_room room, st_ent entity, int index){
+void st_room_entity_set(st_room *proom, st_ent entity, int index){
+	st_room room = *proom;
 	room.entities[index] = entity;
+	*proom = room;
 }
 
 //Sets a room's entity array
-void st_room_entity_set_array(st_room room, st_ent entities[]){
+void st_room_entity_set_array(st_room *proom, st_ent entities[]){
+	st_room room = *proom;
 	for(int i=0; i<RoomEntities; i++){
 		room.entities[i] = entities[i];
 	}
+	*proom = room;
 }
 
 //Sets an entity in a room's entity array
-bool st_room_entity_add(st_room room, st_ent entities){
+bool st_room_entity_add(st_room *proom, st_ent entities){
+	st_room room = *proom;
 	for(int i=0; i<RoomEntities; i++){
 		if(room.entities[i].openSlot){
 			room.entities[i].animStandingDown = entities.animStandingDown;
@@ -1155,9 +1146,11 @@ bool st_room_entity_add(st_room room, st_ent entities){
 			room.entities[i].moving = entities.moving;
 			room.entities[i].control = entities.control;
 			room.entities[i].openSlot = false;
+			*proom = room;
 			return true;
 		}
 	}
+	*proom = room;
 	return false;
 }
 
@@ -1165,7 +1158,6 @@ bool st_room_entity_add(st_room room, st_ent entities){
 void st_room_camera_set(st_room *proom, st_cam camera, int index){
 	st_room room = *proom;
 	room.cameras[index] = camera;
-	room.openCam[index] = false;
 	*proom = room;
 }
 
@@ -1175,29 +1167,6 @@ void st_room_camera_array_set(st_room *proom, st_cam camera[]){
 	for(int i=0; i<RoomCameras; i++){
 		room.cameras[i] = camera[i];
 	}
-	*proom = room;
-}
-
-//Sets an entity in a room's entity array
-bool st_room_camera_add(st_room room, st_cam camera){
-	for(int i=0; i<RoomCameras; i++){
-		if(room.openCam[i]){
-			room.cameras[i].xPos = camera.xPos;
-			room.cameras[i].yPos = camera.yPos;
-			room.cameras[i].zoom = camera.zoom;
-			room.cameras[i].rot = camera.rot;
-			room.cameras[i].follow = camera.follow;
-			room.openCam[i] = false;
-			return true;
-		}
-	}
-	return false;
-}
-
-//Removes a specified camera from a room.
-void st_room_camera_remove(st_room *proom, int index){
-	st_room room = *proom;
-	room.openCam[index] = true;
 	*proom = room;
 }
 
