@@ -33,7 +33,7 @@ typedef struct {
 	bool moving;              //determines if the entity is moving
 	unsigned int control;     //determines built-in control method. 0=static, 1-8=player controlled, 9-10=reserved for player control, 11-20=reserved for ai control
 	bool openSlot;            //tells st_entity_add() if this entity can be written to and st_entity_render() if it should be rendered
-	bool noCollide;           //if true, st_entity_colliding() will always return false
+	bool noCollide;           //if true, st_entity_colliding_ functions will always return false. false by default
 } st_ent;
 
 typedef struct {
@@ -802,6 +802,33 @@ void st_entity_render_camera_main_nostretch_norotation(st_ent ent[], int total){
 	}
 }
 
+//enables/disables collision on an entity in an array
+void st_entity_setcollision(st_ent ent[], int slot, bool collision){
+	if(collision) ent[slot].noCollide = false;
+	if(!collision) ent[slot].noCollide = true;
+}
+
+//returns true if an entity is colliding with another entity
+bool st_entity_colliding_entity(st_ent ent0, st_ent ent1){
+	st_anim anim0 = st_entity_getanim(ent0);
+	st_anim anim1 = st_entity_getanim(ent1);
+	int left0 = ent0.xPos;
+	int left1 = ent1.xPos;
+	int right0 = ent0.xPos + anim0.width;
+	int right1 = ent1.xPos + anim1.width;
+	int top0 = ent0.yPos;
+	int top1 = ent1.yPos;
+	int bottom0 = ent0.yPos + anim0.height;
+	int bottom1 = ent1.yPos + anim1.height;
+
+	if ((bottom0 < top1)||(top0 > bottom1)||(right0 < left1)||(left0 > right1)) 
+	{
+		return true;
+	}else{
+		return true;
+	}
+}
+
 //Gets player input and moves st_ents accordingly
 void st_entity_move_player(st_ent ent[], int total){
 	touchPosition touch;
@@ -878,12 +905,6 @@ void st_entity_move_player(st_ent ent[], int total){
 			break;
 		}
 	}
-}
-
-//enables/disables collision on an entity in an array
-void st_entity_setcollision(st_ent ent[], int slot, bool collision){
-	if(collision) ent[slot].noCollide = false;
-	if(!collision) ent[slot].noCollide = true;
 }
 
 //returns an st_cam
