@@ -1106,6 +1106,13 @@ st_ent st_room_get_entity(st_room room, int index){
 	return room.entities[index];
 }
 
+//Returns a room's background
+void st_room_set_background(st_room *proom, st_anim background){
+	room = *proom;
+	room.background = background;
+	*proom = room;
+}
+
 //Sets an entity in a room's entity array
 void st_room_set_entity(st_room room, st_ent entity, int index){
 	room.entities[index] = entity;
