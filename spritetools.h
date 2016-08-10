@@ -1092,41 +1092,41 @@ void st_camera_zoom_set(st_cam *pcam, float zoom){
 }
 
 //Returns a room's background
-st_anim st_room_get_background(st_room room){
+st_anim st_room_background_get(st_room room){
 	return room.background;
 }
 
 //Returns a room's camera
-st_cam st_room_get_camera(st_room room, int index){
+st_cam st_room_camera_get(st_room room, int index){
 	return room.cameras[index];
 }
 
 //Returns a room's entity
-st_ent st_room_get_entity(st_room room, int index){
+st_ent st_room_entity_get(st_room room, int index){
 	return room.entities[index];
 }
 
 //Sets a room's background
-void st_room_set_background(st_room *proom, st_anim background){
+void st_room_background_set(st_room *proom, st_anim background){
 	st_room room = *proom;
 	room.background = background;
 	*proom = room;
 }
 
 //Sets an entity in a room's entity array
-void st_room_set_entity(st_room room, st_ent entity, int index){
+void st_room_entity_set(st_room room, st_ent entity, int index){
 	room.entities[index] = entity;
 }
 
 //Sets a room's entity array
-void st_room_set_entity_array(st_room room, st_ent entities[]){
+void st_room_entity_set_array(st_room room, st_ent entities[]){
 	for(int i=0; i<RoomEntities; i++){
 		room.entities[i] = entities[i];
 	}
 }
 
 //Sets an entity in a room's entity array
-bool st_room_add_entity(st_room room, st_ent entities){
+bool st_room_entity_add(st_room room, st_ent entities){
 	for(int i=0; i<RoomEntities; i++){
 		if(room.entities[i].openSlot){
 			room.entities[i].animStandingDown = entities.animStandingDown;
@@ -1153,19 +1153,19 @@ bool st_room_add_entity(st_room room, st_ent entities){
 }
 
 //Sets a camera room's camera array
-void st_room_set_camera(st_room room, st_cam camera, int index){
+void st_room_camera_set(st_room room, st_cam camera, int index){
 	room.cameras[index] = camera;
 }
 
 //Sets a room's camera array
-void st_room_set_camera_array(st_room room, st_cam camera[]){
+void st_room_camera_array_set(st_room room, st_cam camera[]){
 	for(int i=0; i<RoomCameras; i++){
 		room.cameras[i] = camera[i];
 	}
 }
 
 //Sets an entity in a room's entity array
-bool st_room_add_camera(st_room room, st_cam camera){
+bool st_room_camera_add(st_room room, st_cam camera){
 	for(int i=0; i<RoomCameras; i++){
 		if(room.openCam[i]){
 			room.cameras[i].xPos = camera.xPos;
@@ -1181,7 +1181,15 @@ bool st_room_add_camera(st_room room, st_cam camera){
 }
 
 //Sets a specified camera of a room.
-void st_room_set_camera(st_room *proom, st_cam camera, int index){
+void st_room_camera_set(st_room *proom, st_cam camera, int index){
+	st_room room = *proom;
+	room.cameras[index] = camera;
+	room.openCam[index] = false;
+	*proom = room;
+}
+
+//Sets a specified camera of a room.
+void st_room_camera_set(st_room *proom, st_cam camera, int index){
 	st_room room = *proom;
 	room.cameras[index] = camera;
 	room.openCam[index] = false;
