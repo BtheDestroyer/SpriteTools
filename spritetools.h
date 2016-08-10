@@ -1152,16 +1152,21 @@ bool st_room_entity_add(st_room room, st_ent entities){
 	return false;
 }
 
-//Sets a camera room's camera array
-void st_room_camera_set(st_room room, st_cam camera, int index){
+//Sets a specified camera of a room.
+void st_room_camera_set(st_room *proom, st_cam camera, int index){
+	st_room room = *proom;
 	room.cameras[index] = camera;
+	room.openCam[index] = false;
+	*proom = room;
 }
 
 //Sets a room's camera array
-void st_room_camera_array_set(st_room room, st_cam camera[]){
+void st_room_camera_array_set(st_room *proom, st_cam camera[]){
+	st_room room = *proom;
 	for(int i=0; i<RoomCameras; i++){
 		room.cameras[i] = camera[i];
 	}
+	*proom = room;
 }
 
 //Sets an entity in a room's entity array
@@ -1180,24 +1185,21 @@ bool st_room_camera_add(st_room room, st_cam camera){
 	return false;
 }
 
-//Sets a specified camera of a room.
-void st_room_camera_set(st_room *proom, st_cam camera, int index){
+//Removes a specified camera from a room.
+void st_room_camera_remove(st_room *proom, int index){
 	st_room room = *proom;
-	room.cameras[index] = camera;
-	room.openCam[index] = false;
+	room.openCam[index] = true;
 	*proom = room;
 }
 
-//Sets a specified camera of a room.
-void st_room_camera_set(st_room *proom, st_cam camera, int index){
+//Sets a room's CurrentCam to the index specified
+void st_room_camera_select(st_room *proom, int index){
 	st_room room = *proom;
-	room.cameras[index] = camera;
-	room.openCam[index] = false;
+	room.CurrentCam = &room.cameras[index];
 	*proom = room;
 }
 
-
-//renders a room with it's CurrentCamera
+//renders a room with it's CurrentCam
 void st_room_render(st_room room){
 	st_cam cam = *room.CurrentCam;
 	st_animation_play(&room.background, -st_screen_width_current() - cam.xPos, -st_screen_height_current() - cam.yPos);
