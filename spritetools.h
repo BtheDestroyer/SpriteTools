@@ -1,7 +1,17 @@
+#ifndef SPRITETOOLS_H
+
+#ifndef STDLIB_H
 #include <stdlib.h>
+#endif
+#ifndef SF2D_H
 #include <sf2d.h>
+#endif
+#ifndef MATH_H
 #include <math.h>
+#endif
+#ifndef STDIO_H
 #include <stdio.h>
+#endif
 
 typedef struct {
 	unsigned int frames;      //number of frames in the animation
@@ -1168,3 +1178,5 @@ void st_room_render_camera(st_room room, int index){
 	st_animation_play(&room.background, -st_screen_width_current() - cam.xPos, -st_screen_height_current() - cam.yPos);
 	st_entity_render_camera(room.entities, 1024, cam);
 }
+
+#endif
