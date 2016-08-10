@@ -46,6 +46,7 @@ typedef struct {
 
 typedef struct {
 	st_cam cameras[16];       //array of cameras in the room
+	bool openCam[16];         //list of open camera slots
 	st_ent entities[1024];    //array of entities in the room
 	st_anim background;       //background of the room (located at 0,0)
 } st_room;
@@ -164,6 +165,7 @@ void st_animation_print(st_anim anim){
 void st_entity_init(st_ent ent[], int total){
 	for(int i=0; i<total; i++){
 		ent[i].openSlot = true;
+		ent[i].noCollide = false;
 	}
 }
 
@@ -823,6 +825,12 @@ void st_entity_move_player(st_ent ent[], int total){
 	}
 }
 
+//enables/disables collision on an entity in an array
+void st_entity_setcollision(st_ent ent[], int slot, bool collision){
+	if(collision) ent[slot].noCollide = false;
+	if(!collision) ent[slot].noCollide = true;
+}
+
 //returns an st_cam
 st_cam st_camera_create(int xPos, int yPos, float zoom, float rot, st_ent *follow){
 	st_cam cam = {xPos, yPos, zoom, rot, follow};
@@ -976,4 +984,67 @@ st_cam st_room_get_camera(st_room room, int index){
 //returns a room's entity
 st_anim st_room_get_entity(st_room room, int index){
 	return room.entities[index];
+}
+
+//sets an entity in a room's entity array
+void st_room_set_entity(st_room room, st_ent entities, int index){
+	room.entities[index] = entity;
+}
+
+//sets a room's entity array
+void st_room_set_entity_array(st_room room, st_ent entities[]){
+	room.entities = entities;
+}
+
+//sets an entity in a room's entity array
+bool st_room_add_entity(st_room room, st_ent entities){
+	for(int i=0; i<1024; i++){
+		if(room.entities[i].openSlot){
+			room.entities[i].animStandingDown = entities.animStandingDown;
+			room.entities[i].animStandingUp = entities.animStandingUp;
+			room.entities[i].animStandingLeft = entities.animStandingLeft;
+			room.entities[i].animStandingRight = entities.animStandingRight;
+			room.entities[i].animWalkingDown = entities.animWalkingDown;
+			room.entities[i].animWalkingUp = entities.animWalkingUp;
+			room.entities[i].animWalkingLeft = entities.animWalkingLeft;
+			room.entities[i].animWalkingRight = entities.animWalkingRight;
+			room.entities[i].xPos = entities.xPos;
+			room.entities[i].yPos = entities.yPos;
+			room.entities[i].xHotspot = entities.xHotspot;
+			room.entities[i].yHotspot = entities.yHotspot;
+			room.entities[i].speed = entities.speed;
+			room.entities[i].dir = entities.dir;
+			room.entities[i].moving = entities.moving;
+			room.entities[i].control = entities.control;
+			room.entities[i].openSlot = false;
+			return true;
+		}
+	}
+	return false;
+}
+
+//sets a camera room's camera array
+void st_room_set_camera(st_room room, st_ent camera, int index){
+	room.cameras[index] = camera;
+}
+
+//sets a room's camera array
+void st_room_set_camera_array(st_room room, st_ent camera[]){
+	room.cameras = camera;
+}
+
+//sets an entity in a room's entity array
+bool st_room_add_camera(st_room room, st_cam camera){
+	for(int i=0; i<16; i++){
+		if(room.openCam[i]){
+			room.cameras[i].xPos = entities.xPos;
+			room.cameras[i].yPos = entities.yPos;
+			room.cameras[i].zoom = entities.zoom;
+			room.cameras[i].rot = entities.rot;
+			room.cameras[i].follow = entities.follow;
+			room.openCam[i] = false;
+			return true;
+		}
+	}
+	return false;
 }
