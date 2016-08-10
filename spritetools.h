@@ -1106,7 +1106,7 @@ st_ent st_room_get_entity(st_room room, int index){
 	return room.entities[index];
 }
 
-//Returns a room's background
+//Sets a room's background
 void st_room_set_background(st_room *proom, st_anim background){
 	st_room room = *proom;
 	room.background = background;
@@ -1179,6 +1179,15 @@ bool st_room_add_camera(st_room room, st_cam camera){
 	}
 	return false;
 }
+
+//Sets a specified camera of a room.
+void st_room_set_camera(st_room *proom, st_cam camera, int index){
+	st_room room = *proom;
+	room.cameras[index] = camera;
+	room.openCam[index] = false;
+	*proom = room;
+}
+
 
 //renders a room with it's CurrentCamera
 void st_room_render(st_room room){
