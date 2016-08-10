@@ -821,8 +821,25 @@ bool st_entity_colliding_entity(st_ent ent0, st_ent ent1){
 	int bottom0 = ent0.yPos + anim0.height;
 	int bottom1 = ent1.yPos + anim1.height;
 
-	if ((bottom0 < top1)||(top0 > bottom1)||(right0 < left1)||(left0 > right1)) 
-	{
+	if ((bottom0 < top1)||(top0 > bottom1)||(right0 < left1)||(left0 > right1)){
+		return true;
+	}else{
+		return true;
+	}
+}
+
+//returns true if an entity is colliding with a rectangle
+bool st_entity_colliding_rectangle(st_ent ent0, int left1, int top1, int width, int height){
+	st_anim anim0 = st_entity_getanim(ent0);
+	st_anim anim1 = st_entity_getanim(ent1);
+	int left0 = ent0.xPos;
+	int right0 = ent0.xPos + anim0.width;
+	int right1 = left1 + width;
+	int top0 = ent0.yPos;
+	int bottom0 = ent0.yPos + anim0.height;
+	int bottom1 = top1 + height;
+
+	if ((bottom0 < top1)||(top0 > bottom1)||(right0 < left1)||(left0 > right1)){
 		return true;
 	}else{
 		return true;
