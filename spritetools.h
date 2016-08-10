@@ -18,6 +18,9 @@
 #define STDIO_H
 #endif
 
+#define RoomEntities 1024
+#define RoomCameras 16
+
 typedef struct {
 	unsigned int frames;      //number of frames in the animation
 	unsigned int currentframe;//current frame of the animation for use in st_animation_frame_current() and related functions
@@ -60,9 +63,9 @@ typedef struct {
 } st_cam;
 
 typedef struct {
-	st_cam cameras[16];       //array of cameras in the room
-	bool openCam[16];         //list of open camera slots
-	st_ent entities[1024];    //array of entities in the room
+	st_cam cameras[RoomCameras];       //array of cameras in the room
+	bool openCam[RoomCameras];         //list of open camera slots
+	st_ent entities[RoomEntities];    //array of entities in the room
 	st_anim background;       //background of the room (located at 0,0)
 	st_cam *CurrentCam;       //current camera of the room
 } st_room;
@@ -1110,14 +1113,14 @@ void st_room_set_entity(st_room room, st_ent entity, int index){
 
 //Sets a room's entity array
 void st_room_set_entity_array(st_room room, st_ent entities[]){
-	for(int i=0; i<1024; i++){
+	for(int i=0; i<RoomEntities; i++){
 		room.entities[i] = entities[i];
 	}
 }
 
 //Sets an entity in a room's entity array
 bool st_room_add_entity(st_room room, st_ent entities){
-	for(int i=0; i<1024; i++){
+	for(int i=0; i<RoomEntities; i++){
 		if(room.entities[i].openSlot){
 			room.entities[i].animStandingDown = entities.animStandingDown;
 			room.entities[i].animStandingUp = entities.animStandingUp;
@@ -1149,14 +1152,14 @@ void st_room_set_camera(st_room room, st_cam camera, int index){
 
 //Sets a room's camera array
 void st_room_set_camera_array(st_room room, st_cam camera[]){
-	for(int i=0; i<16; i++){
+	for(int i=0; i<RoomCameras; i++){
 		room.cameras[i] = camera[i];
 	}
 }
 
 //Sets an entity in a room's entity array
 bool st_room_add_camera(st_room room, st_cam camera){
-	for(int i=0; i<16; i++){
+	for(int i=0; i<RoomCameras; i++){
 		if(room.openCam[i]){
 			room.cameras[i].xPos = camera.xPos;
 			room.cameras[i].yPos = camera.yPos;
@@ -1174,14 +1177,14 @@ bool st_room_add_camera(st_room room, st_cam camera){
 void st_room_render(st_room room){
 	st_cam cam = *room.CurrentCam;
 	st_animation_play(&room.background, -st_screen_width_current() - cam.xPos, -st_screen_height_current() - cam.yPos);
-	st_entity_render_camera(room.entities, 1024, cam);
+	st_entity_render_camera(room.entities, RoomEntities, cam);
 }
 
 //renders a room with a specified camera
 void st_room_render_camera(st_room room, int index){
 	st_cam cam = room.cameras[index];
 	st_animation_play(&room.background, -st_screen_width_current() - cam.xPos, -st_screen_height_current() - cam.yPos);
-	st_entity_render_camera(room.entities, 1024, cam);
+	st_entity_render_camera(room.entities, RoomEntities, cam);
 }
 
 #endif
