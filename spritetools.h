@@ -1,24 +1,12 @@
+#include <stdlib.h>
+#include <sf2d.h>
+#include <math.h>
+#include <stdio.h>
+
 #ifndef SPRITETOOLS_H
 #define SPRITETOOLS_H
 
-#ifndef STDLIB_H
-#include <stdlib.h>
-#define STDLIB_H
-#endif
-#ifndef SF2D_H
-#include <sf2d.h>
-#define SF2D_H
-#endif
-#ifndef MATH_H
-#include <math.h>
-#define MATH_H
-#endif
-#ifndef STDIO_H
-#include <stdio.h>
-#define STDIO_H
-#endif
-
-#define RoomEntities 1024
+#define RoomEntities 96
 #define RoomCameras 16
 
 typedef struct {
@@ -63,10 +51,10 @@ typedef struct {
 } st_cam;
 
 typedef struct {
-	st_cam cameras[RoomCameras];       //array of cameras in the room
+	st_cam cameras[RoomCameras];      //array of cameras in the room
 	st_ent entities[RoomEntities];    //array of entities in the room
-	st_anim background;       //background of the room (located at 0,0)
-	st_cam *CurrentCam;       //current camera of the room
+	st_anim background;               //background of the room (located at 0,0)
+	st_cam *CurrentCam;               //current camera of the room
 } st_room;
 
 st_cam *st_MainCamera;
@@ -354,6 +342,12 @@ void st_entity_set(st_ent ent[], int slot, st_anim anim0, st_anim anim1, st_anim
 	ent[slot].dir = dir;
 	ent[slot].moving = moving;
 	ent[slot].control = control;
+	ent[slot].openSlot = false;
+}
+
+//Copies an st_ent to the selected slot in an st_ent array
+void st_entity_copy(st_ent ent[], int slot, st_ent ent1){
+	ent[slot] = ent1;
 	ent[slot].openSlot = false;
 }
 
@@ -1101,73 +1095,9 @@ st_ent st_room_entity_get(st_room room, int index){
 	return room.entities[index];
 }
 
-//Sets a room's background
-void st_room_background_set(st_room *proom, st_anim background){
-	st_room room = *proom;
-	room.background = background;
-	*proom = room;
-}
-
-//Sets an entity in a room's entity array
-void st_room_entity_set(st_room *proom, st_ent entity, int index){
-	st_room room = *proom;
-	room.entities[index] = entity;
-	*proom = room;
-}
-
-//Sets a room's entity array
-void st_room_entity_set_array(st_room *proom, st_ent entities[]){
-	st_room room = *proom;
-	for(int i=0; i<RoomEntities; i++){
-		room.entities[i] = entities[i];
-	}
-	*proom = room;
-}
-
-//Sets an entity in a room's entity array
-bool st_room_entity_add(st_room *proom, st_ent entities){
-	st_room room = *proom;
-	for(int i=0; i<RoomEntities; i++){
-		if(room.entities[i].openSlot){
-			room.entities[i].animStandingDown = entities.animStandingDown;
-			room.entities[i].animStandingUp = entities.animStandingUp;
-			room.entities[i].animStandingLeft = entities.animStandingLeft;
-			room.entities[i].animStandingRight = entities.animStandingRight;
-			room.entities[i].animWalkingDown = entities.animWalkingDown;
-			room.entities[i].animWalkingUp = entities.animWalkingUp;
-			room.entities[i].animWalkingLeft = entities.animWalkingLeft;
-			room.entities[i].animWalkingRight = entities.animWalkingRight;
-			room.entities[i].xPos = entities.xPos;
-			room.entities[i].yPos = entities.yPos;
-			room.entities[i].xHotspot = entities.xHotspot;
-			room.entities[i].yHotspot = entities.yHotspot;
-			room.entities[i].speed = entities.speed;
-			room.entities[i].dir = entities.dir;
-			room.entities[i].moving = entities.moving;
-			room.entities[i].control = entities.control;
-			room.entities[i].openSlot = false;
-			*proom = room;
-			return true;
-		}
-	}
-	*proom = room;
-	return false;
-}
-
-//Sets a specified camera of a room.
-void st_room_camera_set(st_room *proom, st_cam camera, int index){
-	st_room room = *proom;
-	room.cameras[index] = camera;
-	*proom = room;
-}
-
-//Sets a room's camera array
-void st_room_camera_array_set(st_room *proom, st_cam camera[]){
-	st_room room = *proom;
-	for(int i=0; i<RoomCameras; i++){
-		room.cameras[i] = camera[i];
-	}
-	*proom = room;
+//Returns a room's entity array
+st_ent* st_room_entity_get_array(st_room room){
+	return room.entities;
 }
 
 //Sets a room's CurrentCam to the index specified
