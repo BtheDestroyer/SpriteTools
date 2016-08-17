@@ -1,13 +1,9 @@
+#ifndef SPRITETOOLS_H
 #include <stdlib.h>
 #include <sf2d.h>
 #include <math.h>
 #include <stdio.h>
-
-#ifndef SPRITETOOLS_H
 #define SPRITETOOLS_H
-
-#define RoomEntities 96
-#define RoomCameras 16
 
 typedef struct {
 	unsigned int frames;      //number of frames in the animation
@@ -51,13 +47,35 @@ typedef struct {
 } st_cam;
 
 typedef struct {
-	st_cam cameras[RoomCameras];      //array of cameras in the room
-	st_ent entities[RoomEntities];    //array of entities in the room
-	st_anim background;               //background of the room (located at 0,0)
-	st_cam *CurrentCam;               //current camera of the room
+	int shape;                //determines what shape to use. 0 = rectangle, 1 = elipse
+	int xpos;                 //left of rectangles, center of elipses
+	int ypos;                 //top of rectangles, center of elipses
+	int width;                //width of shape
+	int height;               //height of shape
+} st_collision;
+
+typedef struct {
+	st_cam *cameras;          //array of cameras in the room
+	int cameraTotal;          //total number of cameras in the array
+	st_ent *entities;         //array of entities in the room
+	int entityTotal;          //total number of entities in the array
+	st_anim *background;      //background of the room (located at 0,0)
+	int CurrentCam;           //current camera of the room
+	st_collision *collision;  //collision array (mostly for background)
+	int collisionTotal;       //total number of collisions in the array
 } st_room;
 
 st_cam *st_MainCamera;
+
+signed int st_min(signed int num1, signed int num2){
+	if(num1 < num2) return num1;
+	return num2;
+}
+
+signed int st_max(signed int num1, signed int num2){
+	if(num1 > num2) return num1;
+	return num2;
+}
 
 //returns width of current screen
 int st_screen_width_current(){
@@ -66,6 +84,7 @@ int st_screen_width_current(){
 	}else if(sf2d_get_current_screen() == GFX_BOTTOM){
 		return 320;
 	}
+	return 0;
 }
 
 //returns height of current screen (240 unless no screen is selected)
@@ -73,6 +92,7 @@ int st_screen_height_current(){
 	if(sf2d_get_current_screen() == GFX_TOP || sf2d_get_current_screen() == GFX_BOTTOM){
 		return 240;
 	}
+	return 0;
 }
 
 //returns an st_anim
@@ -234,6 +254,7 @@ st_anim st_entity_getanim(st_ent ent){
 			}
 		}
 	}
+	return ent.animStandingDown;
 }
 
 //Returns the number of open slots in an st_ent array
@@ -250,6 +271,7 @@ int st_entity_slots_open_first(st_ent ent[], int total){
 	for(int i=0; i<total; i++){
 		if(ent[i].openSlot) return i;
 	}
+	return -1;
 }
 
 //Returns the number of taken slots in an st_ent array
@@ -809,10 +831,17 @@ void st_entity_render_camera_main_nostretch_norotation(st_ent ent[], int total){
 	}
 }
 
-//enables/disables collision on an entity in an array
-void st_entity_setcollision(st_ent ent[], int slot, bool collision){
-	if(collision) ent[slot].noCollide = false;
-	if(!collision) ent[slot].noCollide = true;
+//enables/disables collision on an entity in an array. Returns success
+bool st_entity_setcollision(st_ent ent[], int slot, bool collision){
+	if(collision){
+		ent[slot].noCollide = false;
+		return true;
+	}
+	if(!collision){
+		ent[slot].noCollide = true;
+		return true;
+	}
+	return false;
 }
 
 //returns true if an entity is colliding with another entity
@@ -1080,14 +1109,48 @@ void st_camera_zoom_set(st_cam *pcam, float zoom){
 	*pcam = cam;
 }
 
+//Returns a room
+st_room st_room_create(st_cam *cameras, int cameraTotal, st_ent *entities, int entityTotal, st_anim *background, int CurrentCam, st_collision *collision, int collisionTotal){
+	st_room room = {
+		cameras,
+		cameraTotal,
+		entities,
+		entityTotal,
+		background,
+		CurrentCam,
+		collision,
+		collisionTotal
+	};
+	return room;
+}
+
 //Returns a room's background
 st_anim st_room_background_get(st_room room){
-	return room.background;
+	return *room.background;
 }
 
 //Returns a room's camera
 st_cam st_room_camera_get(st_room room, int index){
 	return room.cameras[index];
+}
+
+//Returns a room's current camera
+st_cam st_room_camera_current_get(st_room room){
+	return room.cameras[room.CurrentCam];
+}
+
+//Returns a room's camera
+int st_room_camera_current_get_int(st_room room){
+	return room.CurrentCam;
+}
+
+//Tells a room's cameras to follow their entities
+void st_room_camera_follow(st_room room){
+	for(int i = 0; i < room.cameraTotal; i++){
+		if(room.cameras[i].follow != NULL){
+			st_camera_move_follow((room.cameras + i));
+		}
+	}
 }
 
 //Returns a room's entity
@@ -1100,25 +1163,168 @@ st_ent* st_room_entity_get_array(st_room room){
 	return room.entities;
 }
 
-//Sets a room's CurrentCam to the index specified
-void st_room_camera_select(st_room *proom, int index){
-	st_room room = *proom;
-	room.CurrentCam = &room.cameras[index];
-	*proom = room;
+//moves all entities in a room accordingly
+void st_room_entity_move(st_room room){
+	st_entity_move_player(room.entities, room.entityTotal);
 }
 
 //renders a room with it's CurrentCam
 void st_room_render(st_room room){
-	st_cam cam = *room.CurrentCam;
-	st_animation_play(&room.background, -st_screen_width_current() - cam.xPos, -st_screen_height_current() - cam.yPos);
-	st_entity_render_camera(room.entities, RoomEntities, cam);
+	signed int backgroundx = room.cameras[room.CurrentCam].xPos-(st_screen_width_current()/2);
+	signed int backgroundy = room.cameras[room.CurrentCam].yPos-(st_screen_height_current()/2);
+	backgroundx = st_max(backgroundx,0);
+	backgroundx = st_min(((*room.background).width)-st_screen_width_current(),backgroundx);
+	backgroundx *= -1;
+
+	backgroundy = st_max(backgroundy,0);
+	backgroundy = st_min(backgroundy,((*room.background).height)-st_screen_height_current());
+	backgroundy *= -1;
+
+
+	//if(-room.cameras[room.CurrentCam].yPos+(st_screen_height_current()/2)<0) backgroundy = -room.cameras[room.CurrentCam].yPos+(st_screen_height_current()/2);
+	//if(-room.cameras[room.CurrentCam].yPos+(st_screen_height_current()/2)>0) backgroundy = 0;
+	//if(backgroundy > -((*room.background).height)+(st_screen_height_current()/2)) backgroundy = -((*room.background).height)+(st_screen_height_current()/2);
+	st_animation_play(room.background, backgroundx, backgroundy);
+	
+	st_ent *ent = room.entities;
+	st_cam cam = room.cameras[room.CurrentCam];
+	int total = room.entityTotal;
+
+	for(int i=0; i<total; i++){
+		if(ent[i].openSlot==false){
+			float c = cos(cam.rot);
+			float s = sin(cam.rot);
+
+			int xrend = (ent[i].xPos - ent[i].xHotspot - st_min(st_max(cam.xPos, st_screen_width_current()/2),(*room.background).width-st_screen_width_current()/2));
+			int yrend = (ent[i].yPos - ent[i].yHotspot - st_min(st_max(cam.yPos, st_screen_height_current()/2),(*room.background).height-st_screen_height_current()/2));
+			float px2 = (float)xrend * c - (float)yrend * s;
+			float py2 = (float)xrend * s + (float)yrend * c;
+			xrend = px2*cam.zoom + 200;
+			yrend = py2*cam.zoom + 120;
+
+			if(sf2d_get_current_screen() == GFX_BOTTOM){
+				xrend = px2*cam.zoom + 160;
+			}
+			if(ent[i].moving){
+				//entity is moving, render walking animation by direction
+				switch(ent[i].dir){
+					case(0) :
+					st_animation_play_stretch(&ent[i].animWalkingDown, xrend, yrend, cam.zoom);
+					break;
+					case(1) :
+					st_animation_play_stretch(&ent[i].animWalkingRight, xrend, yrend, cam.zoom);
+					break;
+					case(2) :
+					st_animation_play_stretch(&ent[i].animWalkingUp, xrend, yrend, cam.zoom);
+					break;
+					case(3) :
+					default :
+					st_animation_play_stretch(&ent[i].animWalkingLeft, xrend, yrend, cam.zoom);
+				}
+			}else{
+				//entity is not moving, render standing animation by direction
+				switch(ent[i].dir){
+					case(0) :
+					st_animation_play_stretch(&ent[i].animStandingDown, xrend, yrend, cam.zoom);
+					break;
+					case(1) :
+					st_animation_play_stretch(&ent[i].animStandingRight, xrend, yrend, cam.zoom);
+					break;
+					case(2) :
+					st_animation_play_stretch(&ent[i].animStandingUp, xrend, yrend, cam.zoom);
+					break;
+					case(3) :
+					default :
+					st_animation_play_stretch(&ent[i].animStandingLeft, xrend, yrend, cam.zoom);
+				}
+			}
+		}
+	}
+}
+
+//renders a room with it's CurrentCam
+void st_room_render_noconstrain(st_room room){
+	st_animation_play(room.background, -room.cameras[room.CurrentCam].xPos+(st_screen_width_current()/2), -room.cameras[room.CurrentCam].yPos+(st_screen_height_current()/2));
+	st_entity_render_camera(room.entities, room.entityTotal, room.cameras[room.CurrentCam]);
 }
 
 //renders a room with a specified camera
 void st_room_render_camera(st_room room, int index){
+	st_animation_play(room.background, -room.cameras[index].xPos+(st_screen_width_current()/2), -room.cameras[index].yPos+(st_screen_height_current()/2));
+	st_entity_render_camera(room.entities, room.entityTotal, room.cameras[index]);
+
+	signed int backgroundx = room.cameras[index].xPos-(st_screen_width_current()/2);
+	signed int backgroundy = room.cameras[index].yPos-(st_screen_height_current()/2);
+	backgroundx = st_max(backgroundx,0);
+	backgroundx = st_min(((*room.background).width)-st_screen_width_current(),backgroundx);
+	backgroundx *= -1;
+
+	backgroundy = st_max(backgroundy,0);
+	backgroundy = st_min(backgroundy,((*room.background).height)-st_screen_height_current());
+	backgroundy *= -1;
+
+	st_animation_play(room.background, backgroundx, backgroundy);
+	
+	st_ent *ent = room.entities;
 	st_cam cam = room.cameras[index];
-	st_animation_play(&room.background, -st_screen_width_current() - cam.xPos, -st_screen_height_current() - cam.yPos);
-	st_entity_render_camera(room.entities, RoomEntities, cam);
+	int total = room.entityTotal;
+
+	for(int i=0; i<total; i++){
+		if(ent[i].openSlot==false){
+			float c = cos(cam.rot);
+			float s = sin(cam.rot);
+
+			int xrend = (ent[i].xPos - ent[i].xHotspot - st_min(st_max(cam.xPos, st_screen_width_current()/2),(*room.background).width-st_screen_width_current()/2));
+			int yrend = (ent[i].yPos - ent[i].yHotspot - st_min(st_max(cam.yPos, st_screen_height_current()/2),(*room.background).height-st_screen_height_current()/2));
+			float px2 = (float)xrend * c - (float)yrend * s;
+			float py2 = (float)xrend * s + (float)yrend * c;
+			xrend = px2*cam.zoom + 200;
+			yrend = py2*cam.zoom + 120;
+
+			if(sf2d_get_current_screen() == GFX_BOTTOM){
+				xrend = px2*cam.zoom + 160;
+			}
+			if(ent[i].moving){
+				//entity is moving, render walking animation by direction
+				switch(ent[i].dir){
+					case(0) :
+					st_animation_play_stretch(&ent[i].animWalkingDown, xrend, yrend, cam.zoom);
+					break;
+					case(1) :
+					st_animation_play_stretch(&ent[i].animWalkingRight, xrend, yrend, cam.zoom);
+					break;
+					case(2) :
+					st_animation_play_stretch(&ent[i].animWalkingUp, xrend, yrend, cam.zoom);
+					break;
+					case(3) :
+					default :
+					st_animation_play_stretch(&ent[i].animWalkingLeft, xrend, yrend, cam.zoom);
+				}
+			}else{
+				//entity is not moving, render standing animation by direction
+				switch(ent[i].dir){
+					case(0) :
+					st_animation_play_stretch(&ent[i].animStandingDown, xrend, yrend, cam.zoom);
+					break;
+					case(1) :
+					st_animation_play_stretch(&ent[i].animStandingRight, xrend, yrend, cam.zoom);
+					break;
+					case(2) :
+					st_animation_play_stretch(&ent[i].animStandingUp, xrend, yrend, cam.zoom);
+					break;
+					case(3) :
+					default :
+					st_animation_play_stretch(&ent[i].animStandingLeft, xrend, yrend, cam.zoom);
+				}
+			}
+		}
+	}
+}
+
+//renders a room with a specified camera
+void st_room_render_camera_noconstrain(st_room room, int index){
+	st_animation_play(room.background, -room.cameras[index].xPos+(st_screen_width_current()/2), -room.cameras[index].yPos+(st_screen_height_current()/2));
+	st_entity_render_camera(room.entities, room.entityTotal, room.cameras[index]);
 }
 
 #endif
