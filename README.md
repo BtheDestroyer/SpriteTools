@@ -1,6 +1,12 @@
 ## Notice:
 I'm currently starting college, meaning SpriteTools is being put on hold at least for a while. If/when I pick it back up, I may just rewrite it from scratch.
 
+EDIT: I've got a friend joining the project and will be rebooting it this winter vacation.
+
+You can see our roadmap on this Trello page: https://trello.com/b/Lbktl12Q/sprite-tools
+
+Follow this twitter account for future information and updates: https://twitter.com/SpriteToolsHB
+
 # SpriteTools
 
 SpriteTools is a C header to be used alongside [xerpi](https://github.com/xerpi)'s [sf2dlib](https://github.com/xerpi/sf2dlib).
