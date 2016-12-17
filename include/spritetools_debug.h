@@ -69,7 +69,7 @@ int ST_DebugRemoveName(char *name);
 /*   Returns -1 when all indexes are open */
 int ST_DebugRemoveLast(void);
 
-/* DebugPrints the given id in the DEBUGVar array */
+/* DebugPrints the given id in the DEBUGVars array */
 /* Takes id of variable */
 /* Returns pointer of var (void *) */
 void *ST_DebugPrintVarId(int id);
@@ -79,8 +79,8 @@ void *ST_DebugPrintVarId(int id);
 /* Returns pointer of var (void *) */
 void *ST_DebugPrintVarIdPosition(int id, int x, int y);
 
-/* DebugPrints the given name in the DEBUGVar array */
-/* Takes name of variable in DEBUGVar */
+/* DebugPrints the given name in the DEBUGVars array */
+/* Takes name of variable in DEBUGVars */
 /* Returns pointer of var (void *) */
 void *ST_DebugPrintVarName(char *name);
 
@@ -89,36 +89,36 @@ void *ST_DebugPrintVarName(char *name);
 /* Returns pointer of var (void *) */
 void *ST_DebugPrintVarNamePosition(char *name, int x, int y);
 
-/* DebugPrints all variables in the DEBUGVar array */
+/* DebugPrints all variables in the DEBUGVars array */
 void ST_DebugPrintVarAll(void);
 
-/* DebugPrints all variables in the DEBUGVar array at given x and y */
+/* DebugPrints all variables in the DEBUGVars array at given x and y */
 /* Takes x and y of cursor */
 void ST_DebugPrintVarAllPosition(int x, int y);
 
-/* DebugPrints all variables in the DEBUGVar array until given id */
+/* DebugPrints all variables in the DEBUGVars array until given id */
 /* Takes max id of array to be printed */
 void ST_DebugPrintVarAllUntil(int max);
 
-/* DebugPrints all variables in the DEBUGVar array at given x and y */
+/* DebugPrints all variables in the DEBUGVars array at given x and y */
 /* Takes max id of array to be printed and x and y of cursor */
 void ST_DebugPrintVarAllUntilPosition(int max, int x, int y);
 
-/* DebugPrints all variables in the DEBUGVar array starting at given id */
+/* DebugPrints all variables in the DEBUGVars array starting at given id */
 /* Takes starting id of array to be printed */
 void ST_DebugPrintVarAllFrom(int start);
 
-/* DebugPrints all variables in the DEBUGVar array starting at given id */
+/* DebugPrints all variables in the DEBUGVars array starting at given id */
 /*   at given x and y */
 /* Takes starting id of array to be printed and x and y of cursor */
 void ST_DebugPrintVarAllFromPosition(int start, int x, int y);
 
-/* DebugPrints all variables in the DEBUGVar array starting at given id */
+/* DebugPrints all variables in the DEBUGVars array starting at given id */
 /*   and ending at given id */
 /* Takes starting and ending ids of array to be printed */
 void ST_DebugPrintVarAllFromUntil(int start, int max);
 
-/* DebugPrints all variables in the DEBUGVar array starting at given id */
+/* DebugPrints all variables in the DEBUGVars array starting at given id */
 /*   and ending at given id at given x and y */
 /* Takes starting and ending ids of array to be printed and x and y of cursor */
 void ST_DebugPrintVarAllFromUntilPosition(int start, int max, int x, int y);
@@ -132,6 +132,12 @@ int ST_DebugScrollUp(int scroll);
 /* Takes number of lines to scroll by */
 /* Returns number of lines scrolled */
 int ST_DebugScrollDown(int scroll);
+
+/* Returns DEBUGScroll */
+int ST_DebugGetScroll(void);
+
+/* Clears the console */
+void ST_DebugClear(void);
 
 /* Displays generic debug info if DEBUG is on */
 /* Returns characters printed */

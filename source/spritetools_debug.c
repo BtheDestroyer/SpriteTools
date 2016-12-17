@@ -360,10 +360,16 @@ int ST_DebugScrollUp(int scroll)
 int ST_DebugScrollDown(int scroll)
 {
   int i;
-  for (i = 0; i < scroll && DEBUGScroll < ST_DEBUG_MAX_VAR; i++)
+  for (i = 0; i < scroll && DEBUGScroll + 1 < ST_DEBUG_MAX_VAR; i++)
     DEBUGScroll++;
   
   return i;
+}
+
+/* Returns DEBUGScroll */
+int ST_DebugGetScroll(void)
+{
+  return DEBUGScroll;
 }
 
 /* Clears the console */
