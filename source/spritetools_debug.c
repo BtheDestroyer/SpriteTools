@@ -392,11 +392,12 @@ void ST_DebugClear(void)
 int ST_DebugDisplay(void)
 {
   int c = 0; /* Character counter */
-  ST_DebugClear();
   c += ST_DebugPrint("\x1b[2;2HSPRITETOOLS DEBUG");
   c += ST_DebugPrint("\x1b[3;2HVersion: Beta 2.0");
   c += ST_DebugPrint("\x1b[4;2HVariables in Debug:");
   ST_DebugPrintVarAllFromUntilPosition(DEBUGScroll, 10 + DEBUGScroll, 2, 5);
+
+  ST_DebugButtonFormattedAtPosition(2, 16);
 
   return c;
 }
@@ -678,6 +679,38 @@ void ST_DebugButtonFormatted(void)
   ST_DebugButtonL();
 
   ST_DebugPrint("\n");
+  ST_DebugButtonStart();
+  ST_DebugButtonSelect();
+}
+
+/* Displays status of all buttons at given position */
+/* Takes X and Y of where to start printing from */
+/* Will print a formatted set of all buttons using the above functions */
+void ST_DebugButtonFormattedAtPosition(int x, int y)
+{
+  char tempstr[128] = {0};
+
+  sprintf(tempstr, "\x1b[%d;%dH", y, x);
+  ST_DebugPrint(tempstr);
+  ST_DebugButtonDUp();
+  ST_DebugButtonDRight();
+  ST_DebugButtonDDown();
+  ST_DebugButtonDLeft();
+
+  sprintf(tempstr, "\x1b[%d;%dH", y + 1, x);
+  ST_DebugPrint(tempstr);
+  ST_DebugButtonA();
+  ST_DebugButtonB();
+  ST_DebugButtonX();
+  ST_DebugButtonY();
+
+  sprintf(tempstr, "\x1b[%d;%dH", y + 2, x);
+  ST_DebugPrint(tempstr);
+  ST_DebugButtonR();
+  ST_DebugButtonL();
+
+  sprintf(tempstr, "\x1b[%d;%dH", y + 3, x);
+  ST_DebugPrint(tempstr);
   ST_DebugButtonStart();
   ST_DebugButtonSelect();
 }

@@ -15,7 +15,6 @@ static angularRate INPUTGyroRate;
 static u32 INPUTKeysDown;
 static u32 INPUTKeysHeld;
 static u32 INPUTKeysUp;
-static u8 INPUTVolume;
 
 /* Enables the Accelerometer and Gyroscope at startup */
 void ST_InputInit(void)
@@ -33,10 +32,9 @@ void ST_InputScan(void)
   INPUTKeysHeld = hidKeysHeld();
   INPUTKeysUp = hidKeysUp();
   hidTouchRead(&INPUTTouchPosition);
-  hidCircleRead(&INPUTCirclePosition); 
+  hidCircleRead(&INPUTCirclePosition);
   hidAccelRead(&INPUTAccelVector);
   hidGyroRead(&INPUTGyroRate);
-  HIDUSER_GetSoundVolume(&INPUTVolume);
 }
 
 /* Checks for if a button was just pressed. Requires ST_InputScan before it */

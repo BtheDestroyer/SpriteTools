@@ -233,4 +233,9 @@ int ST_DebugButtonDLeft(void);
 /* Will print a formatted set of all buttons using the above functions */
 void ST_DebugButtonFormatted(void);
 
+/* Displays status of all buttons at given position */
+/* Takes X and Y of where to start printing from */
+/* Will print a formatted set of all buttons using the above functions */
+void ST_DebugButtonFormattedAtPosition(int x, int y);
+
 #endif
