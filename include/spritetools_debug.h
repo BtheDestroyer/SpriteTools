@@ -7,7 +7,13 @@
 #ifndef __spritetools_debug_h
 
 #define __spritetools_debug_h
+
+/* Maximum number of variables that can be debugged at once */
 #define ST_DEBUG_MAX_VAR 64
+
+/****************************\
+|*     Type Definitions     *|
+\****************************/
 
 typedef enum {
   VOID,
@@ -24,6 +30,10 @@ typedef struct NamedPointer {
   void *pointer;
   ST_PointerType type;
 } ST_NamedPointer;
+
+/*****************************\
+|*     General Debugging     *|
+\*****************************/
 
 /* Sets up debug variables */
 /* Returns 1 on success */
@@ -142,5 +152,85 @@ void ST_DebugClear(void);
 /* Displays generic debug info if DEBUG is on */
 /* Returns characters printed */
 int ST_DebugDisplay(void);
+
+/****************************\
+|*     Button Debugging     *|
+\****************************/
+
+/* Displays status of A button */
+/* Will print [ ] and return 0 if A is up */
+/* Will print <A> and return 1 when A is pressed */
+/* Will print [A] and return 2 if A is down */
+int ST_DebugButtonA(void);
+
+/* Displays status of B button */
+/* Will print [ ] and return 0 if B is up */
+/* Will print <B> and return 1 when B is pressed */
+/* Will print [B] and return 2 if B is down */
+int ST_DebugButtonB(void);
+
+/* Displays status of X button */
+/* Will print [ ] and return 0 if X is up */
+/* Will print <X> and return 1 when X is pressed */
+/* Will print [X] and return 2 if X is down */
+int ST_DebugButtonX(void);
+
+/* Displays status of Y button */
+/* Will print [ ] and return 0 if Y is up */
+/* Will print <Y> and return 1 when Y is pressed */
+/* Will print [Y] and return 2 if Y is down */
+int ST_DebugButtonY(void);
+
+/* Displays status of Start button */
+/* Will print [  ] and return 0 if Start is up */
+/* Will print <St> and return 1 when Start is pressed */
+/* Will print [St] and return 2 if Start is down */
+int ST_DebugButtonStart(void);
+
+/* Displays status of Select button */
+/* Will print [  ] and return 0 if Select is up */
+/* Will print <Se> and return 1 when Select is pressed */
+/* Will print [Se] and return 2 if Select is down */
+int ST_DebugButtonSelect(void);
+
+/* Displays status of R button */
+/* Will print [ ] and return 0 if R is up */
+/* Will print <R> and return 1 when R is pressed */
+/* Will print [R] and return 2 if R is down */
+int ST_DebugButtonR(void);
+
+/* Displays status of L button */
+/* Will print [ ] and return 0 if L is up */
+/* Will print <L> and return 1 when L is pressed */
+/* Will print [L] and return 2 if L is down */
+int ST_DebugButtonL(void);
+
+/* Displays status of Dpad's Up button */
+/* Will print [ ] and return 0 if Up is up */
+/* Will print <^> and return 1 when Up is pressed */
+/* Will print [^] and return 2 if Up is down */
+int ST_DebugButtonDUp(void);
+
+/* Displays status of Dpad's Right button */
+/* Will print [ ] and return 0 if Right is up */
+/* Will print <>> and return 1 when Right is pressed */
+/* Will print [>] and return 2 if Right is down */
+int ST_DebugButtonDRight(void);
+
+/* Displays status of Dpad's Down button */
+/* Will print [ ] and return 0 if Down is up */
+/* Will print <v> and return 1 when Down is pressed */
+/* Will print [v] and return 2 if Down is down */
+int ST_DebugButtonDDown(void);
+
+/* Displays status of Dpad's Left button */
+/* Will print [ ] and return 0 if Left is up */
+/* Will print <<> and return 1 when Left is pressed */
+/* Will print [<] and return 2 if Left is down */
+int ST_DebugButtonDLeft(void);
+
+/* Displays status of all buttons */
+/* Will print a formatted set of all buttons using the above functions */
+void ST_DebugButtonFormatted(void);
 
 #endif

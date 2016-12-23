@@ -9,10 +9,19 @@
 #include <stdlib.h>
 #include <string.h>
 #include <spritetools_debug.h>
+#include <spritetools_input.h>
 
-static int DEBUG = 0;
-static ST_NamedPointer *DEBUGVars;
-static int DEBUGScroll = 0;
+/*******************************\
+|*     Debugging Variables     *|
+\*******************************/
+
+static int DEBUG = 0; /* Is debug on? This will tell you (and the engine) */
+static ST_NamedPointer *DEBUGVars; /* List of variables being debugged */
+static int DEBUGScroll = 0; /* Number of variables currently scrolled through */
+
+/*****************************\
+|*     General Debugging     *|
+\*****************************/
 
 /* Takes 2 strings and compares them */
 /* Returns 1 on match, 0 on difference */
@@ -91,7 +100,7 @@ int ST_DebugAddVar(char *name, void *varp, ST_PointerType datatype)
   /* An empty index was found */
   /* Set Variable Pointer of node to given address */
   DEBUGVars[id].pointer = varp;
-  
+
   /* Allocates memory for name of node */
   DEBUGVars[id].name = calloc((size_t) 128, sizeof(char));
   if (!DEBUGVars[id].name) /* If name was not allocated correctly... */
@@ -134,7 +143,7 @@ int ST_DebugRemoveName(char *name)
     if (mystrcmp(DEBUGVars[i].name, name))
     { /* Name was found! Clear that index */
       return ST_DebugRemoveId(i);
-    } 
+    }
   }
 
   return 0;
@@ -206,7 +215,7 @@ void *ST_DebugPrintVarId(int id)
       DEBUGVars[id].pointer);
     break;
   }
-  
+
   ST_DebugPrint(tempstr);
   return DEBUGVars[id].pointer;
 }
@@ -350,7 +359,7 @@ int ST_DebugScrollUp(int scroll)
   int i;
   for (i = 0; i < scroll && DEBUGScroll > 0; i++)
     DEBUGScroll--;
-  
+
   return i;
 }
 
@@ -362,7 +371,7 @@ int ST_DebugScrollDown(int scroll)
   int i;
   for (i = 0; i < scroll && DEBUGScroll + 1 < ST_DEBUG_MAX_VAR; i++)
     DEBUGScroll++;
-  
+
   return i;
 }
 
@@ -390,4 +399,285 @@ int ST_DebugDisplay(void)
   ST_DebugPrintVarAllFromUntilPosition(DEBUGScroll, 10 + DEBUGScroll, 2, 5);
 
   return c;
+}
+
+
+/****************************\
+|*     Button Debugging     *|
+\****************************/
+
+/* Displays status of A button */
+/* Will print [ ] and return 0 if A is up */
+/* Will print <A> and return 1 when A is pressed */
+/* Will print [A] and return 2 if A is down */
+int ST_DebugButtonA(void)
+{
+  if (ST_InputButtonPressed(KEY_A))
+  {
+    ST_DebugPrint("<A>");
+    return 1;
+  }
+  if (ST_InputButtonDown(KEY_A))
+  {
+    ST_DebugPrint("[A]");
+    return 2;
+  }
+
+  ST_DebugPrint("[ ]");
+  return 0;
+}
+
+/* Displays status of B button */
+/* Will print [ ] and return 0 if B is up */
+/* Will print <B> and return 1 when B is pressed */
+/* Will print [B] and return 2 if B is down */
+int ST_DebugButtonB(void)
+{
+  if (ST_InputButtonPressed(KEY_B))
+  {
+    ST_DebugPrint("<B>");
+    return 1;
+  }
+  if (ST_InputButtonDown(KEY_B))
+  {
+    ST_DebugPrint("[B]");
+    return 2;
+  }
+
+  ST_DebugPrint("[ ]");
+  return 0;
+}
+
+/* Displays status of X button */
+/* Will print [ ] and return 0 if X is up */
+/* Will print <X> and return 1 when X is pressed */
+/* Will print [X] and return 2 if X is down */
+int ST_DebugButtonX(void)
+{
+  if (ST_InputButtonPressed(KEY_X))
+  {
+    ST_DebugPrint("<X>");
+    return 1;
+  }
+  if (ST_InputButtonDown(KEY_X))
+  {
+    ST_DebugPrint("[X]");
+    return 2;
+  }
+
+  ST_DebugPrint("[ ]");
+  return 0;
+}
+
+/* Displays status of Y button */
+/* Will print [ ] and return 0 if Y is up */
+/* Will print <Y> and return 1 when Y is pressed */
+/* Will print [Y] and return 2 if Y is down */
+int ST_DebugButtonY(void)
+{
+  if (ST_InputButtonPressed(KEY_Y))
+  {
+    ST_DebugPrint("<Y>");
+    return 1;
+  }
+  if (ST_InputButtonDown(KEY_Y))
+  {
+    ST_DebugPrint("[Y]");
+    return 2;
+  }
+
+  ST_DebugPrint("[ ]");
+  return 0;
+}
+
+/* Displays status of Start button */
+/* Will print [  ] and return 0 if Start is up */
+/* Will print <St> and return 1 when Start is pressed */
+/* Will print [St] and return 2 if Start is down */
+int ST_DebugButtonStart(void)
+{
+  if (ST_InputButtonPressed(KEY_START))
+  {
+    ST_DebugPrint("<St>");
+    return 1;
+  }
+  if (ST_InputButtonDown(KEY_START))
+  {
+    ST_DebugPrint("[St]");
+    return 2;
+  }
+
+  ST_DebugPrint("[  ]");
+  return 0;
+}
+
+/* Displays status of Select button */
+/* Will print [  ] and return 0 if Select is up */
+/* Will print <Se> and return 1 when Select is pressed */
+/* Will print [Se] and return 2 if Select is down */
+int ST_DebugButtonSelect(void)
+{
+  if (ST_InputButtonPressed(KEY_SELECT))
+  {
+    ST_DebugPrint("<Se>");
+    return 1;
+  }
+  if (ST_InputButtonDown(KEY_SELECT))
+  {
+    ST_DebugPrint("[Se]");
+    return 2;
+  }
+
+  ST_DebugPrint("[  ]");
+  return 0;
+}
+
+/* Displays status of R button */
+/* Will print [ ] and return 0 if R is up */
+/* Will print <R> and return 1 when R is pressed */
+/* Will print [R] and return 2 if R is down */
+int ST_DebugButtonR(void)
+{
+  if (ST_InputButtonPressed(KEY_R))
+  {
+    ST_DebugPrint("<R>");
+    return 1;
+  }
+  if (ST_InputButtonDown(KEY_R))
+  {
+    ST_DebugPrint("[R]");
+    return 2;
+  }
+
+  ST_DebugPrint("[ ]");
+  return 0;
+}
+
+/* Displays status of L button */
+/* Will print [ ] and return 0 if L is up */
+/* Will print <L> and return 1 when L is pressed */
+/* Will print [L] and return 2 if L is down */
+int ST_DebugButtonL(void)
+{
+  if (ST_InputButtonPressed(KEY_L))
+  {
+    ST_DebugPrint("<L>");
+    return 1;
+  }
+  if (ST_InputButtonDown(KEY_L))
+  {
+    ST_DebugPrint("[L]");
+    return 2;
+  }
+
+  ST_DebugPrint("[ ]");
+  return 0;
+}
+
+/* Displays status of Dpad's Up button */
+/* Will print [ ] and return 0 if Up is up */
+/* Will print <^> and return 1 when Up is pressed */
+/* Will print [^] and return 2 if Up is down */
+int ST_DebugButtonDUp(void)
+{
+  if (ST_InputButtonPressed(KEY_DUP))
+  {
+    ST_DebugPrint("<^>");
+    return 1;
+  }
+  if (ST_InputButtonDown(KEY_DUP))
+  {
+    ST_DebugPrint("[^]");
+    return 2;
+  }
+
+  ST_DebugPrint("[ ]");
+  return 0;
+}
+
+/* Displays status of Dpad's Right button */
+/* Will print [ ] and return 0 if Right is up */
+/* Will print <>> and return 1 when Right is pressed */
+/* Will print [>] and return 2 if Right is down */
+int ST_DebugButtonDRight(void)
+{
+  if (ST_InputButtonPressed(KEY_DRIGHT))
+  {
+    ST_DebugPrint("<>>");
+    return 1;
+  }
+  if (ST_InputButtonDown(KEY_DRIGHT))
+  {
+    ST_DebugPrint("[>]");
+    return 2;
+  }
+
+  ST_DebugPrint("[ ]");
+  return 0;
+}
+
+/* Displays status of Dpad's Down button */
+/* Will print [ ] and return 0 if Down is up */
+/* Will print <v> and return 1 when Down is pressed */
+/* Will print [v] and return 2 if Down is down */
+int ST_DebugButtonDDown(void)
+{
+  if (ST_InputButtonPressed(KEY_DDOWN))
+  {
+    ST_DebugPrint("<v>");
+    return 1;
+  }
+  if (ST_InputButtonDown(KEY_DDOWN))
+  {
+    ST_DebugPrint("[v]");
+    return 2;
+  }
+
+  ST_DebugPrint("[ ]");
+  return 0;
+}
+
+/* Displays status of Dpad's Left button */
+/* Will print [ ] and return 0 if Left is up */
+/* Will print <<> and return 1 when Left is pressed */
+/* Will print [<] and return 2 if Left is down */
+int ST_DebugButtonDLeft(void)
+{
+  if (ST_InputButtonPressed(KEY_DLEFT))
+  {
+    ST_DebugPrint("<<>");
+    return 1;
+  }
+  if (ST_InputButtonDown(KEY_DLEFT))
+  {
+    ST_DebugPrint("[<]");
+    return 2;
+  }
+
+  ST_DebugPrint("[ ]");
+  return 0;
+}
+
+/* Displays status of all buttons */
+/* Will print a formatted set of all buttons using the above functions */
+void ST_DebugButtonFormatted(void)
+{
+  ST_DebugButtonDUp();
+  ST_DebugButtonDRight();
+  ST_DebugButtonDDown();
+  ST_DebugButtonDLeft();
+
+  ST_DebugPrint("\n");
+  ST_DebugButtonA();
+  ST_DebugButtonB();
+  ST_DebugButtonX();
+  ST_DebugButtonY();
+
+  ST_DebugPrint("\n");
+  ST_DebugButtonR();
+  ST_DebugButtonL();
+
+  ST_DebugPrint("\n");
+  ST_DebugButtonStart();
+  ST_DebugButtonSelect();
 }
