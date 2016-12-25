@@ -8,5 +8,7 @@
 #define __spritetools_h
 
 #include <spritetools_debug.h>
+#include <spritetools_input.h>
+#include <spritetools_textcolors.h>
 
 #endif
