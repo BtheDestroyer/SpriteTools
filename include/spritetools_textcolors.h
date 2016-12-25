@@ -97,7 +97,7 @@ void ST_TextPositive(void);
 void ST_TextStrikethrough(void);
 
 /* Turns off strikethrough */
-void ST_TextStrikethrough(void);
+void ST_TextNoStrikethrough(void);
 
 /************************\
 |*     Default text     *|
