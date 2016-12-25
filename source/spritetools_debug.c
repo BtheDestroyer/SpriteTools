@@ -389,28 +389,44 @@ void ST_DebugClear(void)
 }
 
 /* Displays generic debug info if DEBUG is on */
-/* Returns characters printed */
+/* Returns 1 if debug was on and 0 if it was off */
 int ST_DebugDisplay(void)
 {
-  int c = 0; /* Character counter */
   int i;
+  char tempstr[128];
+
+  if (!ST_DebugGet())
+    return 0;
 
   for (i = 0; i < 18; i++)
     printf("\x1b[%d;3H{                                        }", 2 + i);
 
-  c += ST_DebugPrint("\x1b[2;4HSPRITETOOLS DEBUG");
-  c += ST_DebugPrint("\x1b[3;4HVersion: ");
+  ST_DebugPrint("\x1b[2;4HSPRITETOOLS DEBUG");
+  ST_DebugPrint("\x1b[3;4HVersion: ");
   ST_TextCyanFore();
   ST_TextBright();
-  c += ST_DebugPrint("Beta 2.0");
+  ST_DebugPrint("Beta 2.0");
   ST_TextDefault();
-  c += ST_DebugPrint("\x1b[4;4HVariables in Debug:");
+  ST_DebugPrint("\x1b[4;4HVariables in Debug:");
   ST_DebugPrintVarAllFromUntilPosition(ST_DebugGetScroll(),
     10 + ST_DebugGetScroll(), 4, 5);
-  c += ST_DebugPrint("\x1b[15;4HButtons:");
+  ST_DebugPrint("\x1b[15;4HButtons:");
   ST_DebugButtonFormattedAtPosition(4, 16);
+  ST_DebugPrint("\x1b[15;19HTouchscreen:");
+  sprintf(tempstr,"\x1b[16;19HCurrent: (%d,%d)",
+    ST_InputTouchX(), ST_InputTouchY());
+  ST_DebugPrint(tempstr);
+  sprintf(tempstr,"\x1b[17;19HOrigin: (%d,%d)",
+    ST_InputTouchOriginX(), ST_InputTouchOriginY());
+  ST_DebugPrint(tempstr);
+  sprintf(tempstr,"\x1b[18;19HDist: %d",
+    ST_InputTouchDistance());
+  ST_DebugPrint(tempstr);
+  sprintf(tempstr,"\x1b[18;29HLen: %d",
+    ST_InputTouchLength());
+  ST_DebugPrint(tempstr);
 
-  return c;
+  return 1;
 }
 
 
