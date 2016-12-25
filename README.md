@@ -1,7 +1,8 @@
 # SpriteTools
 ![Icon](https://raw.githubusercontent.com/BtheDestroyer/SpriteTools/master/icon.128.png "SpriteTools icon")
 
-## Current Version: [β2.0 In-Dev](https://github.com/BtheDestroyer/SpriteTools/archive/master.zip)
+## Current Release: [β2.0](https://github.com/BtheDestroyer/SpriteTools/releases/tag/%CE%B22.0)
+## Current Version: [β2.0](https://github.com/BtheDestroyer/SpriteTools/releases/tag/%CE%B22.0)
 
 SpriteTools is an open source 3DS Homebrew library for C/C++. It's being developed by myself and Jemmysponz to make the development process easier, faster, and more accessible for ourselves and other developers.
 
@@ -21,6 +22,11 @@ Follow [this twitter account](https://twitter.com/SpriteToolsHB) for future info
 
 We're following the [ANSI C Standard](en.wikipedia.org/wiki/ANSI_C). This means, among other things, that we use 2 spaces instead of tabs which makes sure our code looks the same by having the same width on everyone's computer regardless of OS, text editor, or settings. The 80 character count per line also ensures this and makes sure everyone can use their own setup such as having a vertical monitor for coding.
 
+## "You should add _____" "_____ is broken for me. Why?"
+
+Create an [issue](https://github.com/bthedestroyer/SpriteTools/issues) so we can
+get your feedback. We're happy to add any ideas that would make the library
+better!
 
 ## License
 
