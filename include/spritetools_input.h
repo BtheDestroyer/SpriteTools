@@ -38,6 +38,36 @@ int ST_InputTouchX(void);
 /* Returns -1 if the touch screen is currently not being touched */
 int ST_InputTouchY(void);
 
+/* Returns X position of where the touch started. */
+/*   Requires ST_InputScan before it */
+/* Returns -1 if the touch screen is currently not being touched */
+int ST_InputTouchOriginX(void);
+
+/* Returns Y position of where the touch started. */
+/*   Requires ST_InputScan before it */
+/* Returns -1 if the touch screen is currently not being touched */
+int ST_InputTouchOriginY(void);
+
+/* Returns X difference between where the touch is and where it started. */
+/*   Requires ST_InputScan before it */
+/* Returns -1 if the touch screen is currently not being touched */
+int ST_InputTouchDistanceX(void);
+
+/* Returns Y difference between where the touch is and where it started. */
+/*   Requires ST_InputScan before it */
+/* Returns -1 if the touch screen is currently not being touched */
+int ST_InputTouchDistanceY(void);
+
+/* Returns distance between where the touch is and where it started. */
+/*   Requires ST_InputScan before it */
+/* Returns -1 if the touch screen is currently not being touched */
+int ST_InputTouchDistance(void);
+
+/* Returns length of line drawn on touchscreen. */
+/*   Requires ST_InputScan before it */
+/* Returns -1 if the touch screen is currently not being touched */
+int ST_InputTouchLength(void);
+
 /* Returns X position of Circle Pad. Requires ST_InputScan before it */
 s16 ST_InputCirclePadX(void);
 

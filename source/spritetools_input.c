@@ -6,9 +6,14 @@
 
 #include <3ds.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <spritetools_input.h>
+#include <math.h>
 
-static touchPosition  INPUTTouchPosition;
+static touchPosition INPUTTouchOrigin;
+static touchPosition INPUTTouchPosition;
+static touchPosition INPUTTouchLastPosition;
+static unsigned int INPUTTouchLength;
 static circlePosition INPUTCirclePosition;
 static accelVector INPUTAccelVector;
 static angularRate INPUTGyroRate;
@@ -21,6 +26,7 @@ void ST_InputInit(void)
 {
   HIDUSER_EnableAccelerometer();
   HIDUSER_EnableGyroscope();
+  INPUTTouchLength = 0;
 }
 
 /* Scans Keys down, held, and up as well as circle and touch positions */
@@ -35,6 +41,24 @@ void ST_InputScan(void)
   hidCircleRead(&INPUTCirclePosition);
   hidAccelRead(&INPUTAccelVector);
   hidGyroRead(&INPUTGyroRate);
+
+  if (INPUTKeysDown & KEY_TOUCH) /* New touch was started */
+  {
+    INPUTTouchLength = 0;
+    hidTouchRead(&INPUTTouchOrigin);
+  }
+
+  if (INPUTKeysHeld & KEY_TOUCH) /* Touch is currently held */
+  {
+    unsigned int xdiff = abs(INPUTTouchPosition.px - INPUTTouchLastPosition.px);
+    unsigned int ydiff = abs(INPUTTouchPosition.py - INPUTTouchLastPosition.py);
+    INPUTTouchLength += sqrt(xdiff * xdiff + ydiff * ydiff);
+    hidTouchRead(&INPUTTouchLastPosition);
+  }
+  else /* Touch is not being held */
+  {
+    INPUTTouchLength = -1;
+  }
 }
 
 /* Checks for if a button was just pressed. Requires ST_InputScan before it */
@@ -81,8 +105,61 @@ int ST_InputTouchX(void)
 int ST_InputTouchY(void)
 {
   if (INPUTKeysHeld & KEY_TOUCH)
+    return INPUTTouchOrigin.py;
+  return -1;
+}
+
+/* Returns X position of where the touch started. */
+/*   Requires ST_InputScan before it */
+/* Returns -1 if the touch screen is currently not being touched */
+int ST_InputTouchOriginX(void)
+{
+  if (INPUTKeysHeld & KEY_TOUCH)
+    return INPUTTouchOrigin.px;
+  return -1;
+}
+
+/* Returns Y position of where the touch started. */
+/*   Requires ST_InputScan before it */
+/* Returns -1 if the touch screen is currently not being touched */
+int ST_InputTouchOriginY(void)
+{
+  if (INPUTKeysHeld & KEY_TOUCH)
     return INPUTTouchPosition.py;
   return -1;
+}
+
+/* Returns X difference between where the touch is and where it started. */
+/*   Requires ST_InputScan before it */
+/* Returns -1 if the touch screen is currently not being touched */
+int ST_InputTouchDistanceX(void)
+{
+  return abs(INPUTTouchPosition.px - INPUTTouchOrigin.px);
+}
+
+/* Returns Y difference between where the touch is and where it started. */
+/*   Requires ST_InputScan before it */
+/* Returns -1 if the touch screen is currently not being touched */
+int ST_InputTouchDistanceY(void)
+{
+  return abs(INPUTTouchPosition.py - INPUTTouchOrigin.py);
+}
+
+/* Returns distance between where the touch is and where it started. */
+/*   Requires ST_InputScan before it */
+/* Returns -1 if the touch screen is currently not being touched */
+int ST_InputTouchDistance(void)
+{
+  return sqrt(ST_InputTouchDistanceX() * ST_InputTouchDistanceX() +
+              ST_InputTouchDistanceY() * ST_InputTouchDistanceY());
+}
+
+/* Returns length of line drawn on touchscreen. */
+/*   Requires ST_InputScan before it */
+/* Returns -1 if the touch screen is currently not being touched */
+int ST_InputTouchLength(void)
+{
+  return INPUTTouchLength;
 }
 
 /* Returns X position of Circle Pad. Requires ST_InputScan before it */
