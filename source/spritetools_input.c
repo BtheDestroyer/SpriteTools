@@ -105,7 +105,7 @@ int ST_InputTouchX(void)
 int ST_InputTouchY(void)
 {
   if (INPUTKeysHeld & KEY_TOUCH)
-    return INPUTTouchOrigin.py;
+    return INPUTTouchPosition.py;
   return -1;
 }
 
@@ -125,7 +125,7 @@ int ST_InputTouchOriginX(void)
 int ST_InputTouchOriginY(void)
 {
   if (INPUTKeysHeld & KEY_TOUCH)
-    return INPUTTouchPosition.py;
+    return INPUTTouchOrigin.py;
   return -1;
 }
 
