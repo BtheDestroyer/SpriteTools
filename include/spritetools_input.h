@@ -86,16 +86,16 @@ s16 ST_InputAccelY(void);
 /* Returns z of Accelerometer Vector. Requires ST_InputScan before it */
 s16 ST_InputAccelZ(void);
 
-/* Returns Gyroscope angular Rate. Requires ST_InputScan before it */
+/* Returns Gyroscope's angular Rate. Requires ST_InputScan before it */
 angularRate ST_InputGyro(void);
 
-/* Returns x of Accelerometer Vector. Requires ST_InputScan before it */
+/* Returns x of Gyroscope's angular Rate. Requires ST_InputScan before it */
 s16 ST_InputGyroRoll(void);
 
-/* Returns y of Accelerometer Vector. Requires ST_InputScan before it */
+/* Returns y of Gyroscope's angular Rate. Requires ST_InputScan before it */
 s16 ST_InputGyroYaw(void);
 
-/* Returns z of Accelerometer Vector. Requires ST_InputScan before it */
+/* Returns z of Gyroscope's angular Rate. Requires ST_InputScan before it */
 s16 ST_InputGyroPitch(void);
 
 #endif
