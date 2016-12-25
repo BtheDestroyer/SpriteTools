@@ -46,6 +46,7 @@ void ST_InputScan(void)
   {
     INPUTTouchLength = 0;
     hidTouchRead(&INPUTTouchOrigin);
+    hidTouchRead(&INPUTTouchLastPosition);
   }
 
   if (INPUTKeysHeld & KEY_TOUCH) /* Touch is currently held */
@@ -134,7 +135,10 @@ int ST_InputTouchOriginY(void)
 /* Returns -1 if the touch screen is currently not being touched */
 int ST_InputTouchDistanceX(void)
 {
-  return abs(INPUTTouchPosition.px - INPUTTouchOrigin.px);
+  if (INPUTKeysHeld & KEY_TOUCH)
+    return abs(INPUTTouchPosition.px - INPUTTouchOrigin.px);
+  else
+    return -1;
 }
 
 /* Returns Y difference between where the touch is and where it started. */
@@ -142,7 +146,10 @@ int ST_InputTouchDistanceX(void)
 /* Returns -1 if the touch screen is currently not being touched */
 int ST_InputTouchDistanceY(void)
 {
-  return abs(INPUTTouchPosition.py - INPUTTouchOrigin.py);
+  if (INPUTKeysHeld & KEY_TOUCH)
+    return abs(INPUTTouchPosition.py - INPUTTouchOrigin.py);
+  else
+    return -1;
 }
 
 /* Returns distance between where the touch is and where it started. */
@@ -150,8 +157,11 @@ int ST_InputTouchDistanceY(void)
 /* Returns -1 if the touch screen is currently not being touched */
 int ST_InputTouchDistance(void)
 {
-  return sqrt(ST_InputTouchDistanceX() * ST_InputTouchDistanceX() +
-              ST_InputTouchDistanceY() * ST_InputTouchDistanceY());
+  if (INPUTKeysHeld & KEY_TOUCH)
+    return sqrt(ST_InputTouchDistanceX() * ST_InputTouchDistanceX() +
+                ST_InputTouchDistanceY() * ST_InputTouchDistanceY());
+  else
+    return -1;
 }
 
 /* Returns length of line drawn on touchscreen. */
