@@ -208,7 +208,7 @@ void *ST_DebugPrintVarId(int id)
       DEBUGVars[id].pointer);
     break;
     case VOID :
-    sprintf(tempstr, "%.2d. VOID  %s = %p", id, DEBUGVars[id].name,
+    sprintf(tempstr, "%.2d. VOID   %s = %p", id, DEBUGVars[id].name,
       DEBUGVars[id].pointer);
     break;
     default :
