@@ -10,6 +10,7 @@
 #include <string.h>
 #include <spritetools_debug.h>
 #include <spritetools_input.h>
+#include <spritetools_textcolors.h>
 
 /*******************************\
 |*     Debugging Variables     *|
@@ -384,7 +385,7 @@ int ST_DebugGetScroll(void)
 /* Clears the console */
 void ST_DebugClear(void)
 {
-  printf("\x1b[0;0H\033[H\033[J");
+  printf("\x1b[2J\x1b[H");
 }
 
 /* Displays generic debug info if DEBUG is on */
@@ -392,12 +393,22 @@ void ST_DebugClear(void)
 int ST_DebugDisplay(void)
 {
   int c = 0; /* Character counter */
-  c += ST_DebugPrint("\x1b[2;2HSPRITETOOLS DEBUG");
-  c += ST_DebugPrint("\x1b[3;2HVersion: Beta 2.0");
-  c += ST_DebugPrint("\x1b[4;2HVariables in Debug:");
-  ST_DebugPrintVarAllFromUntilPosition(DEBUGScroll, 10 + DEBUGScroll, 2, 5);
+  int i;
 
-  ST_DebugButtonFormattedAtPosition(2, 16);
+  for (i = 0; i < 18; i++)
+    printf("\x1b[%d;3H{                                        }", 2 + i);
+
+  c += ST_DebugPrint("\x1b[2;4HSPRITETOOLS DEBUG");
+  c += ST_DebugPrint("\x1b[3;4HVersion: ");
+  ST_TextCyanFore();
+  ST_TextBright();
+  c += ST_DebugPrint("Beta 2.0");
+  ST_TextDefault();
+  c += ST_DebugPrint("\x1b[4;4HVariables in Debug:");
+  ST_DebugPrintVarAllFromUntilPosition(ST_DebugGetScroll(),
+    10 + ST_DebugGetScroll(), 4, 5);
+  c += ST_DebugPrint("\x1b[15;4HButtons:");
+  ST_DebugButtonFormattedAtPosition(4, 16);
 
   return c;
 }
@@ -675,8 +686,8 @@ void ST_DebugButtonFormatted(void)
   ST_DebugButtonY();
 
   ST_DebugPrint("\n");
-  ST_DebugButtonR();
   ST_DebugButtonL();
+  ST_DebugButtonR();
 
   ST_DebugPrint("\n");
   ST_DebugButtonStart();
@@ -706,8 +717,8 @@ void ST_DebugButtonFormattedAtPosition(int x, int y)
 
   sprintf(tempstr, "\x1b[%d;%dH", y + 2, x);
   ST_DebugPrint(tempstr);
-  ST_DebugButtonR();
   ST_DebugButtonL();
+  ST_DebugButtonR();
 
   sprintf(tempstr, "\x1b[%d;%dH", y + 3, x);
   ST_DebugPrint(tempstr);
