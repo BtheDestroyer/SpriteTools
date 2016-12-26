@@ -22,6 +22,12 @@ int ST_RenderInit(void)
   return 1;
 }
 
+/* Finishes rendering */
+void ST_RenderFini(void)
+{
+  sf2d_fini();
+}
+
 /* Start frame */
 /* Takes screen (GFX_TOP or GFX_BOTTOM) */
 void ST_RenderStartFrame(gfxScreen_t screen)

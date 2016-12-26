@@ -22,6 +22,9 @@
 /* Returns 1 on success and 0 on failure */
 int ST_RenderInit(void);
 
+/* Finishes rendering */
+void ST_RenderFini(void);
+
 /* Start frame */
 /* Takes screen (GFX_TOP or GFX_BOTTOM) */
 void ST_RenderStartFrame(gfxScreen_t screen);

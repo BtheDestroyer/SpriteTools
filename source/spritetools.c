@@ -15,10 +15,8 @@ void ST_Init(void)
 }
 
 /* Cleans up all modules */
-int ST_Fini(void)
+void ST_Fini(void)
 {
-  if (!ST_DebugFini())
-    return 0;
-
-  return 1;
+  ST_DebugFini();
+  ST_RenderFini();
 }

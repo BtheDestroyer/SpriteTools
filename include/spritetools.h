@@ -18,6 +18,6 @@
 void ST_Init(void);
 
 /* Cleans up all modules */
-int ST_Fini(void);
+void ST_Fini(void);
 
 #endif
