@@ -12,6 +12,9 @@
 #include <spritetools_textcolors.h>
 
 /* Inits all modules and sets up */
-void ST_Init(void);
+int ST_Init(void);
+
+/* Cleans up all modules */
+int ST_Fini(void);
 
 #endif
