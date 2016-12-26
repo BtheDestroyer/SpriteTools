@@ -4,15 +4,24 @@
 * https://github.com/BtheDestroyer/SpriteTools
 */
 
-#include <3ds.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <spritetools.h>
 
 /* Inits all modules */
-void ST_Init(void)
+int ST_Init(void)
 {
-  ST_DebugInit();
-  ST_InputInit();
+  if (!ST_DebugInit())
+    return 0;
+  if (!ST_InputInit())
+    return 0;
+
+  return 1;
+}
+
+/* Cleans up all modules */
+int ST_Fini(void)
+{
+  if (!ST_DebugFini())
+    return 0;
+
+  return 1;
 }

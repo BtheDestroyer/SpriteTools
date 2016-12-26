@@ -51,6 +51,16 @@ int ST_DebugInit(void)
   return 1;
 }
 
+/* Cleans up debug variables */
+/* Returns 1 on success */
+/* Returns 0 if DEBUGVars cannot be allocated */
+int ST_DebugFini(void)
+{
+  free(DEBUGVars);
+
+  return 1;
+}
+
 /* Returns DEBUG State */
 int ST_DebugGet(void)
 {

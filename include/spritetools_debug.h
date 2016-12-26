@@ -40,6 +40,9 @@ typedef struct NamedPointer {
 /* Returns 0 if DEBUGVars cannot be allocated */
 int ST_DebugInit(void);
 
+/* Cleans up all modules */
+int ST_DebugFini(void);
+
 /* Returns DEBUG State */
 int ST_DebugGet(void);
 
