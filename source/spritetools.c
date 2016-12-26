@@ -25,9 +25,3 @@ int ST_Fini(void)
 
   return 1;
 }
-
-/* Cleans up all modules */
-void ST_Fini(void)
-{
-  ST_DebugFini();
-}
