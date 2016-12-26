@@ -13,6 +13,8 @@
 /* This means that you can technically use sf2d stuff and it'll work, but */
 /* only using spritetools functions and types means you will be able to */
 /* more easily and safely update */
+#include <sf2d.h>
+
 #define st_spritesheet sf2d_texture
 
 /********************************\
@@ -29,10 +31,6 @@ typedef struct {
 /*********************************\
 |*     Spritesheet Functions     *|
 \*********************************/
-/* Inits spritesheets */
-/* Returns 1 on success and 0 on failure */
-int ST_SpritesheetInit(void);
-
 /* Load spritesheet from image */
 /* Takes image */
 /* Returns pointer to st_spritesheet */

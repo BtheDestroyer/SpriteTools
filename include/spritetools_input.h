@@ -7,6 +7,7 @@
 #ifndef __spritetools_input_h
 
 #define __spritetools_input_h
+#include <3ds.h>
 
 /* Enables the Accelerometer and Gyroscope at startup */
 void ST_InputInit(void);
