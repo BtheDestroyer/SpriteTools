@@ -53,7 +53,7 @@ void ST_RenderSpritesheetPosition(st_spritesheet *spritesheet, int x, int y)
 /* Takes spritesheet */
 void ST_RenderSpritesheet(st_spritesheet *spritesheet)
 {
-  ST_RenderSpritesheetPosition(spritesheet, 0, 0);
+  sf2d_draw_texture(spritesheet, 0, 0);
 }
 
 /* Draw Sprite in Spritesheet at Position */
@@ -78,4 +78,54 @@ void ST_RenderSprite(st_spritesheet *spritesheet,
   unsigned int width, unsigned int height)
 {
   ST_RenderSpritePosition(spritesheet, 0, 0, xleft, ytop, width, height);
+}
+
+/* Draw Scaled Sprite in Spritesheet at Position */
+/* Takes spritesheet */
+/*   Takes x and y of the top left pixel of the sprite in the spritesheet */
+/*   Takes width and height of the sprite in the spritesheet */
+/*   Takes position to print the sprite on screen */
+/*   Takes value to scale by */
+void ST_RenderSpritePositionScale(st_spritesheet *spritesheet,
+  unsigned int xleft, unsigned int ytop,
+  unsigned int width, unsigned int height,
+  int x, int y,
+  double scale)
+{
+  sf2d_draw_texture_part_scale(spritesheet, x, y, xleft, ytop,
+    width, height, scale, scale);
+}
+
+/* Draw Rotated Sprite in Spritesheet at Position */
+/* Takes spritesheet */
+/*   Takes x and y of the top left pixel of the sprite in the spritesheet */
+/*   Takes width and height of the sprite in the spritesheet */
+/*   Takes position to print the sprite on screen */
+/*   Takes radian value to rotate by */
+void ST_RenderSpritePositionRotate(st_spritesheet *spritesheet,
+  unsigned int xleft, unsigned int ytop,
+  unsigned int width, unsigned int height,
+  int x, int y,
+  double rotate)
+{
+  sf2d_draw_texture_part_rotate_scale(spritesheet, x, y, rotate, xleft, ytop,
+    width, height, 1.0, 1.0);
+}
+
+/* Draw Scaled and Rotated Sprite in Spritesheet at Position */
+/* Takes spritesheet */
+/*   Takes x and y of the top left pixel of the sprite in the spritesheet */
+/*   Takes width and height of the sprite in the spritesheet */
+/*   Takes position to print the sprite on screen */
+/*   Takes value to scale by */
+/*   Takes value to rotate by */
+void ST_RenderSpritePositionScaleRotate(st_spritesheet *spritesheet,
+  unsigned int xleft, unsigned int ytop,
+  unsigned int width, unsigned int height,
+  int x, int y,
+  double scale,
+  double rotate)
+{
+  sf2d_draw_texture_part_rotate_scale(spritesheet, x, y, rotate, xleft, ytop,
+    width, height, scale, scale);
 }
