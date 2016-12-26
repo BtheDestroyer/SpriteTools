@@ -11,4 +11,7 @@
 #include <spritetools_input.h>
 #include <spritetools_textcolors.h>
 
+/* Inits all modules and sets up */
+void ST_Init(void);
+
 #endif
