@@ -8,16 +8,11 @@
 
 #define __spritetools_render_h
 
-/* For now, this depends on sf2d. */
-/* In the future, it will be rewritten to be fully independant */
-/* This means that you can technically use sf2d stuff and it'll work, but */
-/* only using spritetools functions and types means you will be able to */
-/* more easily and safely update */
-#include <sf2d.h>
+#include <spritetools_spritesheet.h>
 
-/****************************\
-|*     Render Functions     *|
-\****************************/
+/*****************************\
+|*     General Functions     *|
+\*****************************/
 /* Inits rendering */
 /* Returns 1 on success and 0 on failure */
 int ST_RenderInit(void);
@@ -32,6 +27,9 @@ void ST_RenderStartFrame(gfxScreen_t screen);
 /* Ends rendering the current frame (for both screens) */
 void ST_RenderEndRender(void);
 
+/*******************************\
+|*     Render Spritesheets     *|
+\*******************************/
 /* Draw Spritesheet at Position */
 /* Takes spritesheet and x and y of position to render on screen */
 /* Untested */
