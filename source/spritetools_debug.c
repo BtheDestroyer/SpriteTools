@@ -409,30 +409,30 @@ int ST_DebugDisplay(void)
     return 0;
 
   for (i = 0; i < 18; i++)
-    printf("\x1b[%d;3H{                                        }", 2 + i);
+    printf("\x1b[%d;1H{                                    }", 2 + i);
 
-  ST_DebugPrint("\x1b[2;4HSPRITETOOLS DEBUG");
-  ST_DebugPrint("\x1b[3;4HVersion: ");
+  ST_DebugPrint("\x1b[2;2HSPRITETOOLS DEBUG");
+  ST_DebugPrint("\x1b[3;2HVersion: ");
   ST_TextCyanFore();
   ST_TextBright();
   ST_DebugPrint("Beta 2.0");
   ST_TextDefault();
-  ST_DebugPrint("\x1b[4;4HVariables in Debug:");
+  ST_DebugPrint("\x1b[4;2HVariables in Debug:");
   ST_DebugPrintVarAllFromUntilPosition(ST_DebugGetScroll(),
     10 + ST_DebugGetScroll(), 4, 5);
-  ST_DebugPrint("\x1b[15;4HButtons:");
+  ST_DebugPrint("\x1b[15;2HButtons:");
   ST_DebugButtonFormattedAtPosition(4, 16);
-  ST_DebugPrint("\x1b[15;19HTouchscreen:");
-  sprintf(tempstr,"\x1b[16;19HCurrent: (%d,%d)",
+  ST_DebugPrint("\x1b[15;17HTouchscreen:");
+  sprintf(tempstr,"\x1b[16;17HCurrent: (%d,%d)",
     ST_InputTouchX(), ST_InputTouchY());
   ST_DebugPrint(tempstr);
-  sprintf(tempstr,"\x1b[17;19HOrigin: (%d,%d)",
+  sprintf(tempstr,"\x1b[17;17HOrigin: (%d,%d)",
     ST_InputTouchOriginX(), ST_InputTouchOriginY());
   ST_DebugPrint(tempstr);
-  sprintf(tempstr,"\x1b[18;19HDist: %d",
+  sprintf(tempstr,"\x1b[18;17HDist: %d",
     ST_InputTouchDistance());
   ST_DebugPrint(tempstr);
-  sprintf(tempstr,"\x1b[18;29HLen: %d",
+  sprintf(tempstr,"\x1b[18;27HLen: %d",
     ST_InputTouchLength());
   ST_DebugPrint(tempstr);
 
