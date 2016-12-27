@@ -5,8 +5,6 @@
 */
 
 #include <3ds.h>
-#include <sf2d.h>
-#include <stdio.h>
 #include <spritetools_spritesheet.h>
 
 /*********************************\
