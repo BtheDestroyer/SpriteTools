@@ -5,12 +5,11 @@
 */
 
 #include <3ds.h>
-#include <stdio.h>
-#include <spritetools_spritesheet.h>
+#include <spritetools_render.h>
 
-/****************************\
-|*     Render Functions     *|
-\****************************/
+/*****************************\
+|*     General Functions     *|
+\*****************************/
 /* Inits rendering */
 /* Returns 1 on success and 0 on failure */
 int ST_RenderInit(void)
@@ -48,6 +47,9 @@ void ST_RenderEndRender(void)
   sf2d_swapbuffers();
 }
 
+/*******************************\
+|*     Render Spritesheets     *|
+\*******************************/
 /* Draw Spritesheet at Position */
 /* Takes spritesheet and x and y of position to render on screen */
 void ST_RenderSpritesheetPosition(st_spritesheet *spritesheet, int x, int y)
