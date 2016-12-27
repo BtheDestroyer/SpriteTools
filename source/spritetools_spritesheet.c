@@ -13,10 +13,11 @@
 /* Load spritesheet from image */
 /* Takes image */
 /* Returns pointer to st_spritesheet */
-st_spritesheet *ST_SpritesheetCreateSpritesheet(st_image image)
+st_spritesheet *ST_SpritesheetCreateSpritesheet(const unsigned char *pixel_data,
+    unsigned int width, unsigned int height)
 {
-  return sf2d_create_texture_mem_RGBA8(image.pixel_data,
-    image.width, image.height, TEXFMT_RGBA8, SF2D_PLACE_RAM);
+  return sf2d_create_texture_mem_RGBA8(pixel_data, width, height,
+    TEXFMT_RGBA8, SF2D_PLACE_RAM);
 }
 
 /* Free spritesheet */

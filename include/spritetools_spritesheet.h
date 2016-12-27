@@ -15,18 +15,18 @@
 /* more easily and safely update */
 #include <sf2d.h>
 
+/*******************************\
+|*     Spritesheet Defines     *|
+\*******************************/
+/* Temporary define until this is split from sf2d */
 #define st_spritesheet sf2d_texture
-
-/********************************\
-|*     Spritesheet Typedefs     *|
-\********************************/
 /* image structure */
-typedef struct {
-  unsigned int width;
-  unsigned int height;
-  unsigned int bytes_per_pixel;
-  unsigned char pixel_data[];
-} st_image;
+#define st_image struct {\
+  unsigned int width;\
+  unsigned int height;\
+  unsigned int bytes_per_pixel;\
+  unsigned char pixel_data[];\
+}
 
 /*********************************\
 |*     Spritesheet Functions     *|
@@ -34,7 +34,8 @@ typedef struct {
 /* Load spritesheet from image */
 /* Takes image */
 /* Returns pointer to st_spritesheet */
-st_spritesheet *ST_SpritesheetCreateSpritesheet(st_image image);
+st_spritesheet *ST_SpritesheetCreateSpritesheet(const unsigned char *pixel_data,
+    unsigned int width, unsigned int height);
 
 /* Free spritesheet */
 /* Takes st_spritesheet */
