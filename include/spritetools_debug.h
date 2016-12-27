@@ -8,6 +8,9 @@
 
 #define __spritetools_debug_h
 
+/* Current version of SpriteTools */
+#define SPRITETOOLS_VERSION "Beta 2.0.1"
+
 /* Maximum number of variables that can be debugged at once */
 #define ST_DEBUG_MAX_VAR 64
 

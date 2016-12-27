@@ -415,7 +415,7 @@ int ST_DebugDisplay(void)
   ST_DebugPrint("\x1b[3;2HVersion: ");
   ST_TextCyanFore();
   ST_TextBright();
-  ST_DebugPrint("Beta 2.0");
+  ST_DebugPrint(SPRITETOOLS_VERSION);
   ST_TextDefault();
   ST_DebugPrint("\x1b[4;2HVariables in Debug:");
   ST_DebugPrintVarAllFromUntilPosition(ST_DebugGetScroll(),
