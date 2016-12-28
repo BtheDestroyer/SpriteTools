@@ -27,6 +27,9 @@ void ST_RenderStartFrame(gfxScreen_t screen);
 /* Ends rendering the current frame (for both screens) */
 void ST_RenderEndRender(void);
 
+/* Returns current screen */
+gfxScreen_t ST_RenderCurrentScreen(void);
+
 /*******************************\
 |*     Render Spritesheets     *|
 \*******************************/
@@ -93,5 +96,21 @@ void ST_RenderSpritePositionScaleRotate(st_spritesheet *spritesheet,
   int x, int y,
   double scale,
   double rotate);
+
+/* Draw Scaled, Rotated, and Blended Sprite in Spritesheet at Position */
+/* Takes spritesheet */
+/*   Takes x and y of the top left pixel of the sprite in the spritesheet */
+/*   Takes width and height of the sprite in the spritesheet */
+/*   Takes position to print the sprite on screen */
+/*   Takes value to scale by */
+/*   Takes value to rotate by */
+/*   Takes color to blend with (rgba8) */
+void ST_RenderSpriteAdvanced(st_spritesheet *spritesheet,
+  unsigned int xleft, unsigned int ytop,
+  unsigned int width, unsigned int height,
+  int x, int y,
+  double scale,
+  double rotate,
+  u8 red, u8 green, u8 blue, u8 alpha);
 
 #endif

@@ -16,7 +16,7 @@ int ST_RenderInit(void)
 {
   if (!sf2d_init())
     return 0;
-  sf2d_set_clear_color(RGBA8(0x20, 0xA0, 0x20, 0xFF));
+  sf2d_set_clear_color(RGBA8(0x00, 0x00, 0x00, 0xFF));
 
   return 1;
 }
@@ -45,6 +45,12 @@ void ST_RenderStartFrame(gfxScreen_t screen)
 void ST_RenderEndRender(void)
 {
   sf2d_swapbuffers();
+}
+
+/* Returns current screen */
+gfxScreen_t ST_RenderCurrentScreen(void)
+{
+  return sf2d_get_current_screen();
 }
 
 /*******************************\
@@ -136,4 +142,24 @@ void ST_RenderSpritePositionScaleRotate(st_spritesheet *spritesheet,
 {
   sf2d_draw_texture_part_rotate_scale(spritesheet, x, y, rotate, xleft, ytop,
     width, height, scale, scale);
+}
+
+/* Draw Scaled, Rotated, and Blended Sprite in Spritesheet at Position */
+/* Takes spritesheet */
+/*   Takes x and y of the top left pixel of the sprite in the spritesheet */
+/*   Takes width and height of the sprite in the spritesheet */
+/*   Takes position to print the sprite on screen */
+/*   Takes value to scale by */
+/*   Takes value to rotate by */
+/*   Takes color to blend with (rgba8) */
+void ST_RenderSpriteAdvanced(st_spritesheet *spritesheet,
+  unsigned int xleft, unsigned int ytop,
+  unsigned int width, unsigned int height,
+  int x, int y,
+  double scale,
+  double rotate,
+  u8 red, u8 green, u8 blue, u8 alpha)
+{
+  sf2d_draw_texture_part_rotate_scale_blend(spritesheet, x, y, rotate,
+    xleft, ytop, width, height, scale, scale, RGBA8(red, green, blue, alpha));
 }
