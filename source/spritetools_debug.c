@@ -201,10 +201,6 @@ void *ST_DebugPrintVarId(int id)
     sprintf(tempstr, "%.2d. int    %s = %d", id, DEBUGVars[id].name,
       *(int *)DEBUGVars[id].pointer);
     break;
-    case U32 :
-    sprintf(tempstr, "%.2d. u32    %s = %lu", id, DEBUGVars[id].name,
-      *(u32 *)DEBUGVars[id].pointer);
-    break;
     case DOUBLE :
     sprintf(tempstr, "%.2d. double %s = %f", id, DEBUGVars[id].name,
       *(double *)DEBUGVars[id].pointer);
@@ -213,6 +209,75 @@ void *ST_DebugPrintVarId(int id)
     sprintf(tempstr, "%.2d. float  %s = %f", id, DEBUGVars[id].name,
       *(float *)DEBUGVars[id].pointer);
     break;
+
+    case U8 :
+    sprintf(tempstr, "%.2d. u8     %s = %u", id, DEBUGVars[id].name,
+      *(u8 *)DEBUGVars[id].pointer);
+    break;
+    case U16 :
+    sprintf(tempstr, "%.2d. u16    %s = %u", id, DEBUGVars[id].name,
+      *(u16 *)DEBUGVars[id].pointer);
+    break;
+    case U32 :
+    sprintf(tempstr, "%.2d. u32    %s = %lu", id, DEBUGVars[id].name,
+      *(u32 *)DEBUGVars[id].pointer);
+    break;
+    case U64 :
+    sprintf(tempstr, "%.2d. u64    %s = %llu", id, DEBUGVars[id].name,
+      *(u64 *)DEBUGVars[id].pointer);
+    break;
+
+    case S8 :
+    sprintf(tempstr, "%.2d. s8     %s = %d", id, DEBUGVars[id].name,
+      *(s8 *)DEBUGVars[id].pointer);
+    break;
+    case S16 :
+    sprintf(tempstr, "%.2d. s16    %s = %d", id, DEBUGVars[id].name,
+      *(s16 *)DEBUGVars[id].pointer);
+    break;
+    case S32 :
+    sprintf(tempstr, "%.2d. s32    %s = %ld", id, DEBUGVars[id].name,
+      *(s32 *)DEBUGVars[id].pointer);
+    break;
+    case S64 :
+    sprintf(tempstr, "%.2d. s64    %s = %lld", id, DEBUGVars[id].name,
+      *(s64 *)DEBUGVars[id].pointer);
+    break;
+
+    case VU8 :
+    sprintf(tempstr, "%.2d. vu8    %s = %u", id, DEBUGVars[id].name,
+      *(vu8 *)DEBUGVars[id].pointer);
+    break;
+    case VU16 :
+    sprintf(tempstr, "%.2d. vu16   %s = %u", id, DEBUGVars[id].name,
+      *(vu16 *)DEBUGVars[id].pointer);
+    break;
+    case VU32 :
+    sprintf(tempstr, "%.2d. vu32   %s = %lu", id, DEBUGVars[id].name,
+      *(vu32 *)DEBUGVars[id].pointer);
+    break;
+    case VU64 :
+    sprintf(tempstr, "%.2d. vu64   %s = %llu", id, DEBUGVars[id].name,
+      *(vu64 *)DEBUGVars[id].pointer);
+    break;
+
+    case VS8 :
+    sprintf(tempstr, "%.2d. vs8    %s = %d", id, DEBUGVars[id].name,
+      *(vs8 *)DEBUGVars[id].pointer);
+    break;
+    case VS16 :
+    sprintf(tempstr, "%.2d. vs16   %s = %d", id, DEBUGVars[id].name,
+      *(vs16 *)DEBUGVars[id].pointer);
+    break;
+    case VS32 :
+    sprintf(tempstr, "%.2d. vs32   %s = %ld", id, DEBUGVars[id].name,
+      *(vs32 *)DEBUGVars[id].pointer);
+    break;
+    case VS64 :
+    sprintf(tempstr, "%.2d. vs64  %s = %lld", id, DEBUGVars[id].name,
+      *(vs64 *)DEBUGVars[id].pointer);
+    break;
+
     case ST_NAMEDPOINTER :
     sprintf(tempstr, "%.2d. ST_NP  %s = %p", id, DEBUGVars[id].name,
       DEBUGVars[id].pointer);
