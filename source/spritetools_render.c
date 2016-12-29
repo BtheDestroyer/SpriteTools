@@ -163,3 +163,62 @@ void ST_RenderSpriteAdvanced(st_spritesheet *spritesheet,
   sf2d_draw_texture_part_rotate_scale_blend(spritesheet, x, y, rotate,
     xleft, ytop, width, height, scale, scale, RGBA8(red, green, blue, alpha));
 }
+
+/*************************\
+|*     Render Frames     *|
+\*************************/
+/* Draw frame at given position */
+/* Takes spritesheet and position at which to draw */
+void ST_RenderFramePosition(st_frame *frame, int x, int y)
+{
+  ST_RenderSpriteAdvanced(frame->spritesheet,
+  frame->xleft, frame->ytop,
+  frame->width, frame->height,
+  x, y,
+  1.0,
+  0.0,
+  255, 255, 255, 255);
+}
+
+/* Draw scaled frame at given position */
+/* Takes spritesheet, position at which to draw and a scalar multiplier */
+void ST_RenderFrameScale(st_frame *frame, int x, int y, double scale)
+{
+  ST_RenderSpriteAdvanced(frame->spritesheet,
+  frame->xleft, frame->ytop,
+  frame->width, frame->height,
+  x, y,
+  scale,
+  0.0,
+  255, 255, 255, 255);
+}
+
+/* Draw rotated frame at given position */
+/* Takes spritesheet, position at which to draw and a rotation in radians */
+void ST_RenderFrameRotate(st_frame *frame, int x, int y, double rotate)
+{
+  ST_RenderSpriteAdvanced(frame->spritesheet,
+  frame->xleft, frame->ytop,
+  frame->width, frame->height,
+  x, y,
+  1.0,
+  rotate,
+  255, 255, 255, 255);
+}
+
+/* Draw frame at given position */
+/* Takes spritesheet and position at which to draw */
+/*   Takes scalar multiplier and rotation in radians */
+/*   Takes red, green, blue, and alpha of color to blend */
+void ST_RenderFramePositionAdvanced(st_frame *frame, int x, int y,
+  double scale, double rotate,
+  u8 red, u8 green, u8 blue, u8 alpha)
+{
+  ST_RenderSpriteAdvanced(frame->spritesheet,
+  frame->xleft, frame->ytop,
+  frame->width, frame->height,
+  x, y,
+  scale,
+  rotate,
+  red, green, blue, alpha);
+}

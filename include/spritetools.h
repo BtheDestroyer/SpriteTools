@@ -14,6 +14,7 @@
 #include <spritetools_spritesheet.h>
 #include <spritetools_render.h>
 #include <spritetools_splash.h>
+#include <spritetools_animation.h>
 
 /* Inits all modules and sets up */
 void ST_Init(void);

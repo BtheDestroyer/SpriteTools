@@ -9,6 +9,7 @@
 #define __spritetools_render_h
 
 #include <spritetools_spritesheet.h>
+#include <spritetools_animation.h>
 
 /*****************************\
 |*     General Functions     *|
@@ -112,5 +113,29 @@ void ST_RenderSpriteAdvanced(st_spritesheet *spritesheet,
   double scale,
   double rotate,
   u8 red, u8 green, u8 blue, u8 alpha);
+
+/*************************\
+|*     Render Frames     *|
+\*************************/
+/* Draw frame at given position */
+/* Takes spritesheet and position at which to draw */
+void ST_RenderFramePosition(st_frame *frame, int x, int y);
+
+/* Draw scaled frame at given position */
+/* Takes spritesheet, position at which to draw and a scalar multiplier */
+void ST_RenderFrameScale(st_frame *frame, int x, int y, double scale);
+
+/* Draw rotated frame at given position */
+/* Takes spritesheet, position at which to draw and a rotation in radians */
+void ST_RenderFrameRotate(st_frame *frame, int x, int y, double rotate);
+
+/* Draw frame at given position */
+/* Takes spritesheet and position at which to draw */
+/*   Takes scalar multiplier and rotation in radians */
+/*   Takes red, green, blue, and alpha of color to blend */
+void ST_RenderFramePositionAdvanced(st_frame *frame, int x, int y,
+  double scale, double rotate,
+  u8 red, u8 green, u8 blue, u8 alpha);
+
 
 #endif
