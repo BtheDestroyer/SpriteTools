@@ -19,7 +19,7 @@
 int ST_RenderInit(void);
 
 /* Finishes rendering */
-void ST_RenderFini(void);
+int ST_RenderFini(void);
 
 /* Start frame */
 /* Takes screen (GFX_TOP or GFX_BOTTOM) */
