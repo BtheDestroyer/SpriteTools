@@ -6,6 +6,7 @@
 
 #include <3ds.h>
 #include <spritetools_splash.h>
+#include <spritetools_time.h>
 
 /*****************\
 |*     Image     *|
@@ -19077,21 +19078,22 @@ static const struct {
 /* Takes time to display in ms */
 void ST_Splashscreen(u64 time)
 {
-  u64 startTime = osGetTime();
-  u64 currentTime = startTime;
   u8 fade = 0;
+  u32 bg = ST_RenderGetBackground();
 
   st_spritesheet *splash_s =
   ST_SpritesheetCreateSpritesheet(splash.pixel_data,
     splash.width, splash.height);
 
+  ST_RenderSetBackground(0x00, 0x00, 0x00);
+
   /* Splash for 4 seconds */
-  while ((currentTime = osGetTime() - startTime) <= time)
+  while (ST_TimeRunning() <= time)
   {
-    if (currentTime <= 255)
-      fade = currentTime; /* Fade in */
-    else if (time - currentTime <= 255)
-      fade = time - currentTime; /* Fade out */
+    if (ST_TimeRunning() <= 255)
+      fade = ST_TimeRunning(); /* Fade in */
+    else if (time - ST_TimeRunning() <= 255)
+      fade = time - ST_TimeRunning(); /* Fade out */
     else
       fade = 255; /* Mid splash */
 
@@ -19107,4 +19109,7 @@ void ST_Splashscreen(u64 time)
 
   /* Free splashscreen */
   ST_SpritesheetFreeSpritesheet(splash_s);
+
+  /* Return original background */
+  ST_RenderSetBackground(RGBA8_GET_R(bg), RGBA8_GET_G(bg), RGBA8_GET_B(bg));
 }
