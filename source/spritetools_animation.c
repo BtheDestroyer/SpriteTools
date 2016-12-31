@@ -15,7 +15,7 @@
 /* Takes a pointer to a spritesheet */
 /*   Takes the position of the frame in the spritesheet */
 /*   Takes the dimensions of the frame */
-st_frame *ST_FrameCreateFrame(st_spritesheet *spritesheet,
+st_frame *ST_AnimationCreateFrame(st_spritesheet *spritesheet,
   unsigned int xleft, unsigned int ytop,
   unsigned int width, unsigned int height)
 {
@@ -34,7 +34,7 @@ st_frame *ST_FrameCreateFrame(st_spritesheet *spritesheet,
 
 /* Frees frame from memory */
 /* Takes a pointer to a frame */
-void ST_FrameFreeFrame(st_frame *frame)
+void ST_AnimationFreeFrame(st_frame *frame)
 {
   free(frame);
 }
@@ -71,4 +71,14 @@ st_animation *ST_AnimationCreateAnimation(int fpf, unsigned int loopFrame,
   va_end (ap);
 
   return tempanim;
+}
+
+/* Frees an animation and all of its frames from memory */
+/* Takes a pointer to an animation */
+void ST_AnimationFreeAnimation(st_animation *animation)
+{
+  int i;
+  for (i = 0; i < animation->length; i++)
+    ST_AnimationFreeFrame(animation->frames[i]);
+  free(animation);
 }

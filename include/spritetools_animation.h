@@ -58,4 +58,8 @@ void ST_AnimationFreeFrame(st_frame *frame);
 st_animation *ST_AnimationCreateAnimation(int fpf, unsigned int loopFrame,
   unsigned int length, ...);
 
+/* Frees an animation and all of its frames from memory */
+/* Takes a pointer to an animation */
+void ST_AnimationFreeAnimation(st_animation *animation);
+
 #endif
