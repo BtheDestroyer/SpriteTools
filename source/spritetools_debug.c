@@ -500,8 +500,8 @@ int ST_DebugDisplay(void)
   ST_DebugPrint(tempstr);
   sprintf(tempstr,"\x1b[18;27HLen: %d", ST_InputTouchLength());
   ST_DebugPrint(tempstr);
-  sprintf(tempstr, "\x1b[19;2HMemory: %9.3f KB used\x1b[20;10H%9.3f KB total\
-    \x1b[21;10H%9.3f KB left",
+  sprintf(tempstr, "\x1b[20;2HMemory: %9.3f KB used\x1b[21;10H%9.3f KB total\
+    \x1b[22;10H%9.3f KB left",
     osGetMemRegionUsed(MEMREGION_ALL) * 0.0001,
     osGetMemRegionSize(MEMREGION_ALL) * 0.0001,
     osGetMemRegionFree(MEMREGION_ALL) * 0.0001);
