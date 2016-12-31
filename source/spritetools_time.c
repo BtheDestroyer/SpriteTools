@@ -4,6 +4,7 @@
 * https://github.com/BtheDestroyer/SpriteTools
 */
 
+#include <3ds.h>
 #include <spritetools_time.h>
 
 /* Time from January 1st, 1990 until the program was started in ms */

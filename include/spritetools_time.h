@@ -8,6 +8,8 @@
 
 #define __spritetools_time_h
 
+#include <3ds/types.h>
+
 /**************************\
 |*     Time Functions     *|
 \**************************/
