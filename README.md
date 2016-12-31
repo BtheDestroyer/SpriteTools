@@ -29,4 +29,4 @@ better!
 
 ## License
 
-TBA
+MIT
