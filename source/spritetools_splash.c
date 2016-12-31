@@ -19130,5 +19130,5 @@ void ST_Splashscreen(u64 time)
   ST_RenderEndRender();
 
   /* Free splashscreen */
-
+  ST_SpritesheetFreeSpritesheet(splash_s);
 }

@@ -206,7 +206,7 @@ void ST_RenderFrameRotate(st_frame *frame, int x, int y, double rotate)
   255, 255, 255, 255);
 }
 
-/* Draw frame at given position */
+/* Draw scaled, rotated, and blended frame at given position */
 /* Takes spritesheet and position at which to draw */
 /*   Takes scalar multiplier and rotation in radians */
 /*   Takes red, green, blue, and alpha of color to blend */
