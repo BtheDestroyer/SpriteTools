@@ -22,7 +22,8 @@ static u32 INPUTKeysHeld;
 static u32 INPUTKeysUp;
 
 /* Enables the Accelerometer and Gyroscope at startup */
-void ST_InputInit(void)
+/* Returns 1 on success and 0 on failure */
+int ST_InputInit(void)
 {
   HIDUSER_EnableAccelerometer();
   HIDUSER_EnableGyroscope();
