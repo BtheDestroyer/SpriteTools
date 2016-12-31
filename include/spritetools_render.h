@@ -31,6 +31,9 @@ void ST_RenderEndRender(void);
 /* Returns current screen */
 gfxScreen_t ST_RenderCurrentScreen(void);
 
+/* Returns current fps */
+float ST_RenderFPS(void);
+
 /*******************************\
 |*     Render Spritesheets     *|
 \*******************************/
