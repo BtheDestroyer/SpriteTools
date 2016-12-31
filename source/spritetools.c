@@ -23,8 +23,13 @@ int ST_Init(void)
 }
 
 /* Cleans up all modules */
-void ST_Fini(void)
+/* Returns 1 on success, 0 on failure */
+int ST_Fini(void)
 {
-  ST_DebugFini();
-  ST_RenderFini();
+  if (!ST_DebugFini())
+    return 0;
+  if (!ST_RenderFini())
+    return 0;
+
+  return 1;
 }

@@ -22,9 +22,13 @@ int ST_RenderInit(void)
 }
 
 /* Finishes rendering */
-void ST_RenderFini(void)
+/* Returns 1 on success, 0 on failure */
+int ST_RenderFini(void)
 {
-  sf2d_fini();
+  if (!sf2d_fini())
+    return 0;
+
+  return 1;
 }
 
 /* Start frame */

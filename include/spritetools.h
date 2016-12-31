@@ -22,6 +22,7 @@
 int ST_Init(void);
 
 /* Cleans up all modules */
-void ST_Fini(void);
+/* Returns 1 on success, 0 on failure */
+int ST_Fini(void);
 
 #endif
