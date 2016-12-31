@@ -222,3 +222,52 @@ void ST_RenderFramePositionAdvanced(st_frame *frame, int x, int y,
   rotate,
   red, green, blue, alpha);
 }
+
+/*****************************\
+|*     Render Animations     *|
+\*****************************/
+/* Draw the current frame of an animation at given position */
+/* Takes a pointer to an animation and a position */
+void ST_RenderAnimationCurrent(st_animation *animation, int x, int y)
+{
+  ST_RenderFramePosition(animation->frames[animation->currentFrame], x, y);
+}
+
+/* Draw the next frame of an animation at given position */
+/*   Also adds 1 to the current frame */
+/* Takes a pointer to an animation and a position */
+void ST_RenderAnimationNext(st_animation *animation, int x, int y)
+{
+  animation->currentFrame++;
+  if(animation->currentFrame >= animation->length)
+    animation->currentFrame = animation->loopFrame;
+  ST_RenderFramePosition(animation->frames[animation->currentFrame], x, y);
+}
+
+/* Draw the previous frame of an animation at given position */
+/*   Also subtracts 1 from the current frame */
+/* Takes a pointer to an animation and a position */
+void ST_RenderAnimationPrevious(st_animation *animation, int x, int y)
+{
+  animation->currentFrame--;
+  if(animation->currentFrame >= animation->length)
+    animation->currentFrame = animation->loopFrame;
+  ST_RenderFramePosition(animation->frames[animation->currentFrame], x, y);
+}
+
+/* Plays an animation at given position */
+/*   This also accounts for the animation's speed */
+/* Takes a pointer to an animation and a position */
+void ST_RenderAnimationPlay(st_animation *animation, int x, int y)
+{
+  animation->ftn++;
+  if (animation->ftn > animation->fpf)
+  {
+    animation->ftn = 0;
+    ST_RenderAnimationNext(animation, x, y);
+  }
+  else
+  {
+    ST_RenderAnimationCurrent(animation, x, y);
+  }
+}

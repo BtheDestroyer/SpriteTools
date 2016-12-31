@@ -137,5 +137,26 @@ void ST_RenderFramePositionAdvanced(st_frame *frame, int x, int y,
   double scale, double rotate,
   u8 red, u8 green, u8 blue, u8 alpha);
 
+/*****************************\
+|*     Render Animations     *|
+\*****************************/
+/* Draw the current frame of an animation at given position */
+/* Takes a pointer to an animation and a position */
+void ST_RenderAnimationCurrent(st_animation *animation, int x, int y);
+
+/* Draw the next frame of an animation at given position */
+/*   Also adds 1 to the current frame */
+/* Takes a pointer to an animation and a position */
+void ST_RenderAnimationNext(st_animation *animation, int x, int y);
+
+/* Draw the previous frame of an animation at given position */
+/*   Also subtracts 1 from the current frame */
+/* Takes a pointer to an animation and a position */
+void ST_RenderAnimationPrevious(st_animation *animation, int x, int y);
+
+/* Plays an animation at given position */
+/*   This also accounts for the animation's speed */
+/* Takes a pointer to an animation and a position */
+void ST_RenderAnimationPlay(st_animation *animation, int x, int y);
 
 #endif
