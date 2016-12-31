@@ -7,6 +7,8 @@
 #include <3ds.h>
 #include <spritetools_render.h>
 
+static u32 st_background = 0;
+
 /*****************************\
 |*     General Functions     *|
 \*****************************/
@@ -17,6 +19,7 @@ int ST_RenderInit(void)
   if (!sf2d_init())
     return 0;
   sf2d_set_clear_color(RGBA8(0x00, 0x00, 0x00, 0xFF));
+  st_background = RGBA8(0x00, 0x00, 0x00, 0xFF);
 
   return 1;
 }
@@ -67,6 +70,13 @@ float ST_RenderFPS(void)
 void ST_RenderSetBackground(u8 red, u8 green, u8 blue)
 {
   sf2d_set_clear_color(RGBA8(red, green, blue, 0xFF));
+  st_background = RGBA8(red, green, blue, 0xFF);
+}
+
+/* Returns background color in the RGBA8 format */
+u32 ST_RenderGetBackground(void)
+{
+  return st_background;
 }
 
 /*******************************\
