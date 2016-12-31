@@ -48,8 +48,8 @@ void ST_AnimationFreeFrame(st_frame *frame)
 /*   Takes frame to loop to when the animation has reached its end */
 /*   Takes length of animation in frames */
 /*   Takes a list of pointers to frames */
-st_animation *ST_AnimationCreateAnimation(int fpf, unsigned int loopFrame,
-  unsigned int length, ...)
+st_animation *ST_AnimationCreateAnimation(u16 fpf, u16 loopFrame,
+  u16 length, ...)
 {
   int i;
   va_list ap;
@@ -59,9 +59,11 @@ st_animation *ST_AnimationCreateAnimation(int fpf, unsigned int loopFrame,
     return 0;
 
   tempanim->fpf = fpf;
+  tempanim->ftn = 0;
   tempanim->loopFrame = loopFrame;
   tempanim->length = length;
   tempanim->frames = calloc(sizeof(st_frame*), length);
+  tempanim->currentFrame = 0;
 
   va_start(ap, length);
 
@@ -81,4 +83,37 @@ void ST_AnimationFreeAnimation(st_animation *animation)
   for (i = 0; i < animation->length; i++)
     ST_AnimationFreeFrame(animation->frames[i]);
   free(animation);
+}
+
+/* Sets the current frame of an animation */
+/* Takes a pointer to an animation and frame to go to */
+void ST_AnimationSetFrame(st_animation *animation, u16 frame)
+{
+  animation->currentFrame = frame;
+}
+
+/* Adds 1 to the current frame of an animation. Wraps to 0 if needed */
+/* Takes a pointer to an animation */
+void ST_AnimationNextFrame(st_animation *animation)
+{
+  animation->currentFrame++;
+  if (animation->currentFrame >= animation->length)
+    animation->currentFrame = 0;
+}
+
+/* Subs 1 from the current frame of an animation */
+/*   Wraps to the last frame if needed */
+/* Takes a pointer to an animation */
+void ST_AnimationPreviousFrame(st_animation *animation)
+{
+  animation->currentFrame--;
+  if (animation->currentFrame >= animation->length)
+    animation->currentFrame = animation->length;
+}
+
+/* Sets the speed (fpf) of an animation */
+/* Takes a pointer to an animation and frame to go to */
+void ST_AnimationSetSpeed(st_animation *animation, s16 speed)
+{
+  animation->fpf = speed;
 }

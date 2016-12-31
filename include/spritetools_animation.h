@@ -24,10 +24,12 @@ typedef struct {
 
 /* Animation of frames */
 typedef struct {
-  int fpf; /* Number of frames to wait between each frame of animation */
-  unsigned int loopFrame; /* Frame to jump to when an animation loops */
-  unsigned int length; /* Number of frames in the animation */
+  s16 fpf; /* Number of frames to wait between each frame of animation */
+  u16 ftn; /* Counts number of frames between displayed frame */
+  u16 loopFrame; /* Frame to jump to when an animation loops */
+  u16 length; /* Number of frames in the animation */
   st_frame **frames;
+  u16 currentFrame;
 } st_animation;
 
 /***************************\
@@ -55,11 +57,28 @@ void ST_AnimationFreeFrame(st_frame *frame);
 /*   Takes frame to loop to when the animation has reached its end */
 /*   Takes length of animation in frames */
 /*   Takes a list of pointers to frames */
-st_animation *ST_AnimationCreateAnimation(int fpf, unsigned int loopFrame,
-  unsigned int length, ...);
+st_animation *ST_AnimationCreateAnimation(u16 fpf, u16 loopFrame,
+  u16 length, ...);
 
 /* Frees an animation and all of its frames from memory */
 /* Takes a pointer to an animation */
 void ST_AnimationFreeAnimation(st_animation *animation);
+
+/* Sets the current frame of an animation */
+/* Takes a pointer to an animation and frame to go to */
+void ST_AnimationSetFrame(st_animation *animation, u16 frame);
+
+/* Adds 1 to the current frame of an animation. Wraps to 0 if needed */
+/* Takes a pointer to an animation */
+void ST_AnimationNextFrame(st_animation *animation);
+
+/* Subs 1 from the current frame of an animation */
+/*   Wraps to the last frame if needed */
+/* Takes a pointer to an animation */
+void ST_AnimationPreviousFrame(st_animation *animation);
+
+/* Sets the speed (fpf) of an animation */
+/* Takes a pointer to an animation and frame to go to */
+void ST_AnimationSetSpeed(st_animation *animation, s16 speed);
 
 #endif
