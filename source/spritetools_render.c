@@ -53,6 +53,12 @@ gfxScreen_t ST_RenderCurrentScreen(void)
   return sf2d_get_current_screen();
 }
 
+/* Returns current fps */
+float ST_RenderFPS(void)
+{
+  return sf2d_get_fps();
+}
+
 /*******************************\
 |*     Render Spritesheets     *|
 \*******************************/
