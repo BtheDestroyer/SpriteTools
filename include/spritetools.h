@@ -15,9 +15,11 @@
 #include <spritetools_render.h>
 #include <spritetools_splash.h>
 #include <spritetools_animation.h>
+#include <spritetools_time.h>
 
 /* Inits all modules and sets up */
-void ST_Init(void);
+/* Returns 1 on success, 0 on failure */
+int ST_Init(void);
 
 /* Cleans up all modules */
 void ST_Fini(void);

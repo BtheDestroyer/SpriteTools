@@ -7,11 +7,19 @@
 #include <spritetools.h>
 
 /* Inits all modules */
-void ST_Init(void)
+/* Returns 1 on success, 0 on failure */
+int ST_Init(void)
 {
-  ST_DebugInit();
-  ST_InputInit();
-  ST_RenderInit();
+  if (!ST_DebugInit())
+    return 0;
+  if (!ST_InputInit())
+    return 0;
+  if (!ST_RenderInit())
+    return 0;
+  if (!ST_TimeInit())
+    return 0;
+
+  return 1;
 }
 
 /* Cleans up all modules */

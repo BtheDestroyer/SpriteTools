@@ -59,6 +59,12 @@ float ST_RenderFPS(void)
   return sf2d_get_fps();
 }
 
+/* Sets background to given color */
+void ST_RenderSetBackground(u8 red, u8 green, u8 blue)
+{
+  sf2d_set_clear_color(RGBA8(red, green, blue, 0xFF));
+}
+
 /*******************************\
 |*     Render Spritesheets     *|
 \*******************************/

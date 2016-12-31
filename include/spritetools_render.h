@@ -34,6 +34,9 @@ gfxScreen_t ST_RenderCurrentScreen(void);
 /* Returns current fps */
 float ST_RenderFPS(void);
 
+/* Sets background to given color */
+void ST_RenderSetBackground(u8 red, u8 green, u8 blue);
+
 /*******************************\
 |*     Render Spritesheets     *|
 \*******************************/

@@ -27,6 +27,8 @@ void ST_InputInit(void)
   HIDUSER_EnableAccelerometer();
   HIDUSER_EnableGyroscope();
   INPUTTouchLength = 0;
+
+  return 1;
 }
 
 /* Scans Keys down, held, and up as well as circle and touch positions */
