@@ -188,12 +188,12 @@ void ST_RenderSpriteAdvanced(st_spritesheet *spritesheet,
 void ST_RenderFramePosition(st_frame *frame, int x, int y)
 {
   ST_RenderSpriteAdvanced(frame->spritesheet,
-  frame->xleft, frame->ytop,
-  frame->width, frame->height,
-  x, y,
-  1.0,
-  0.0,
-  255, 255, 255, 255);
+    frame->xleft, frame->ytop,
+    frame->width, frame->height,
+    x, y,
+    1.0,
+    0.0,
+    255, 255, 255, 255);
 }
 
 /* Draw scaled frame at given position */
@@ -201,12 +201,12 @@ void ST_RenderFramePosition(st_frame *frame, int x, int y)
 void ST_RenderFrameScale(st_frame *frame, int x, int y, double scale)
 {
   ST_RenderSpriteAdvanced(frame->spritesheet,
-  frame->xleft, frame->ytop,
-  frame->width, frame->height,
-  x, y,
-  scale,
-  0.0,
-  255, 255, 255, 255);
+    frame->xleft, frame->ytop,
+    frame->width, frame->height,
+    x, y,
+    scale,
+    0.0,
+    255, 255, 255, 255);
 }
 
 /* Draw rotated frame at given position */
@@ -214,12 +214,12 @@ void ST_RenderFrameScale(st_frame *frame, int x, int y, double scale)
 void ST_RenderFrameRotate(st_frame *frame, int x, int y, double rotate)
 {
   ST_RenderSpriteAdvanced(frame->spritesheet,
-  frame->xleft, frame->ytop,
-  frame->width, frame->height,
-  x, y,
-  1.0,
-  rotate,
-  255, 255, 255, 255);
+    frame->xleft, frame->ytop,
+    frame->width, frame->height,
+    x, y,
+    1.0,
+    rotate,
+    255, 255, 255, 255);
 }
 
 /* Draw scaled, rotated, and blended frame at given position */
@@ -231,12 +231,12 @@ void ST_RenderFramePositionAdvanced(st_frame *frame, int x, int y,
   u8 red, u8 green, u8 blue, u8 alpha)
 {
   ST_RenderSpriteAdvanced(frame->spritesheet,
-  frame->xleft, frame->ytop,
-  frame->width, frame->height,
-  x, y,
-  scale,
-  rotate,
-  red, green, blue, alpha);
+    frame->xleft, frame->ytop,
+    frame->width, frame->height,
+    x, y,
+    scale,
+    rotate,
+    red, green, blue, alpha);
 }
 
 /*****************************\
@@ -277,13 +277,28 @@ void ST_RenderAnimationPrevious(st_animation *animation, int x, int y)
 void ST_RenderAnimationPlay(st_animation *animation, int x, int y)
 {
   animation->ftn++;
-  if (animation->ftn > animation->fpf)
+  if (animation->fpf >= 0)
   {
-    animation->ftn = 0;
-    ST_RenderAnimationNext(animation, x, y);
+    if (animation->ftn > animation->fpf)
+    {
+      animation->ftn = 0;
+      ST_RenderAnimationNext(animation, x, y);
+    }
+    else
+    {
+      ST_RenderAnimationCurrent(animation, x, y);
+    }
   }
   else
   {
-    ST_RenderAnimationCurrent(animation, x, y);
+    if (animation->ftn > abs(animation->fpf))
+    {
+      animation->ftn = 0;
+      ST_RenderAnimationPrevious(animation, x, y);
+    }
+    else
+    {
+      ST_RenderAnimationCurrent(animation, x, y);
+    }
   }
 }
