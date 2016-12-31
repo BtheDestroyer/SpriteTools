@@ -12,6 +12,7 @@
 #include <spritetools_debug.h>
 #include <spritetools_input.h>
 #include <spritetools_textcolors.h>
+#include <spritetools_render.h>
 
 /*******************************\
 |*     Debugging Variables     *|
@@ -474,7 +475,7 @@ int ST_DebugDisplay(void)
   if (!ST_DebugGet())
     return 0;
 
-  for (i = 0; i < 18; i++)
+  for (i = 0; i < 22; i++)
     printf("\x1b[%d;1H{                                    }", 2 + i);
 
   ST_DebugPrint("\x1b[2;2HSPRITETOOLS DEBUG");
@@ -492,14 +493,20 @@ int ST_DebugDisplay(void)
   sprintf(tempstr,"\x1b[16;17HCurrent: (%d,%d)",
     ST_InputTouchX(), ST_InputTouchY());
   ST_DebugPrint(tempstr);
-  sprintf(tempstr,"\x1b[17;17HOrigin: (%d,%d)",
-    ST_InputTouchOriginX(), ST_InputTouchOriginY());
+  sprintf(tempstr,"\x1b[17;17HOrigin: (%d,%d)", ST_InputTouchOriginX(),
+    ST_InputTouchOriginY());
   ST_DebugPrint(tempstr);
-  sprintf(tempstr,"\x1b[18;17HDist: %d",
-    ST_InputTouchDistance());
+  sprintf(tempstr,"\x1b[18;17HDist: %d", ST_InputTouchDistance());
   ST_DebugPrint(tempstr);
-  sprintf(tempstr,"\x1b[18;27HLen: %d",
-    ST_InputTouchLength());
+  sprintf(tempstr,"\x1b[18;27HLen: %d", ST_InputTouchLength());
+  ST_DebugPrint(tempstr);
+  sprintf(tempstr, "\x1b[19;2HMemory: %9.3f KB used\x1b[20;10H%9.3f KB total\
+    \x1b[21;10H%9.3f KB left",
+    osGetMemRegionUsed(MEMREGION_ALL) * 0.0001,
+    osGetMemRegionSize(MEMREGION_ALL) * 0.0001,
+    osGetMemRegionFree(MEMREGION_ALL) * 0.0001);
+  ST_DebugPrint(tempstr);
+  sprintf(tempstr,"\x1b[23;2HFPS: %f", ST_RenderFPS());
   ST_DebugPrint(tempstr);
 
   return 1;
