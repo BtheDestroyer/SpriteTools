@@ -480,8 +480,7 @@ int ST_DebugDisplay(void)
 
   ST_DebugPrint("\x1b[2;2HSPRITETOOLS DEBUG");
   ST_DebugPrint("\x1b[3;2HVersion: ");
-  ST_TextCyanFore();
-  ST_TextBright();
+  ST_TextGreenFore();
   ST_DebugPrint(SPRITETOOLS_VERSION);
   ST_TextDefault();
   ST_DebugPrint("\x1b[4;2HVariables in Debug:");
