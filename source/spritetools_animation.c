@@ -60,10 +60,15 @@ st_animation *ST_AnimationCreateAnimation(u16 fpf, u16 loopFrame,
 
   tempanim->fpf = fpf;
   tempanim->ftn = 0;
-  tempanim->loopFrame = loopFrame;
+
+  if (loopFrame < length)
+    tempanim->loopFrame = loopFrame;
+  else
+    tempanim->loopFrame = length - 1;
   tempanim->length = length;
   tempanim->frames = calloc(sizeof(st_frame*), length);
   tempanim->currentFrame = 0;
+
 
   va_start(ap, length);
 
