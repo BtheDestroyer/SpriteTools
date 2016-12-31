@@ -257,7 +257,7 @@ void ST_RenderAnimationNext(st_animation *animation, int x, int y)
   animation->currentFrame++;
   if(animation->currentFrame >= animation->length)
     animation->currentFrame = animation->loopFrame;
-  ST_RenderFramePosition(animation->frames[animation->currentFrame], x, y);
+  ST_RenderAnimationCurrent(animation, x, y);
 }
 
 /* Draw the previous frame of an animation at given position */
@@ -268,7 +268,7 @@ void ST_RenderAnimationPrevious(st_animation *animation, int x, int y)
   animation->currentFrame--;
   if(animation->currentFrame >= animation->length)
     animation->currentFrame = animation->loopFrame;
-  ST_RenderFramePosition(animation->frames[animation->currentFrame], x, y);
+  ST_RenderAnimationCurrent(animation, x, y);
 }
 
 /* Plays an animation at given position */
@@ -291,7 +291,7 @@ void ST_RenderAnimationPlay(st_animation *animation, int x, int y)
   }
   else
   {
-    if (animation->ftn > abs(animation->fpf))
+    if (animation->ftn > -1 * animation->fpf)
     {
       animation->ftn = 0;
       ST_RenderAnimationPrevious(animation, x, y);
@@ -299,6 +299,80 @@ void ST_RenderAnimationPlay(st_animation *animation, int x, int y)
     else
     {
       ST_RenderAnimationCurrent(animation, x, y);
+    }
+  }
+}
+
+
+/****************************************\
+|*     Advanced Animation Rendering     *|
+\****************************************/
+/* The following functions also take a scalar multiplier, */
+/*   rotation in radians, and red, green, blue, and alpha of a */
+/*   color to blend with */
+
+
+void ST_RenderAnimationCurrentAdvanced(st_animation *animation, int x, int y,
+  double scale, double rotate,
+  u8 red, u8 green, u8 blue, u8 alpha)
+{
+  ST_RenderFramePositionAdvanced(animation->frames[animation->currentFrame],
+    x, y, scale, rotate, red, green, blue, alpha);
+}
+
+void ST_RenderAnimationNextAdvanced(st_animation *animation, int x, int y,
+  double scale, double rotate,
+  u8 red, u8 green, u8 blue, u8 alpha)
+{
+  animation->currentFrame++;
+  if(animation->currentFrame >= animation->length)
+    animation->currentFrame = animation->loopFrame;
+  ST_RenderAnimationCurrentAdvanced(animation, x, y,
+    scale, rotate, red, green, blue, alpha);
+}
+
+void ST_RenderAnimationPreviousAdvanced(st_animation *animation, int x, int y,
+  double scale, double rotate,
+  u8 red, u8 green, u8 blue, u8 alpha)
+{
+  animation->currentFrame--;
+  if(animation->currentFrame >= animation->length)
+    animation->currentFrame = animation->loopFrame;
+  ST_RenderAnimationCurrentAdvanced(animation, x, y,
+    scale, rotate, red, green, blue, alpha);
+}
+
+void ST_RenderAnimationPlayAdvanced(st_animation *animation, int x, int y,
+  double scale, double rotate,
+  u8 red, u8 green, u8 blue, u8 alpha)
+{
+  animation->ftn++;
+  if (animation->fpf >= 0)
+  {
+    if (animation->ftn > animation->fpf)
+    {
+      animation->ftn = 0;
+      ST_RenderAnimationNextAdvanced(animation, x, y,
+        scale, rotate, red, green, blue, alpha);
+    }
+    else
+    {
+      ST_RenderAnimationCurrentAdvanced(animation, x, y,
+        scale, rotate, red, green, blue, alpha);
+    }
+  }
+  else
+  {
+    if (animation->ftn > -1 * animation->fpf)
+    {
+      animation->ftn = 0;
+      ST_RenderAnimationPreviousAdvanced(animation, x, y,
+        scale, rotate, red, green, blue, alpha);
+    }
+    else
+    {
+      ST_RenderAnimationCurrentAdvanced(animation, x, y,
+        scale, rotate, red, green, blue, alpha);
     }
   }
 }

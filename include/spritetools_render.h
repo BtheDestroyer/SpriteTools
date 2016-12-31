@@ -165,4 +165,29 @@ void ST_RenderAnimationPrevious(st_animation *animation, int x, int y);
 /* Takes a pointer to an animation and a position */
 void ST_RenderAnimationPlay(st_animation *animation, int x, int y);
 
+
+/****************************************\
+|*     Advanced Animation Rendering     *|
+\****************************************/
+/* The following functions also take a scalar multiplier, */
+/*   rotation in radians, and red, green, blue, and alpha of a */
+/*   color to blend with */
+
+
+void ST_RenderAnimationCurrentAdvanced(st_animation *animation, int x, int y,
+  double scale, double rotate,
+  u8 red, u8 green, u8 blue, u8 alpha);
+
+void ST_RenderAnimationNextAdvanced(st_animation *animation, int x, int y,
+  double scale, double rotate,
+  u8 red, u8 green, u8 blue, u8 alpha);
+
+void ST_RenderAnimationPreviousAdvanced(st_animation *animation, int x, int y,
+  double scale, double rotate,
+  u8 red, u8 green, u8 blue, u8 alpha);
+
+void ST_RenderAnimationPlayAdvanced(st_animation *animation, int x, int y,
+  double scale, double rotate,
+  u8 red, u8 green, u8 blue, u8 alpha);
+
 #endif
