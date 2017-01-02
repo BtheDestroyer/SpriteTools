@@ -26,7 +26,3 @@ We're following the [ANSI C Standard](en.wikipedia.org/wiki/ANSI_C). This means,
 Create an [issue](https://github.com/bthedestroyer/SpriteTools/issues) so we can
 get your feedback. We're happy to add any ideas that would make the library
 better!
-
-## License
-
-MIT
