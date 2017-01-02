@@ -57,7 +57,7 @@ void ST_AnimationFreeFrame(st_frame *frame);
 /*   Takes frame to loop to when the animation has reached its end */
 /*   Takes length of animation in frames */
 /*   Takes a list of pointers to frames */
-st_animation *ST_AnimationCreateAnimation(u16 fpf, u16 loopFrame,
+st_animation *ST_AnimationCreateAnimation(s16 fpf, u16 loopFrame,
   u16 length, ...);
 
 /* Frees an animation and all of its frames from memory */
