@@ -289,7 +289,7 @@ void ST_RenderAnimationPlay(st_animation *animation, int x, int y)
   animation->ftn++;
   if (animation->fpf >= 0)
   {
-    if (animation->ftn > animation->fpf)
+    if (animation->ftn >= animation->fpf)
     {
       animation->ftn = 0;
       ST_RenderAnimationNext(animation, x, y);
@@ -301,7 +301,7 @@ void ST_RenderAnimationPlay(st_animation *animation, int x, int y)
   }
   else
   {
-    if (animation->ftn > -1 * animation->fpf)
+    if (animation->ftn >= -1 * animation->fpf)
     {
       animation->ftn = 0;
       ST_RenderAnimationPrevious(animation, x, y);
