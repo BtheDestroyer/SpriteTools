@@ -22,10 +22,6 @@ static int DEBUG = 0; /* Is debug on? This will tell you (and the engine) */
 static ST_NamedPointer *DEBUGVars; /* List of variables being debugged */
 static int DEBUGScroll = 0; /* Number of variables currently scrolled through */
 
-/*****************************\
-|*     General Debugging     *|
-\*****************************/
-
 /* Takes 2 strings and compares them */
 /* Returns 1 on match, 0 on difference */
 static int mystrcmp(char *strA, char *strB) /* bc standard strcmp is dumb */
@@ -40,6 +36,10 @@ static int mystrcmp(char *strA, char *strB) /* bc standard strcmp is dumb */
 
   return 0; /* One of the strings didn't match */
 }
+
+/*****************************\
+|*     General Debugging     *|
+\*****************************/
 
 /* Sets up debug variables */
 /* Returns 1 on success */
