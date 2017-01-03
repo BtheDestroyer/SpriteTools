@@ -10,6 +10,7 @@
 
 #include <spritetools_animation.h>
 
+/* Max number of animations per entity */
 #define ST_ENTITY_ANIMATIONS 16
 
 /********************\
