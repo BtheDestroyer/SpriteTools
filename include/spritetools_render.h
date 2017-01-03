@@ -10,6 +10,7 @@
 
 #include <spritetools_spritesheet.h>
 #include <spritetools_animation.h>
+#include <spritetools_entity.h>
 
 /*****************************\
 |*     General Functions     *|
@@ -168,14 +169,12 @@ void ST_RenderAnimationPrevious(st_animation *animation, int x, int y);
 /* Takes a pointer to an animation and a position */
 void ST_RenderAnimationPlay(st_animation *animation, int x, int y);
 
-
 /****************************************\
 |*     Advanced Animation Rendering     *|
 \****************************************/
 /* The following functions also take a scalar multiplier, */
 /*   rotation in radians, and red, green, blue, and alpha of a */
 /*   color to blend with */
-
 
 void ST_RenderAnimationCurrentAdvanced(st_animation *animation, int x, int y,
   double scale, double rotate,
@@ -192,5 +191,18 @@ void ST_RenderAnimationPreviousAdvanced(st_animation *animation, int x, int y,
 void ST_RenderAnimationPlayAdvanced(st_animation *animation, int x, int y,
   double scale, double rotate,
   u8 red, u8 green, u8 blue, u8 alpha);
+
+/****************************\
+|*     Entity Rendering     *|
+\****************************/
+/* Plays an animation of an entity by name */
+/* Takes a pointer to an entity and the name of the animation */
+/*   Returns 1 on success and 0 on failure */
+int ST_RenderEntityName(st_entity *entity, char *name);
+
+/* Plays an animation of an entity by id */
+/* Takes a pointer to an entity and the id of the animation */
+/*   Returns 1 on success and 0 on failure */
+int ST_RenderEntityId(st_entity *entity, int id);
 
 #endif

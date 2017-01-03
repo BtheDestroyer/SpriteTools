@@ -6,8 +6,24 @@
 
 #include <3ds.h>
 #include <spritetools_render.h>
+#include <spritetools_entity.h>
 
 static u32 st_background = 0;
+
+/* Takes 2 strings and compares them */
+/* Returns 1 on match, 0 on difference */
+static int mystrcmp(char *strA, char *strB) /* bc standard strcmp is dumb */
+{
+  while (*strA == *strB)
+  {
+    if (!*strA)
+      return 1; /* Both strings have matched and reached \0 at the same time */
+
+      strA++, strB++;
+  }
+
+  return 0; /* One of the strings didn't match */
+}
 
 /*****************************\
 |*     General Functions     *|
@@ -385,4 +401,43 @@ void ST_RenderAnimationPlayAdvanced(st_animation *animation, int x, int y,
         scale, rotate, red, green, blue, alpha);
     }
   }
+}
+
+/****************************\
+|*     Entity Rendering     *|
+\****************************/
+/* Plays an animation of an entity by name */
+/* Takes a pointer to an entity and the name of the animation */
+/*   Returns 1 on success and 0 on failure */
+int ST_RenderEntityName(st_entity *entity, char *name)
+{
+  int i;
+  for (i = 0; i <= entity->animationCount; i++)
+  {
+    if (mystrcmp(entity->names[i], name))
+    {
+      ST_RenderAnimationPlayAdvanced(entity->animations[i], entity->xpos,
+        entity->ypos, entity->scale, entity->rotation, entity->red,
+        entity->green, entity->blue, entity->alpha);
+      strcpy(entity->currentAnim, name);
+      return 1;
+    }
+  }
+  return 0;
+}
+
+/* Plays an animation of an entity by id */
+/* Takes a pointer to an entity and the id of the animation */
+/*   Returns 1 on success and 0 on failure */
+int ST_RenderEntityId(st_entity *entity, int id)
+{
+  if (id <= entity->animationCount)
+  {
+    ST_RenderAnimationPlayAdvanced(entity->animations[id], entity->xpos,
+      entity->ypos, entity->scale, entity->rotation, entity->red,
+      entity->green, entity->blue, entity->alpha);
+    strcpy(entity->currentAnim, entity->names[id]);
+    return 1;
+  }
+  return 0;
 }
