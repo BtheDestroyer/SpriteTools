@@ -16,6 +16,7 @@
 #include <spritetools_splash.h>
 #include <spritetools_animation.h>
 #include <spritetools_time.h>
+#include <spritetools_entity.h>
 
 /* Inits all modules and sets up */
 /* Returns 1 on success, 0 on failure */
