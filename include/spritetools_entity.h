@@ -20,7 +20,8 @@
 typedef struct {
   st_animation **animations;
   char **names;
-  int animationCount;
+  u8 animationCount;
+  u8 totalAnims;
   s64 xpos;
   s64 ypos;
   double scale;
@@ -38,8 +39,8 @@ typedef struct {
 \***************************/
 /* Returns a pointer to an entity */
 /*   Returns NULL if failed */
-/* Takes a position, scale, and rotation */
-st_entity *ST_EntityCreateEntity(s64 x, s64 y);
+/* Takes a position and number of animations */
+st_entity *ST_EntityCreateEntity(s64 x, s64 y, u8 animCount);
 
 /* Frees frame from memory */
 /* Takes a pointer to a frame */
@@ -102,9 +103,13 @@ int ST_EntitySetDirection(st_entity *entity, char *dir);
 /* Sets the direction of an entity */
 /* Takes a pointer to an entity and a direction id */
 /*   0 = east */
-/*   1 = south */
-/*   2 = west */
-/*   3 = north */
+/*   1 = south east */
+/*   2 = south */
+/*   3 = south west */
+/*   4 = west */
+/*   5 = north west */
+/*   6 = north */
+/*   7 = north east */
 /* Returns 1 on success and 0 on failure */
 int ST_EntitySetDirectionId(st_entity *entity, u8 dir);
 

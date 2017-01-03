@@ -30,13 +30,13 @@ static int mystrcmp(char *strA, char *strB) /* bc standard strcmp is dumb */
 \***************************/
 /* Returns a pointer to an entity */
 /*   Returns NULL if failed */
-/* Takes a position, scale, and rotation */
-st_entity *ST_EntityCreateEntity(s64 x, s64 y)
+/* Takes a position and number of animations */
+st_entity *ST_EntityCreateEntity(s64 x, s64 y, u8 animCount)
 {
   st_entity *tempent = calloc(sizeof(st_entity), 0);
 
-  tempent->animations = calloc(sizeof(st_animation*), ST_ENTITY_ANIMATIONS);
-  tempent->names = calloc(sizeof(char*), ST_ENTITY_ANIMATIONS);
+  tempent->animations = calloc(sizeof(st_animation*), animCount);
+  tempent->names = calloc(sizeof(char*), animCount);
   tempent->animationCount = 0;
   tempent->xpos = x;
   tempent->ypos = y;
@@ -167,9 +167,19 @@ int ST_EntitySetDirection(st_entity *entity, char *dir)
     entity->dir = "east";
     return 1;
   }
+  if (mystrcmp(dir, "south east"))
+  {
+    entity->dir = "south east";
+    return 1;
+  }
   if (mystrcmp(dir, "south"))
   {
     entity->dir = "south";
+    return 1;
+  }
+  if (mystrcmp(dir, "south west"))
+  {
+    entity->dir = "south west";
     return 1;
   }
   if (mystrcmp(dir, "west"))
@@ -177,9 +187,19 @@ int ST_EntitySetDirection(st_entity *entity, char *dir)
     entity->dir = "west";
     return 1;
   }
+  if (mystrcmp(dir, "north west"))
+  {
+    entity->dir = "north west";
+    return 1;
+  }
   if (mystrcmp(dir, "north"))
   {
     entity->dir = "north";
+    return 1;
+  }
+  if (mystrcmp(dir, "north east"))
+  {
+    entity->dir = "north east";
     return 1;
   }
 
@@ -202,17 +222,37 @@ int ST_EntitySetDirectionId(st_entity *entity, u8 dir)
   }
   if (dir == 1)
   {
-    entity->dir = "south";
+    entity->dir = "south east";
     return 1;
   }
   if (dir == 2)
   {
-    entity->dir = "west";
+    entity->dir = "south";
     return 1;
   }
   if (dir == 3)
   {
+    entity->dir = "south west";
+    return 1;
+  }
+  if (dir == 4)
+  {
+    entity->dir = "west";
+    return 1;
+  }
+  if (dir == 5)
+  {
+    entity->dir = "north west";
+    return 1;
+  }
+  if (dir == 6)
+  {
     entity->dir = "north";
+    return 1;
+  }
+  if (dir == 7)
+  {
+    entity->dir = "north east";
     return 1;
   }
 
@@ -310,12 +350,20 @@ void ST_EntityModifyDirection(st_entity *entity, s8 dir)
     for (i = 0; i < dir; i++)
     {
       if (mystrcmp(entity->dir, "east"))
+        entity->dir = "south east";
+      else if (mystrcmp(entity->dir, "south east"))
         entity->dir = "south";
-      if (mystrcmp(entity->dir, "south"))
+      else if (mystrcmp(entity->dir, "south"))
+        entity->dir = "south west";
+      else if (mystrcmp(entity->dir, "south west"))
         entity->dir = "west";
-      if (mystrcmp(entity->dir, "west"))
+      else if (mystrcmp(entity->dir, "west"))
+        entity->dir = "north west";
+      else if (mystrcmp(entity->dir, "north west"))
         entity->dir = "north";
-      if (mystrcmp(entity->dir, "north"))
+      else if (mystrcmp(entity->dir, "north"))
+        entity->dir = "north east";
+      else if (mystrcmp(entity->dir, "north east"))
         entity->dir = "east";
     }
   }
@@ -325,13 +373,21 @@ void ST_EntityModifyDirection(st_entity *entity, s8 dir)
     for (i = 0; i > dir; i--)
     {
       if (mystrcmp(entity->dir, "east"))
-        entity->dir = "north";
-      if (mystrcmp(entity->dir, "south"))
-        entity->dir = "east";
-      if (mystrcmp(entity->dir, "west"))
+        entity->dir = "south east";
+      else if (mystrcmp(entity->dir, "south east"))
         entity->dir = "south";
-      if (mystrcmp(entity->dir, "north"))
+      else if (mystrcmp(entity->dir, "south"))
+        entity->dir = "south west";
+      else if (mystrcmp(entity->dir, "south west"))
         entity->dir = "west";
+      else if (mystrcmp(entity->dir, "west"))
+        entity->dir = "north west";
+      else if (mystrcmp(entity->dir, "north west"))
+        entity->dir = "north";
+      else if (mystrcmp(entity->dir, "north"))
+        entity->dir = "north east";
+      else if (mystrcmp(entity->dir, "north east"))
+        entity->dir = "east";
     }
   }
 }
