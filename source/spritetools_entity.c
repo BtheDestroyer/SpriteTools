@@ -5,9 +5,25 @@
 */
 
 #include <3ds.h>
+#include <stdlib.h>
 #include <spritetools_entity.h>
 
 #define PI 3.1415926535897932384626433832795
+
+/* Takes 2 strings and compares them */
+/* Returns 1 on match, 0 on difference */
+static int mystrcmp(char *strA, char *strB) /* bc standard strcmp is dumb */
+{
+  while (*strA == *strB)
+  {
+    if (!*strA)
+      return 1; /* Both strings have matched and reached \0 at the same time */
+
+      strA++, strB++;
+  }
+
+  return 0; /* One of the strings didn't match */
+}
 
 /***************************\
 |*     Entity Creation     *|
@@ -15,12 +31,12 @@
 /* Returns a pointer to an entity */
 /*   Returns NULL if failed */
 /* Takes a position, scale, and rotation */
-st_entity *ST_EntityCreateEntity(s64 x, s64, y)
+st_entity *ST_EntityCreateEntity(s64 x, s64 y)
 {
   st_entity *tempent = calloc(sizeof(st_entity), 0);
 
-  tempent->animations = calloc(sizeof(*st_animation), ST_ENTITY_ANIMATIONS);
-  tempent->names = calloc(sizeof(*char), ST_ENTITY_ANIMATIONS);
+  tempent->animations = calloc(sizeof(st_animation*), ST_ENTITY_ANIMATIONS);
+  tempent->names = calloc(sizeof(char*), ST_ENTITY_ANIMATIONS);
   tempent->animationCount = 0;
   tempent->xpos = x;
   tempent->ypos = y;
@@ -30,6 +46,10 @@ st_entity *ST_EntityCreateEntity(s64 x, s64, y)
   tempent->green = 0;
   tempent->blue = 0;
   tempent->alpha = 0;
+  tempent->dir = "east";
+  tempent->currentAnim = calloc(sizeof(char), 128);
+
+  return tempent;
 }
 
 /* Frees frame from memory */
@@ -137,6 +157,68 @@ void ST_EntitySetColor(st_entity *entity, u8 red, u8 green, u8 blue, u8 alpha)
   entity->alpha = alpha;
 }
 
+/* Sets the direction of an entity */
+/* Takes a pointer to an entity and a direction */
+/* Returns 1 on success and 0 on failure */
+int ST_EntitySetDirection(st_entity *entity, char *dir)
+{
+  if (mystrcmp(dir, "east"))
+  {
+    entity->dir = "east";
+    return 1;
+  }
+  if (mystrcmp(dir, "south"))
+  {
+    entity->dir = "south";
+    return 1;
+  }
+  if (mystrcmp(dir, "west"))
+  {
+    entity->dir = "west";
+    return 1;
+  }
+  if (mystrcmp(dir, "north"))
+  {
+    entity->dir = "north";
+    return 1;
+  }
+
+  return 0;
+}
+
+/* Sets the direction of an entity */
+/* Takes a pointer to an entity and a direction id */
+/*   0 = east */
+/*   1 = south */
+/*   2 = west */
+/*   3 = north */
+/* Returns 1 on success and 0 on failure */
+int ST_EntitySetDirectionId(st_entity *entity, u8 dir)
+{
+  if (dir == 0)
+  {
+    entity->dir = "east";
+    return 1;
+  }
+  if (dir == 1)
+  {
+    entity->dir = "south";
+    return 1;
+  }
+  if (dir == 2)
+  {
+    entity->dir = "west";
+    return 1;
+  }
+  if (dir == 3)
+  {
+    entity->dir = "north";
+    return 1;
+  }
+
+  return 0;
+}
+
 /****************************\
 |*     Modifying Values     *|
 \****************************/
@@ -174,7 +256,8 @@ void ST_EntityModifyScale(st_entity *entity, double scale)
 void ST_EntityModifyRotation(st_entity *entity, double rotation)
 {
   entity->rotation += rotation;
-  entity->rotation = entity->rotation % (2 * PI);
+  while (entity->rotation - (2 * PI) > 2 * PI)
+    entity->rotation -= 2 * PI;
 }
 
 /* Modifies the red of the blend color of an entity by a given amount */
@@ -214,6 +297,43 @@ void ST_EntityModifyColor(st_entity *entity,
   entity->green += green;
   entity->blue += blue;
   entity->alpha += alpha;
+}
+
+/* Modifies the direction of an entity */
+/* Takes a pointer to an entity and a value to turn by */
+/*   Positive turns right, negative turns left */
+void ST_EntityModifyDirection(st_entity *entity, s8 dir)
+{
+  if (dir > 0)
+  {
+    int i;
+    for (i = 0; i < dir; i++)
+    {
+      if (mystrcmp(entity->dir, "east"))
+        entity->dir = "south";
+      if (mystrcmp(entity->dir, "south"))
+        entity->dir = "west";
+      if (mystrcmp(entity->dir, "west"))
+        entity->dir = "north";
+      if (mystrcmp(entity->dir, "north"))
+        entity->dir = "east";
+    }
+  }
+  if (dir < 0)
+  {
+    int i;
+    for (i = 0; i > dir; i--)
+    {
+      if (mystrcmp(entity->dir, "east"))
+        entity->dir = "north";
+      if (mystrcmp(entity->dir, "south"))
+        entity->dir = "east";
+      if (mystrcmp(entity->dir, "west"))
+        entity->dir = "south";
+      if (mystrcmp(entity->dir, "north"))
+        entity->dir = "west";
+    }
+  }
 }
 
 /*****************************************\

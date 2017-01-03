@@ -11,7 +11,7 @@
 #include <spritetools_animation.h>
 
 /* Max number of animations per entity */
-#define ST_ENTITY_ANIMATIONS 16
+#define ST_ENTITY_ANIMATIONS 32
 
 /********************\
 |*     Typedefs     *|
@@ -29,6 +29,8 @@ typedef struct {
   u8 green;
   u8 blue;
   u8 alpha;
+  char *dir;
+  char *currentAnim;
 } st_entity;
 
 /***************************\
@@ -37,7 +39,7 @@ typedef struct {
 /* Returns a pointer to an entity */
 /*   Returns NULL if failed */
 /* Takes a position, scale, and rotation */
-st_entity *ST_EntityCreateEntity(s64 x, s64, y);
+st_entity *ST_EntityCreateEntity(s64 x, s64 y);
 
 /* Frees frame from memory */
 /* Takes a pointer to a frame */
@@ -92,6 +94,20 @@ void ST_EntitySetAlpha(st_entity *entity, u8 alpha);
 /* Takes a pointer to an entity and red, green, blue, and alpha values */
 void ST_EntitySetColor(st_entity *entity, u8 red, u8 green, u8 blue, u8 alpha);
 
+/* Sets the direction of an entity */
+/* Takes a pointer to an entity and a direction */
+/* Returns 1 on success and 0 on failure */
+int ST_EntitySetDirection(st_entity *entity, char *dir);
+
+/* Sets the direction of an entity */
+/* Takes a pointer to an entity and a direction id */
+/*   0 = east */
+/*   1 = south */
+/*   2 = west */
+/*   3 = north */
+/* Returns 1 on success and 0 on failure */
+int ST_EntitySetDirectionId(st_entity *entity, u8 dir);
+
 /****************************\
 |*     Modifying Values     *|
 \****************************/
@@ -135,6 +151,11 @@ void ST_EntityModifyAlpha(st_entity *entity, u8 alpha);
 /* Takes a pointer to an entity and red, green, blue, and alpha values */
 void ST_EntityModifyColor(st_entity *entity,
   u8 red, u8 green, u8 blue, u8 alpha);
+
+/* Modifies the direction of an entity */
+/* Takes a pointer to an entity and a value to turn by */
+/*   Positive turns right, negative turns left */
+void ST_EntityModifyDirection(st_entity *entity, s8 dir);
 
 /*****************************************\
 |*     Non-Wrapping Modifying Values     *|
