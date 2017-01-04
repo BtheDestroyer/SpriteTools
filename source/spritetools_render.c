@@ -422,10 +422,10 @@ int ST_RenderEntityName(st_entity *entity, char *name)
       if (mystrcmp(entity->currentAnim, name))
       {
         strcpy(entity->currentAnim, name);
-        if (entity->animations[id]->fpf > 0)
-          entity->animations[id]->currentFrame = 0;
+        if (entity->animations[i]->fpf > 0)
+          entity->animations[i]->currentFrame = 0;
         else
-          entity->animations[id]->currentFrame = entity->animations[id]->length;
+          entity->animations[i]->currentFrame = entity->animations[i]->length;
       }
       return 1;
     }
@@ -443,9 +443,9 @@ int ST_RenderEntityId(st_entity *entity, int id)
     ST_RenderAnimationPlayAdvanced(entity->animations[id], entity->xpos,
       entity->ypos, entity->scale, entity->rotation, entity->red,
       entity->green, entity->blue, entity->alpha);
-    if (mystrcmp(entity->currentAnim, name))
+    if (mystrcmp(entity->currentAnim, entity->names[id]))
     {
-      strcpy(entity->currentAnim, name);
+      strcpy(entity->currentAnim, entity->names[id]);
       if (entity->animations[id]->fpf > 0)
         entity->animations[id]->currentFrame = 0;
       else
