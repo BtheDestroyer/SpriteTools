@@ -28,6 +28,34 @@ st_frame *ST_AnimationCreateFrame(st_spritesheet *spritesheet,
   tempframe->ytop = ytop;
   tempframe->width = width;
   tempframe->height = height;
+  tempframe->xoff = 0;
+  tempframe->yoff = 0;
+
+  return tempframe;
+}
+
+/* Returns a pointer to a frame */
+/*   Returns NULL if failed */
+/* Takes a pointer to a spritesheet */
+/*   Takes the position of the frame in the spritesheet */
+/*   Takes the dimensions of the frame */
+/*   Takes offset for rendering (hotspot) */
+st_frame *ST_AnimationCreateFrameOffset(st_spritesheet *spritesheet,
+  unsigned int xleft, unsigned int ytop,
+  unsigned int width, unsigned int height,
+  unsigned int xoff, unsigned int yoff)
+{
+  st_frame *tempframe = calloc(sizeof(st_frame), 1);
+  if (!tempframe)
+    return 0;
+
+  tempframe->spritesheet = spritesheet;
+  tempframe->xleft = xleft;
+  tempframe->ytop = ytop;
+  tempframe->width = width;
+  tempframe->height = height;
+  tempframe->xoff = xoff;
+  tempframe->yoff = yoff;
 
   return tempframe;
 }

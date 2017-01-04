@@ -20,6 +20,8 @@ typedef struct {
   unsigned int ytop;
   unsigned int width;
   unsigned int height;
+  unsigned int xoff;
+  unsigned int yoff;
 } st_frame;
 
 /* Animation of frames */
@@ -43,6 +45,17 @@ typedef struct {
 st_frame *ST_AnimationCreateFrame(st_spritesheet *spritesheet,
   unsigned int xleft, unsigned int ytop,
   unsigned int width, unsigned int height);
+
+/* Returns a pointer to a frame */
+/*   Returns NULL if failed */
+/* Takes a pointer to a spritesheet */
+/*   Takes the position of the frame in the spritesheet */
+/*   Takes the dimensions of the frame */
+/*   Takes offset for rendering (hotspot) */
+st_frame *ST_AnimationCreateFrameOffset(st_spritesheet *spritesheet,
+  unsigned int xleft, unsigned int ytop,
+  unsigned int width, unsigned int height,
+  unsigned int xoff, unsigned int yoff);
 
 /* Frees frame from memory */
 /* Takes a pointer to a frame */
