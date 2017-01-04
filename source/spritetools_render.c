@@ -216,7 +216,7 @@ void ST_RenderFramePosition(st_frame *frame, int x, int y)
   ST_RenderSpriteAdvanced(frame->spritesheet,
     frame->xleft, frame->ytop,
     frame->width, frame->height,
-    x, y,
+    x + frame->xoff, y + frame->yoff,
     1.0,
     0.0,
     255, 255, 255, 255);
@@ -229,7 +229,7 @@ void ST_RenderFrameScale(st_frame *frame, int x, int y, double scale)
   ST_RenderSpriteAdvanced(frame->spritesheet,
     frame->xleft, frame->ytop,
     frame->width, frame->height,
-    x, y,
+    x + frame->xoff, y + frame->yoff,
     scale,
     0.0,
     255, 255, 255, 255);
@@ -242,7 +242,7 @@ void ST_RenderFrameRotate(st_frame *frame, int x, int y, double rotate)
   ST_RenderSpriteAdvanced(frame->spritesheet,
     frame->xleft, frame->ytop,
     frame->width, frame->height,
-    x, y,
+    x + frame->xoff, y + frame->yoff,
     1.0,
     rotate,
     255, 255, 255, 255);
@@ -259,7 +259,7 @@ void ST_RenderFramePositionAdvanced(st_frame *frame, int x, int y,
   ST_RenderSpriteAdvanced(frame->spritesheet,
     frame->xleft, frame->ytop,
     frame->width, frame->height,
-    x, y,
+    x + frame->xoff, y + frame->yoff,
     scale,
     rotate,
     red, green, blue, alpha);
