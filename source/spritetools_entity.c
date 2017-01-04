@@ -70,7 +70,7 @@ void ST_EntityFreeEntity(st_entity *entity)
 /* Returns 1 on success and 0 on failure */
 int ST_EntityAddAnimation(st_entity *entity, st_animation *anim, char *name)
 {
-  if (entity->animationCount < ST_ENTITY_ANIMATIONS)
+  if (entity->animationCount < entity->totalAnims)
   {
     entity->animations[entity->animationCount] = anim;
     entity->names[entity->animationCount] = name;
