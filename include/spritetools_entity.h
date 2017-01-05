@@ -22,6 +22,7 @@ typedef struct {
   s64 ypos;
   double scale;
   double rotation;
+  u32 flags;
   u8 animationCount;
   u8 totalAnims;
   u8 currentAnim;
@@ -188,5 +189,24 @@ void ST_EntityModifyAlphaNoWrap(st_entity *entity, int alpha);
 
 void ST_EntityModifyColorNoWrap(st_entity *entity,
   int red, int green, int blue, int alpha);
+
+/*****************\
+|*     Flags     *|
+\*****************/
+/* Turns on a given flag (sets it to 1) */
+/* Takes a pointer to an entity and the id of the flag */
+void ST_EntityFlagOn(st_entity *entity, u8 flag);
+
+/* Turns off a given flag (sets it to 0) */
+/* Takes a pointer to an entity and the id of the flag */
+void ST_EntityFlagOff(st_entity *entity, u8 flag);
+
+/* Toggles the given flag (1->0 and 0->1) */
+/* Takes a pointer to an entity and the id of the flag */
+void ST_EntityFlagToggle(st_entity *entity, u8 flag);
+
+/* Returns the current state of a flag (1 or 0) */
+/* Takes a pointer to an entity and the id of the flag */
+u8 ST_EntityFlagGet(st_entity *entity, u8 flag);
 
 #endif

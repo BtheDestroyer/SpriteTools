@@ -539,3 +539,39 @@ void ST_EntityModifyColorNoWrap(st_entity *entity,
   ST_EntityModifyBlueNoWrap(entity, blue);
   ST_EntityModifyAlphaNoWrap(entity, alpha);
 }
+
+/*****************\
+|*     Flags     *|
+\*****************/
+/* Turns on a given flag (sets it to 1) */
+/* Takes a pointer to an entity and the id of the flag */
+void ST_EntityFlagOn(st_entity *entity, u8 flag)
+{
+  if (flag < 32)
+    entity->flags |= (1 << flag);
+}
+
+/* Turns off a given flag (sets it to 0) */
+/* Takes a pointer to an entity and the id of the flag */
+void ST_EntityFlagOff(st_entity *entity, u8 flag)
+{
+  if (flag < 32)
+    entity->flags &= ~(1 << flag);
+}
+
+/* Toggles the given flag (1->0 and 0->1) */
+/* Takes a pointer to an entity and the id of the flag */
+void ST_EntityFlagToggle(st_entity *entity, u8 flag)
+{
+  if (ST_EntityFlagGet(entity, flag))
+    ST_EntityFlagOff(entity, flag);
+  else
+    ST_EntityFlagOn(entity, flag);
+}
+
+/* Returns the current state of a flag (1 or 0) */
+/* Takes a pointer to an entity and the id of the flag */
+u8 ST_EntityFlagGet(st_entity *entity, u8 flag)
+{
+  return (entity->flags >> flag) % 2;
+}
