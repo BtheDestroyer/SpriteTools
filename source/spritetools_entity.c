@@ -33,19 +33,22 @@ static int mystrcmp(char *strA, char *strB) /* bc standard strcmp is dumb */
 /* Takes a position and number of animations */
 st_entity *ST_EntityCreateEntity(s64 x, s64 y, u8 animCount)
 {
-  st_entity *tempent = calloc(sizeof(st_entity), 0);
+  st_entity *tempent = calloc(sizeof(st_entity), 1);
+  if (!tempent)
+    return NULL;
 
   tempent->animations = calloc(sizeof(st_animation*), animCount);
   tempent->names = calloc(sizeof(char*), animCount);
   tempent->animationCount = 0;
+  tempent->totalAnims = animCount;
   tempent->xpos = x;
   tempent->ypos = y;
   tempent->scale = 1.0;
   tempent->rotation = 0.0;
-  tempent->red = 0;
-  tempent->green = 0;
-  tempent->blue = 0;
-  tempent->alpha = 0;
+  tempent->red = 0xFF;
+  tempent->green = 0xFF;
+  tempent->blue = 0xFF;
+  tempent->alpha = 0xFF;
   tempent->dir = "east";
   tempent->currentAnim = calloc(sizeof(char), 128);
 
@@ -73,7 +76,11 @@ int ST_EntityAddAnimation(st_entity *entity, st_animation *anim, char *name)
   if (entity->animationCount < entity->totalAnims)
   {
     entity->animations[entity->animationCount] = anim;
+    if (!entity->animations[entity->animationCount])
+      return 0;
     entity->names[entity->animationCount] = name;
+    if (!entity->names[entity->animationCount])
+      return 0;
     entity->animationCount++;
     return 1;
   }
@@ -162,44 +169,12 @@ void ST_EntitySetColor(st_entity *entity, u8 red, u8 green, u8 blue, u8 alpha)
 /* Returns 1 on success and 0 on failure */
 int ST_EntitySetDirection(st_entity *entity, char *dir)
 {
-  if (mystrcmp(dir, "east"))
+  if (mystrcmp(dir, "east") || mystrcmp(dir, "south east") ||
+    mystrcmp(dir, "south") || mystrcmp(dir, "south west") ||
+    mystrcmp(dir, "west") || mystrcmp(dir, "north west") ||
+    mystrcmp(dir, "north") || mystrcmp(dir, "north east"))
   {
-    entity->dir = "east";
-    return 1;
-  }
-  if (mystrcmp(dir, "south east"))
-  {
-    entity->dir = "south east";
-    return 1;
-  }
-  if (mystrcmp(dir, "south"))
-  {
-    entity->dir = "south";
-    return 1;
-  }
-  if (mystrcmp(dir, "south west"))
-  {
-    entity->dir = "south west";
-    return 1;
-  }
-  if (mystrcmp(dir, "west"))
-  {
-    entity->dir = "west";
-    return 1;
-  }
-  if (mystrcmp(dir, "north west"))
-  {
-    entity->dir = "north west";
-    return 1;
-  }
-  if (mystrcmp(dir, "north"))
-  {
-    entity->dir = "north";
-    return 1;
-  }
-  if (mystrcmp(dir, "north east"))
-  {
-    entity->dir = "north east";
+    entity->dir = dir;
     return 1;
   }
 
