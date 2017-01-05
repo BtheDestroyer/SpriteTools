@@ -195,14 +195,9 @@ void ST_RenderAnimationPlayAdvanced(st_animation *animation, int x, int y,
 /****************************\
 |*     Entity Rendering     *|
 \****************************/
-/* Plays an animation of an entity by name */
-/* Takes a pointer to an entity and the name of the animation */
-/*   Returns 1 on success and 0 on failure */
-int ST_RenderEntityName(st_entity *entity, char *name);
-
-/* Plays an animation of an entity by id */
-/* Takes a pointer to an entity and the id of the animation */
-/*   Returns 1 on success and 0 on failure */
-int ST_RenderEntityId(st_entity *entity, int id);
+/* Plays the current animation of an entity by name */
+/* Takes a pointer to an entity */
+/* Returns 1 on success and 0 on failure */
+int ST_RenderEntity(st_entity *entity);
 
 #endif

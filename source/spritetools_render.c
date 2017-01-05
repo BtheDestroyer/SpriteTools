@@ -10,21 +10,6 @@
 
 static u32 st_background = 0;
 
-/* Takes 2 strings and compares them */
-/* Returns 1 on match, 0 on difference */
-static int mystrcmp(char *strA, char *strB) /* bc standard strcmp is dumb */
-{
-  while (*strA == *strB)
-  {
-    if (!*strA)
-      return 1; /* Both strings have matched and reached \0 at the same time */
-
-      strA++, strB++;
-  }
-
-  return 0; /* One of the strings didn't match */
-}
-
 /*****************************\
 |*     General Functions     *|
 \*****************************/
@@ -216,7 +201,7 @@ void ST_RenderFramePosition(st_frame *frame, int x, int y)
   ST_RenderSpriteAdvanced(frame->spritesheet,
     frame->xleft, frame->ytop,
     frame->width, frame->height,
-    x + frame->xoff, y + frame->yoff,
+    x - frame->xoff, y - frame->yoff,
     1.0,
     0.0,
     255, 255, 255, 255);
@@ -259,7 +244,7 @@ void ST_RenderFramePositionAdvanced(st_frame *frame, int x, int y,
   ST_RenderSpriteAdvanced(frame->spritesheet,
     frame->xleft, frame->ytop,
     frame->width, frame->height,
-    x + frame->xoff, y + frame->yoff,
+    x - frame->xoff, y - frame->yoff,
     scale,
     rotate,
     red, green, blue, alpha);
@@ -406,52 +391,13 @@ void ST_RenderAnimationPlayAdvanced(st_animation *animation, int x, int y,
 /****************************\
 |*     Entity Rendering     *|
 \****************************/
-/* Plays an animation of an entity by name */
-/* Takes a pointer to an entity and the name of the animation */
-/*   Returns 1 on success and 0 on failure */
-int ST_RenderEntityName(st_entity *entity, char *name)
+/* Plays the current animation of an entity by name */
+/* Takes a pointer to an entity */
+/* Returns 1 on success and 0 on failure */
+int ST_RenderEntity(st_entity *entity)
 {
-  int i;
-  for (i = 0; i <= entity->animationCount; i++)
-  {
-    if (mystrcmp(entity->names[i], name))
-    {
-      ST_RenderAnimationPlayAdvanced(entity->animations[i], entity->xpos,
-        entity->ypos, entity->scale, entity->rotation, entity->red,
-        entity->green, entity->blue, entity->alpha);
-      if (mystrcmp(entity->currentAnim, name))
-      {
-        strcpy(entity->currentAnim, name);
-        if (entity->animations[i]->fpf > 0)
-          entity->animations[i]->currentFrame = 0;
-        else
-          entity->animations[i]->currentFrame = entity->animations[i]->length;
-      }
-      return 1;
-    }
-  }
-  return 0;
-}
-
-/* Plays an animation of an entity by id */
-/* Takes a pointer to an entity and the id of the animation */
-/*   Returns 1 on success and 0 on failure */
-int ST_RenderEntityId(st_entity *entity, int id)
-{
-  if (id <= entity->animationCount)
-  {
-    ST_RenderAnimationPlayAdvanced(entity->animations[id], entity->xpos,
-      entity->ypos, entity->scale, entity->rotation, entity->red,
+    ST_RenderAnimationPlayAdvanced(entity->animations[entity->currentAnim],
+      entity->xpos, entity->ypos, entity->scale, entity->rotation, entity->red,
       entity->green, entity->blue, entity->alpha);
-    if (mystrcmp(entity->currentAnim, entity->names[id]))
-    {
-      strcpy(entity->currentAnim, entity->names[id]);
-      if (entity->animations[id]->fpf > 0)
-        entity->animations[id]->currentFrame = 0;
-      else
-        entity->animations[id]->currentFrame = entity->animations[id]->length;
-    }
-    return 1;
-  }
   return 0;
 }
