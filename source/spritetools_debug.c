@@ -199,6 +199,10 @@ void *ST_DebugPrintVarId(int id)
     sprintf(tempstr, "%.2d. char   %s = %c", id, DEBUGVars[id].name,
       *(char *)DEBUGVars[id].pointer);
     break;
+    case STR :
+    sprintf(tempstr, "%.2d. char*  %s = %s", id, DEBUGVars[id].name,
+      *(char **)DEBUGVars[id].pointer);
+    break;
     case INT :
     sprintf(tempstr, "%.2d. int    %s = %d", id, DEBUGVars[id].name,
       *(int *)DEBUGVars[id].pointer);
@@ -282,15 +286,15 @@ void *ST_DebugPrintVarId(int id)
 
     case ST_NAMEDPOINTER :
     sprintf(tempstr, "%.2d. ST_NP  %s = %p", id, DEBUGVars[id].name,
-      DEBUGVars[id].pointer);
+      *(void **)DEBUGVars[id].pointer);
     break;
     case VOID :
     sprintf(tempstr, "%.2d. VOID   %s = %p", id, DEBUGVars[id].name,
-      DEBUGVars[id].pointer);
+      *(void **)DEBUGVars[id].pointer);
     break;
     default :
     sprintf(tempstr, "%.2d. UNK   %s = %p", id, DEBUGVars[id].name,
-      DEBUGVars[id].pointer);
+      *(void **)DEBUGVars[id].pointer);
     break;
   }
 
@@ -485,7 +489,7 @@ int ST_DebugDisplay(void)
   ST_TextDefault();
   ST_DebugPrint("\x1b[4;2HVariables in Debug:");
   ST_DebugPrintVarAllFromUntilPosition(ST_DebugGetScroll(),
-    10 + ST_DebugGetScroll(), 4, 5);
+    10 + ST_DebugGetScroll(), 2, 5);
   ST_DebugPrint("\x1b[15;2HButtons:");
   ST_DebugButtonFormattedAtPosition(4, 16);
   ST_DebugPrint("\x1b[15;17HTouchscreen:");
