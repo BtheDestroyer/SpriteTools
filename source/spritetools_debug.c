@@ -293,8 +293,7 @@ void *ST_DebugPrintVarId(int id)
       *(void **)DEBUGVars[id].pointer);
     break;
     default :
-    sprintf(tempstr, "%.2d. UNK   %s = %p", id, DEBUGVars[id].name,
-      *(void **)DEBUGVars[id].pointer);
+    sprintf(tempstr, "%.2d. UNK", id);
     break;
   }
 
@@ -484,7 +483,20 @@ int ST_DebugDisplay(void)
 
   ST_DebugPrint("\x1b[2;2HSPRITETOOLS DEBUG");
   ST_DebugPrint("\x1b[3;2HVersion: ");
-  ST_TextGreenFore();
+  if (*SPRITETOOLS_VERSION == 'B')
+  {
+    ST_TextCyanFore();
+    ST_TextBright();
+  }
+  else if (*SPRITETOOLS_VERSION == 'R')
+  {
+    ST_TextGreenFore();
+  }
+  else
+  {
+    ST_TextRedFore();
+    ST_TextBright();
+  }
   ST_DebugPrint(SPRITETOOLS_VERSION);
   ST_TextDefault();
   ST_DebugPrint("\x1b[4;2HVariables in Debug:");
