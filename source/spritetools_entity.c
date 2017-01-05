@@ -50,7 +50,7 @@ st_entity *ST_EntityCreateEntity(s64 x, s64 y, u8 animCount)
   tempent->blue = 0xFF;
   tempent->alpha = 0xFF;
   tempent->dir = "east";
-  tempent->currentAnim = calloc(sizeof(char), 128);
+  tempent->currentAnim = 0;
 
   return tempent;
 }
@@ -231,6 +231,50 @@ int ST_EntitySetDirectionId(st_entity *entity, u8 dir)
     return 1;
   }
 
+  return 0;
+}
+
+/* Sets the current animation of an entity by name */
+/* Takes a pointer to an entity and the name of the animation to set */
+/* Returns 1 on success and 0 on failure */
+int ST_EntitySetAnimationName(st_entity *entity, char *name)
+{
+  int i;
+  for (i = 0; i < entity->animationCount; i++)
+  {
+    if (mystrcmp(entity->names[i], name))
+    {
+      if (entity->currentAnim != i)
+      {
+        entity->currentAnim = i;
+        if (entity->animations[i]->fpf > 0)
+          entity->animations[i]->currentFrame = 0;
+        else
+          entity->animations[i]->currentFrame = entity->animations[i]->length;
+      }
+      return 1;
+    }
+  }
+  return 0;
+}
+
+/* Sets the current animation of an entity by id */
+/* Takes a pointer to an entity and the id of the animation to set */
+/* Returns 1 on success and 0 on failure */
+int ST_EntitySetAnimationId(st_entity *entity, u8 id)
+{
+  if (id < entity->animationCount)
+  {
+    if (entity->currentAnim != id)
+    {
+      entity->currentAnim = id;
+      if (entity->animations[id]->fpf > 0)
+        entity->animations[id]->currentFrame = 0;
+      else
+        entity->animations[id]->currentFrame = entity->animations[id]->length;
+    }
+    return 1;
+  }
   return 0;
 }
 

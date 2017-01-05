@@ -17,18 +17,18 @@
 typedef struct {
   st_animation **animations;
   char **names;
-  u8 animationCount;
-  u8 totalAnims;
+  char *dir;
   s64 xpos;
   s64 ypos;
   double scale;
   double rotation;
+  u8 animationCount;
+  u8 totalAnims;
+  u8 currentAnim;
   u8 red;
   u8 green;
   u8 blue;
   u8 alpha;
-  char *dir;
-  char *currentAnim;
 } st_entity;
 
 /***************************\
@@ -109,6 +109,16 @@ int ST_EntitySetDirection(st_entity *entity, char *dir);
 /*   7 = north east */
 /* Returns 1 on success and 0 on failure */
 int ST_EntitySetDirectionId(st_entity *entity, u8 dir);
+
+/* Sets the current animation of an entity by name */
+/* Takes a pointer to an entity and the name of the animation to set */
+/* Returns 1 on success and 0 on failure */
+int ST_EntitySetAnimationName(st_entity *entity, char *name);
+
+/* Sets the current animation of an entity by id */
+/* Takes a pointer to an entity and the id of the animation to set */
+/* Returns 1 on success and 0 on failure */
+int ST_EntitySetAnimationId(st_entity *entity, u8 id);
 
 /****************************\
 |*     Modifying Values     *|
