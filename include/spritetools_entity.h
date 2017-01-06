@@ -48,7 +48,7 @@ void ST_EntityFreeEntity(st_entity *entity);
 /* Takes a pointer to an entity, a pointer to an animation, */
 /*   and a name for the animation */
 /* Returns 1 on success and 0 on failure */
-int ST_EntityAddAnimation(st_entity *entity, st_animation *anim, char *name);
+u8 ST_EntityAddAnimation(st_entity *entity, st_animation *anim, char *name);
 
 /**************************\
 |*     Setting Values     *|
@@ -96,7 +96,7 @@ void ST_EntitySetColor(st_entity *entity, u8 red, u8 green, u8 blue, u8 alpha);
 /* Sets the direction of an entity */
 /* Takes a pointer to an entity and a direction */
 /* Returns 1 on success and 0 on failure */
-int ST_EntitySetDirection(st_entity *entity, char *dir);
+u8 ST_EntitySetDirection(st_entity *entity, char *dir);
 
 /* Sets the direction of an entity */
 /* Takes a pointer to an entity and a direction id */
@@ -109,17 +109,17 @@ int ST_EntitySetDirection(st_entity *entity, char *dir);
 /*   6 = north */
 /*   7 = north east */
 /* Returns 1 on success and 0 on failure */
-int ST_EntitySetDirectionId(st_entity *entity, u8 dir);
+u8 ST_EntitySetDirectionId(st_entity *entity, u8 dir);
 
 /* Sets the current animation of an entity by name */
 /* Takes a pointer to an entity and the name of the animation to set */
 /* Returns 1 on success and 0 on failure */
-int ST_EntitySetAnimationName(st_entity *entity, char *name);
+u8 ST_EntitySetAnimationName(st_entity *entity, char *name);
 
 /* Sets the current animation of an entity by id */
 /* Takes a pointer to an entity and the id of the animation to set */
 /* Returns 1 on success and 0 on failure */
-int ST_EntitySetAnimationId(st_entity *entity, u8 id);
+u8 ST_EntitySetAnimationId(st_entity *entity, u8 id);
 
 /****************************\
 |*     Modifying Values     *|
@@ -179,16 +179,16 @@ void ST_EntityModifyDirection(st_entity *entity, s8 dir);
 
 void ST_EntityModifyRotationNoWrap(st_entity *entity, double rotation);
 
-void ST_EntityModifyRedNoWrap(st_entity *entity, int red);
+void ST_EntityModifyRedNoWrap(st_entity *entity, u8 red);
 
-void ST_EntityModifyGreenNoWrap(st_entity *entity, int green);
+void ST_EntityModifyGreenNoWrap(st_entity *entity, u8 green);
 
-void ST_EntityModifyBlueNoWrap(st_entity *entity, int blue);
+void ST_EntityModifyBlueNoWrap(st_entity *entity, u8 blue);
 
-void ST_EntityModifyAlphaNoWrap(st_entity *entity, int alpha);
+void ST_EntityModifyAlphaNoWrap(st_entity *entity, u8 alpha);
 
 void ST_EntityModifyColorNoWrap(st_entity *entity,
-  int red, int green, int blue, int alpha);
+  u8 red, u8 green, u8 blue, u8 alpha);
 
 /*****************\
 |*     Flags     *|
