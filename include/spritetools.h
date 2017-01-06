@@ -20,10 +20,10 @@
 
 /* Inits all modules and sets up */
 /* Returns 1 on success, 0 on failure */
-int ST_Init(void);
+u8 ST_Init(void);
 
 /* Cleans up all modules */
 /* Returns 1 on success, 0 on failure */
-int ST_Fini(void);
+u8 ST_Fini(void);
 
 #endif

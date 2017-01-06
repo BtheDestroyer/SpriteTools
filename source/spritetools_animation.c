@@ -16,8 +16,8 @@
 /*   Takes the position of the frame in the spritesheet */
 /*   Takes the dimensions of the frame */
 st_frame *ST_AnimationCreateFrame(st_spritesheet *spritesheet,
-  unsigned int xleft, unsigned int ytop,
-  unsigned int width, unsigned int height)
+  u32 xleft, u32 ytop,
+  u32 width, u32 height)
 {
   st_frame *tempframe = calloc(sizeof(st_frame), 1);
   if (!tempframe)
@@ -41,9 +41,9 @@ st_frame *ST_AnimationCreateFrame(st_spritesheet *spritesheet,
 /*   Takes the dimensions of the frame */
 /*   Takes offset for rendering (hotspot) */
 st_frame *ST_AnimationCreateFrameOffset(st_spritesheet *spritesheet,
-  unsigned int xleft, unsigned int ytop,
-  unsigned int width, unsigned int height,
-  unsigned int xoff, unsigned int yoff)
+  u32 xleft, u32 ytop,
+  u32 width, u32 height,
+  s32 xoff, s32 yoff)
 {
   st_frame *tempframe = calloc(sizeof(st_frame), 1);
   if (!tempframe)
@@ -79,7 +79,7 @@ void ST_AnimationFreeFrame(st_frame *frame)
 st_animation *ST_AnimationCreateAnimation(s16 fpf, u16 loopFrame,
   u16 length, ...)
 {
-  int i;
+  u16 i;
   va_list ap;
 
   st_animation *tempanim = calloc(sizeof(st_animation), 1);
@@ -112,7 +112,7 @@ st_animation *ST_AnimationCreateAnimation(s16 fpf, u16 loopFrame,
 /* Takes a pointer to an animation */
 void ST_AnimationFreeAnimation(st_animation *animation)
 {
-  int i;
+  u16 i;
   for (i = 0; i < animation->length; i++)
     ST_AnimationFreeFrame(animation->frames[i]);
   free(animation);

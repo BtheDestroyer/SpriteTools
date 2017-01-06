@@ -18,13 +18,13 @@
 |*     Debugging Variables     *|
 \*******************************/
 
-static int DEBUG = 0; /* Is debug on? This will tell you (and the engine) */
+static u8 DEBUG = 0; /* Is debug on? This will tell you (and the engine) */
 static ST_NamedPointer *DEBUGVars; /* List of variables being debugged */
-static int DEBUGScroll = 0; /* Number of variables currently scrolled through */
+static u8 DEBUGScroll = 0; /* Number of variables currently scrolled through */
 
 /* Takes 2 strings and compares them */
 /* Returns 1 on match, 0 on difference */
-static int mystrcmp(char *strA, char *strB) /* bc standard strcmp is dumb */
+static u8 mystrcmp(char *strA, char *strB) /* bc standard strcmp is dumb */
 {
   while (*strA == *strB)
   {
@@ -44,7 +44,7 @@ static int mystrcmp(char *strA, char *strB) /* bc standard strcmp is dumb */
 /* Sets up debug variables */
 /* Returns 1 on success */
 /* Returns 0 if DEBUGVars cannot be allocated */
-int ST_DebugInit(void)
+u8 ST_DebugInit(void)
 {
   DEBUGVars = calloc(ST_DEBUG_MAX_VAR, sizeof(ST_NamedPointer));
   if (!DEBUGVars)
@@ -56,7 +56,7 @@ int ST_DebugInit(void)
 /* Cleans up debug variables */
 /* Returns 1 on success */
 /* Returns 0 if DEBUGVars cannot be allocated */
-int ST_DebugFini(void)
+u8 ST_DebugFini(void)
 {
   free(DEBUGVars);
 
@@ -64,14 +64,14 @@ int ST_DebugFini(void)
 }
 
 /* Returns DEBUG State */
-int ST_DebugGet(void)
+u8 ST_DebugGet(void)
 {
   return DEBUG;
 }
 
 /* Sets DEBUG State to on */
 /* Returns DEBUG State */
-int ST_DebugSetOn(void)
+u8 ST_DebugSetOn(void)
 {
   DEBUG = 1;
   return DEBUG;
@@ -79,7 +79,7 @@ int ST_DebugSetOn(void)
 
 /* Sets DEBUG State to off */
 /* Returns DEBUG State */
-int ST_DebugSetOff(void)
+u8 ST_DebugSetOff(void)
 {
   DEBUG = 0;
   return DEBUG;
@@ -88,7 +88,7 @@ int ST_DebugSetOff(void)
 /* Prints a string if DEBUG is on */
 /* Takes string to print */
 /* Returns characters printed */
-int ST_DebugPrint(char *str)
+u8 ST_DebugPrint(char *str)
 {
   if (DEBUG)
     return printf(str);
@@ -100,10 +100,10 @@ int ST_DebugPrint(char *str)
 /* Takes name of variable, pointer to variable (void *), and type of variable */
 /* Returns id of var */
 /*   Will return -1 if name allocation had an error */
-int ST_DebugAddVar(char *name, void *varp, ST_PointerType datatype)
+s8 ST_DebugAddVar(char *name, void *varp, ST_PointerType datatype)
 {
   /* ID of variable */
-  int id = 0;
+  u8 id = 0;
 
   while (DEBUGVars[id].pointer) /* Loop until an open index is found */
   {
@@ -132,7 +132,7 @@ int ST_DebugAddVar(char *name, void *varp, ST_PointerType datatype)
 /* Takes id of variable */
 /* Returns 1 when the variable was cleared */
 /*   Returns 0 when the variable was already empty */
-int ST_DebugRemoveId(int id)
+u8 ST_DebugRemoveId(u8 id)
 {
   if (DEBUGVars[id].name == NULL && DEBUGVars[id].pointer == NULL)
     return 0;
@@ -147,9 +147,9 @@ int ST_DebugRemoveId(int id)
 /* Takes name of variable */
 /* Returns 1 when the variable was cleared */
 /*   Returns 0 when there is no variable by that name */
-int ST_DebugRemoveName(char *name)
+u8 ST_DebugRemoveName(char *name)
 {
-  int i; /* For loop index */
+  u8 i; /* For loop index */
 
   for (i = 0; i < ST_DEBUG_MAX_VAR; i++)
   {
@@ -165,10 +165,10 @@ int ST_DebugRemoveName(char *name)
 /* Removes last variable from DEBUGVars array */
 /* Returns index of cleared variable */
 /*   Returns -1 when all indexes are open */
-int ST_DebugRemoveLast(void)
+s8 ST_DebugRemoveLast(void)
 {
-  int i; /* For loop index */
-  int last = -1; /* last filled index */
+  u8 i; /* For loop index */
+  s8 last = -1; /* last filled index */
 
   for (i = 0; i < ST_DEBUG_MAX_VAR; i++)
   {
@@ -189,7 +189,7 @@ int ST_DebugRemoveLast(void)
 /* DebugPrints the given id in the DEBUGVars array */
 /* Takes id of variable */
 /* Returns pointer of var (void *) */
-void *ST_DebugPrintVarId(int id)
+void *ST_DebugPrintVarId(u8 id)
 {
   char tempstr[128];
 
@@ -292,6 +292,10 @@ void *ST_DebugPrintVarId(int id)
     sprintf(tempstr, "%.2d. VOID   %s = %p", id, DEBUGVars[id].name,
       *(void **)DEBUGVars[id].pointer);
     break;
+    case PTR :
+    sprintf(tempstr, "%.2d. PTR    %s = %p", id, DEBUGVars[id].name,
+      *(void **)DEBUGVars[id].pointer);
+    break;
     default :
     sprintf(tempstr, "%.2d. UNK", id);
     break;
@@ -304,7 +308,7 @@ void *ST_DebugPrintVarId(int id)
 /* Just runs ST_DebugPrintVarId but sets the cursor position first */
 /* Takes id of variable, x of cursor, and y of cursor */
 /* Returns pointer of var (void *) */
-void *ST_DebugPrintVarIdPosition(int id, int x, int y)
+void *ST_DebugPrintVarIdPosition(u8 id, s8 x, s8 y)
 {
   printf ("\x1b[%d;%dH", y, x);
   return ST_DebugPrintVarId(id);
@@ -315,7 +319,7 @@ void *ST_DebugPrintVarIdPosition(int id, int x, int y)
 /* Returns pointer of var (void *) */
 void *ST_DebugPrintVarName(char *name)
 {
-  int i; /* For loop index */
+  u8 i; /* For loop index */
 
   for (i = 0; i < ST_DEBUG_MAX_VAR; i++)
   {
@@ -328,7 +332,7 @@ void *ST_DebugPrintVarName(char *name)
 /* Just runs ST_DebugPrintVarName but sets the cursor position first */
 /* Takes name of variable, x of cursor, and y of cursor */
 /* Returns pointer of var (void *) */
-void *ST_DebugPrintVarNamePosition(char *name, int x, int y)
+void *ST_DebugPrintVarNamePosition(char *name, s8 x, s8 y)
 {
   printf ("\x1b[%d;%dH", y, x);
   return ST_DebugPrintVarName(name);
@@ -337,7 +341,7 @@ void *ST_DebugPrintVarNamePosition(char *name, int x, int y)
 /* DebugPrints all variables in the DEBUGVars array */
 void ST_DebugPrintVarAll(void)
 {
-  int i;
+  u8 i;
   for (i = 0; i < ST_DEBUG_MAX_VAR; i++)
   {
     ST_DebugPrintVarId(i);
@@ -347,9 +351,9 @@ void ST_DebugPrintVarAll(void)
 
 /* DebugPrints all variables in the DEBUGVars array at given x and y */
 /* Takes x and y of cursor */
-void ST_DebugPrintVarAllPosition(int x, int y)
+void ST_DebugPrintVarAllPosition(s8 x, s8 y)
 {
-  int i;
+  u8 i;
   for (i = 0; i < ST_DEBUG_MAX_VAR; i++)
   {
     printf ("\x1b[%d;%dH", y + i, x);
@@ -359,9 +363,9 @@ void ST_DebugPrintVarAllPosition(int x, int y)
 
 /* DebugPrints all variables in the DEBUGVars array until given id */
 /* Takes max id of array to be printed */
-void ST_DebugPrintVarAllUntil(int max)
+void ST_DebugPrintVarAllUntil(u8 max)
 {
-  int i;
+  u8 i;
   for (i = 0; i < ST_DEBUG_MAX_VAR && i < max; i++)
   {
     ST_DebugPrintVarId(i);
@@ -371,9 +375,9 @@ void ST_DebugPrintVarAllUntil(int max)
 
 /* DebugPrints all variables in the DEBUGVars array at given x and y */
 /* Takes max id of array to be printed and x and y of cursor */
-void ST_DebugPrintVarAllUntilPosition(int max, int x, int y)
+void ST_DebugPrintVarAllUntilPosition(u8 max, s8 x, s8 y)
 {
-  int i;
+  u8 i;
   for (i = 0; i < ST_DEBUG_MAX_VAR && i < max; i++)
   {
     printf ("\x1b[%d;%dH", y + i, x);
@@ -383,9 +387,9 @@ void ST_DebugPrintVarAllUntilPosition(int max, int x, int y)
 
 /* DebugPrints all variables in the DEBUGVars array starting at given id */
 /* Takes starting id of array to be printed */
-void ST_DebugPrintVarAllFrom(int start)
+void ST_DebugPrintVarAllFrom(u8 start)
 {
-  int i;
+  u8 i;
   for (i = 0; start + i < ST_DEBUG_MAX_VAR; i++)
   {
     ST_DebugPrintVarId(start + i);
@@ -396,9 +400,9 @@ void ST_DebugPrintVarAllFrom(int start)
 /* DebugPrints all variables in the DEBUGVars array starting at given id */
 /*   at given x and y */
 /* Takes starting id of array to be printed and x and y of cursor */
-void ST_DebugPrintVarAllFromPosition(int start, int x, int y)
+void ST_DebugPrintVarAllFromPosition(u8 start, s8 x, s8 y)
 {
-  int i;
+  u8 i;
   for (i = 0; start + i < ST_DEBUG_MAX_VAR; i++)
   {
     printf ("\x1b[%d;%dH", y + i, x);
@@ -409,9 +413,9 @@ void ST_DebugPrintVarAllFromPosition(int start, int x, int y)
 /* DebugPrints all variables in the DEBUGVars array starting at given id */
 /*   and ending at given id */
 /* Takes starting and ending ids of array to be printed */
-void ST_DebugPrintVarAllFromUntil(int start, int max)
+void ST_DebugPrintVarAllFromUntil(u8 start, u8 max)
 {
-  int i;
+  u8 i;
   for (i = 0; start + i < ST_DEBUG_MAX_VAR && start + i < max; i++)
   {
     ST_DebugPrintVarId(start + i);
@@ -422,9 +426,9 @@ void ST_DebugPrintVarAllFromUntil(int start, int max)
 /* DebugPrints all variables in the DEBUGVars array starting at given id */
 /*   and ending at given id at given x and y */
 /* Takes starting and ending ids of array to be printed and x and y of cursor */
-void ST_DebugPrintVarAllFromUntilPosition(int start, int max, int x, int y)
+void ST_DebugPrintVarAllFromUntilPosition(u8 start, u8 max, s8 x, s8 y)
 {
-  int i;
+  u8 i;
   for (i = 0; start + i < ST_DEBUG_MAX_VAR && start + i < max; i++)
   {
     printf ("\x1b[%d;%dH", y + i, x);
@@ -435,11 +439,13 @@ void ST_DebugPrintVarAllFromUntilPosition(int start, int max, int x, int y)
 /* Scrolls up on the Debug Variable list */
 /* Takes number of lines to scroll by */
 /* Returns number of lines scrolled */
-int ST_DebugScrollUp(int scroll)
+u8 ST_DebugScrollUp(s8 scroll)
 {
-  int i;
+  s8 i;
   for (i = 0; i < scroll && DEBUGScroll > 0; i++)
     DEBUGScroll--;
+  for (i = 0; i > scroll && DEBUGScroll + 1 < ST_DEBUG_MAX_VAR; i--)
+    DEBUGScroll++;
 
   return i;
 }
@@ -447,17 +453,19 @@ int ST_DebugScrollUp(int scroll)
 /* Scrolls down on the Debug Variable list */
 /* Takes number of lines to scroll by */
 /* Returns number of lines scrolled */
-int ST_DebugScrollDown(int scroll)
+u8 ST_DebugScrollDown(s8 scroll)
 {
-  int i;
+  s8 i;
   for (i = 0; i < scroll && DEBUGScroll + 1 < ST_DEBUG_MAX_VAR; i++)
     DEBUGScroll++;
+  for (i = 0; i > scroll && DEBUGScroll > 0; i--)
+    DEBUGScroll--;
 
   return i;
 }
 
 /* Returns DEBUGScroll */
-int ST_DebugGetScroll(void)
+u8 ST_DebugGetScroll(void)
 {
   return DEBUGScroll;
 }
@@ -470,9 +478,9 @@ void ST_DebugClear(void)
 
 /* Displays generic debug info if DEBUG is on */
 /* Returns 1 if debug was on and 0 if it was off */
-int ST_DebugDisplay(void)
+u16 ST_DebugDisplay(void)
 {
-  int i;
+  u8 i;
   char tempstr[128];
 
   if (!ST_DebugGet())
@@ -536,7 +544,7 @@ int ST_DebugDisplay(void)
 /* Will print [ ] and return 0 if A is up */
 /* Will print <A> and return 1 when A is pressed */
 /* Will print [A] and return 2 if A is down */
-int ST_DebugButtonA(void)
+u8 ST_DebugButtonA(void)
 {
   if (ST_InputButtonPressed(KEY_A))
   {
@@ -557,7 +565,7 @@ int ST_DebugButtonA(void)
 /* Will print [ ] and return 0 if B is up */
 /* Will print <B> and return 1 when B is pressed */
 /* Will print [B] and return 2 if B is down */
-int ST_DebugButtonB(void)
+u8 ST_DebugButtonB(void)
 {
   if (ST_InputButtonPressed(KEY_B))
   {
@@ -578,7 +586,7 @@ int ST_DebugButtonB(void)
 /* Will print [ ] and return 0 if X is up */
 /* Will print <X> and return 1 when X is pressed */
 /* Will print [X] and return 2 if X is down */
-int ST_DebugButtonX(void)
+u8 ST_DebugButtonX(void)
 {
   if (ST_InputButtonPressed(KEY_X))
   {
@@ -599,7 +607,7 @@ int ST_DebugButtonX(void)
 /* Will print [ ] and return 0 if Y is up */
 /* Will print <Y> and return 1 when Y is pressed */
 /* Will print [Y] and return 2 if Y is down */
-int ST_DebugButtonY(void)
+u8 ST_DebugButtonY(void)
 {
   if (ST_InputButtonPressed(KEY_Y))
   {
@@ -620,7 +628,7 @@ int ST_DebugButtonY(void)
 /* Will print [  ] and return 0 if Start is up */
 /* Will print <St> and return 1 when Start is pressed */
 /* Will print [St] and return 2 if Start is down */
-int ST_DebugButtonStart(void)
+u8 ST_DebugButtonStart(void)
 {
   if (ST_InputButtonPressed(KEY_START))
   {
@@ -641,7 +649,7 @@ int ST_DebugButtonStart(void)
 /* Will print [  ] and return 0 if Select is up */
 /* Will print <Se> and return 1 when Select is pressed */
 /* Will print [Se] and return 2 if Select is down */
-int ST_DebugButtonSelect(void)
+u8 ST_DebugButtonSelect(void)
 {
   if (ST_InputButtonPressed(KEY_SELECT))
   {
@@ -662,7 +670,7 @@ int ST_DebugButtonSelect(void)
 /* Will print [ ] and return 0 if R is up */
 /* Will print <R> and return 1 when R is pressed */
 /* Will print [R] and return 2 if R is down */
-int ST_DebugButtonR(void)
+u8 ST_DebugButtonR(void)
 {
   if (ST_InputButtonPressed(KEY_R))
   {
@@ -683,7 +691,7 @@ int ST_DebugButtonR(void)
 /* Will print [ ] and return 0 if L is up */
 /* Will print <L> and return 1 when L is pressed */
 /* Will print [L] and return 2 if L is down */
-int ST_DebugButtonL(void)
+u8 ST_DebugButtonL(void)
 {
   if (ST_InputButtonPressed(KEY_L))
   {
@@ -704,7 +712,7 @@ int ST_DebugButtonL(void)
 /* Will print [ ] and return 0 if Up is up */
 /* Will print <^> and return 1 when Up is pressed */
 /* Will print [^] and return 2 if Up is down */
-int ST_DebugButtonDUp(void)
+u8 ST_DebugButtonDUp(void)
 {
   if (ST_InputButtonPressed(KEY_DUP))
   {
@@ -725,7 +733,7 @@ int ST_DebugButtonDUp(void)
 /* Will print [ ] and return 0 if Right is up */
 /* Will print <>> and return 1 when Right is pressed */
 /* Will print [>] and return 2 if Right is down */
-int ST_DebugButtonDRight(void)
+u8 ST_DebugButtonDRight(void)
 {
   if (ST_InputButtonPressed(KEY_DRIGHT))
   {
@@ -746,7 +754,7 @@ int ST_DebugButtonDRight(void)
 /* Will print [ ] and return 0 if Down is up */
 /* Will print <v> and return 1 when Down is pressed */
 /* Will print [v] and return 2 if Down is down */
-int ST_DebugButtonDDown(void)
+u8 ST_DebugButtonDDown(void)
 {
   if (ST_InputButtonPressed(KEY_DDOWN))
   {
@@ -767,7 +775,7 @@ int ST_DebugButtonDDown(void)
 /* Will print [ ] and return 0 if Left is up */
 /* Will print <<> and return 1 when Left is pressed */
 /* Will print [<] and return 2 if Left is down */
-int ST_DebugButtonDLeft(void)
+u8 ST_DebugButtonDLeft(void)
 {
   if (ST_InputButtonPressed(KEY_DLEFT))
   {
@@ -811,7 +819,7 @@ void ST_DebugButtonFormatted(void)
 /* Displays status of all buttons at given position */
 /* Takes X and Y of where to start printing from */
 /* Will print a formatted set of all buttons using the above functions */
-void ST_DebugButtonFormattedAtPosition(int x, int y)
+void ST_DebugButtonFormattedAtPosition(s8 x, s8 y)
 {
   char tempstr[128] = {0};
 

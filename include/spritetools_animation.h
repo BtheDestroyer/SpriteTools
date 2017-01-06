@@ -16,12 +16,12 @@
 /* Frame of animation from a spritesheet */
 typedef struct {
   st_spritesheet *spritesheet;
-  unsigned int xleft;
-  unsigned int ytop;
-  unsigned int width;
-  unsigned int height;
-  unsigned int xoff;
-  unsigned int yoff;
+  u32 xleft;
+  u32 ytop;
+  u32 width;
+  u32 height;
+  s32 xoff;
+  s32 yoff;
 } st_frame;
 
 /* Animation of frames */
@@ -43,8 +43,7 @@ typedef struct {
 /*   Takes the position of the frame in the spritesheet */
 /*   Takes the dimensions of the frame */
 st_frame *ST_AnimationCreateFrame(st_spritesheet *spritesheet,
-  unsigned int xleft, unsigned int ytop,
-  unsigned int width, unsigned int height);
+  u32 xleft, u32 ytop, u32 width, u32 height);
 
 /* Returns a pointer to a frame */
 /*   Returns NULL if failed */
@@ -53,9 +52,7 @@ st_frame *ST_AnimationCreateFrame(st_spritesheet *spritesheet,
 /*   Takes the dimensions of the frame */
 /*   Takes offset for rendering (hotspot) */
 st_frame *ST_AnimationCreateFrameOffset(st_spritesheet *spritesheet,
-  unsigned int xleft, unsigned int ytop,
-  unsigned int width, unsigned int height,
-  unsigned int xoff, unsigned int yoff);
+  u32 xleft, u32 ytop, u32 width, u32 height, s32 xoff, s32 yoff);
 
 /* Frees frame from memory */
 /* Takes a pointer to a frame */
