@@ -51,6 +51,7 @@ st_entity *ST_EntityCreateEntity(s64 x, s64 y, u8 animCount)
   tempent->alpha = 0xFF;
   tempent->dir = "east";
   tempent->currentAnim = 0;
+  tempent->flags = 0;
 
   return tempent;
 }
