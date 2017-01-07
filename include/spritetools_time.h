@@ -14,7 +14,7 @@
 |*     Time Functions     *|
 \**************************/
 /* Inits times */
-int ST_TimeInit(void);
+u8 ST_TimeInit(void);
 
 /* Returns time since program started in ms */
 u64 ST_TimeRunning(void);

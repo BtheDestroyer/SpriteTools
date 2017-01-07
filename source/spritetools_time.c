@@ -14,7 +14,7 @@ static u64 ST_StartTime = 0;
 |*     Time Functions     *|
 \**************************/
 /* Inits times */
-int ST_TimeInit(void)
+u8 ST_TimeInit(void)
 {
   ST_StartTime = osGetTime();
   if (ST_StartTime)

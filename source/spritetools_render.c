@@ -15,7 +15,7 @@ static u32 st_background = 0;
 \*****************************/
 /* Inits rendering */
 /* Returns 1 on success and 0 on failure */
-int ST_RenderInit(void)
+u8 ST_RenderInit(void)
 {
   if (!sf2d_init())
     return 0;
@@ -27,7 +27,7 @@ int ST_RenderInit(void)
 
 /* Finishes rendering */
 /* Returns 1 on success, 0 on failure */
-int ST_RenderFini(void)
+u8 ST_RenderFini(void)
 {
   if (!sf2d_fini())
     return 0;
@@ -85,7 +85,7 @@ u32 ST_RenderGetBackground(void)
 \*******************************/
 /* Draw Spritesheet at Position */
 /* Takes spritesheet and x and y of position to render on screen */
-void ST_RenderSpritesheetPosition(st_spritesheet *spritesheet, int x, int y)
+void ST_RenderSpritesheetPosition(st_spritesheet *spritesheet, s64 x, s64 y)
 {
   sf2d_draw_texture(spritesheet, x, y);
 }
@@ -103,9 +103,9 @@ void ST_RenderSpritesheet(st_spritesheet *spritesheet)
 /*   Takes width and height of the sprite in the spritesheet */
 /*   Takes position to print the sprite on screen */
 void ST_RenderSpritePosition(st_spritesheet *spritesheet,
-  unsigned int xleft, unsigned int ytop,
-  unsigned int width, unsigned int height,
-  int x, int y)
+  u32 xleft, u32 ytop,
+  u32 width, u32 height,
+  s64 x, s64 y)
 {
   sf2d_draw_texture_part(spritesheet, x, y, xleft, ytop, width, height);
 }
@@ -115,8 +115,8 @@ void ST_RenderSpritePosition(st_spritesheet *spritesheet,
 /*   Takes x and y of the top left pixel of the sprite in the spritesheet */
 /*   Takes width and height of the sprite in the spritesheet */
 void ST_RenderSprite(st_spritesheet *spritesheet,
-  unsigned int xleft, unsigned int ytop,
-  unsigned int width, unsigned int height)
+  u32 xleft, u32 ytop,
+  u32 width, u32 height)
 {
   ST_RenderSpritePosition(spritesheet, 0, 0, xleft, ytop, width, height);
 }
@@ -128,9 +128,9 @@ void ST_RenderSprite(st_spritesheet *spritesheet,
 /*   Takes position to print the sprite on screen */
 /*   Takes value to scale by */
 void ST_RenderSpritePositionScale(st_spritesheet *spritesheet,
-  unsigned int xleft, unsigned int ytop,
-  unsigned int width, unsigned int height,
-  int x, int y,
+  u32 xleft, u32 ytop,
+  u32 width, u32 height,
+  s64 x, s64 y,
   double scale)
 {
   sf2d_draw_texture_part_scale(spritesheet, x, y, xleft, ytop,
@@ -144,9 +144,9 @@ void ST_RenderSpritePositionScale(st_spritesheet *spritesheet,
 /*   Takes position to print the sprite on screen */
 /*   Takes radian value to rotate by */
 void ST_RenderSpritePositionRotate(st_spritesheet *spritesheet,
-  unsigned int xleft, unsigned int ytop,
-  unsigned int width, unsigned int height,
-  int x, int y,
+  u32 xleft, u32 ytop,
+  u32 width, u32 height,
+  s64 x, s64 y,
   double rotate)
 {
   sf2d_draw_texture_part_rotate_scale(spritesheet, x, y, rotate, xleft, ytop,
@@ -161,9 +161,9 @@ void ST_RenderSpritePositionRotate(st_spritesheet *spritesheet,
 /*   Takes value to scale by */
 /*   Takes value to rotate by */
 void ST_RenderSpritePositionScaleRotate(st_spritesheet *spritesheet,
-  unsigned int xleft, unsigned int ytop,
-  unsigned int width, unsigned int height,
-  int x, int y,
+  u32 xleft, u32 ytop,
+  u32 width, u32 height,
+  s64 x, s64 y,
   double scale,
   double rotate)
 {
@@ -180,9 +180,9 @@ void ST_RenderSpritePositionScaleRotate(st_spritesheet *spritesheet,
 /*   Takes value to rotate by */
 /*   Takes color to blend with (rgba8) */
 void ST_RenderSpriteAdvanced(st_spritesheet *spritesheet,
-  unsigned int xleft, unsigned int ytop,
-  unsigned int width, unsigned int height,
-  int x, int y,
+  u32 xleft, u32 ytop,
+  u32 width, u32 height,
+  s64 x, s64 y,
   double scale,
   double rotate,
   u8 red, u8 green, u8 blue, u8 alpha)
@@ -196,7 +196,7 @@ void ST_RenderSpriteAdvanced(st_spritesheet *spritesheet,
 \*************************/
 /* Draw frame at given position */
 /* Takes spritesheet and position at which to draw */
-void ST_RenderFramePosition(st_frame *frame, int x, int y)
+void ST_RenderFramePosition(st_frame *frame, s64 x, s64 y)
 {
   ST_RenderSpriteAdvanced(frame->spritesheet,
     frame->xleft, frame->ytop,
@@ -209,7 +209,7 @@ void ST_RenderFramePosition(st_frame *frame, int x, int y)
 
 /* Draw scaled frame at given position */
 /* Takes spritesheet, position at which to draw and a scalar multiplier */
-void ST_RenderFrameScale(st_frame *frame, int x, int y, double scale)
+void ST_RenderFrameScale(st_frame *frame, s64 x, s64 y, double scale)
 {
   ST_RenderSpriteAdvanced(frame->spritesheet,
     frame->xleft, frame->ytop,
@@ -222,7 +222,7 @@ void ST_RenderFrameScale(st_frame *frame, int x, int y, double scale)
 
 /* Draw rotated frame at given position */
 /* Takes spritesheet, position at which to draw and a rotation in radians */
-void ST_RenderFrameRotate(st_frame *frame, int x, int y, double rotate)
+void ST_RenderFrameRotate(st_frame *frame, s64 x, s64 y, double rotate)
 {
   ST_RenderSpriteAdvanced(frame->spritesheet,
     frame->xleft, frame->ytop,
@@ -237,7 +237,7 @@ void ST_RenderFrameRotate(st_frame *frame, int x, int y, double rotate)
 /* Takes spritesheet and position at which to draw */
 /*   Takes scalar multiplier and rotation in radians */
 /*   Takes red, green, blue, and alpha of color to blend */
-void ST_RenderFramePositionAdvanced(st_frame *frame, int x, int y,
+void ST_RenderFramePositionAdvanced(st_frame *frame, s64 x, s64 y,
   double scale, double rotate,
   u8 red, u8 green, u8 blue, u8 alpha)
 {
@@ -255,7 +255,7 @@ void ST_RenderFramePositionAdvanced(st_frame *frame, int x, int y,
 \*****************************/
 /* Draw the current frame of an animation at given position */
 /* Takes a pointer to an animation and a position */
-void ST_RenderAnimationCurrent(st_animation *animation, int x, int y)
+void ST_RenderAnimationCurrent(st_animation *animation, s64 x, s64 y)
 {
   ST_RenderFramePosition(animation->frames[animation->currentFrame], x, y);
 }
@@ -263,7 +263,7 @@ void ST_RenderAnimationCurrent(st_animation *animation, int x, int y)
 /* Draw the next frame of an animation at given position */
 /*   Also adds 1 to the current frame */
 /* Takes a pointer to an animation and a position */
-void ST_RenderAnimationNext(st_animation *animation, int x, int y)
+void ST_RenderAnimationNext(st_animation *animation, s64 x, s64 y)
 {
   animation->currentFrame++;
   if(animation->currentFrame >= animation->length)
@@ -274,7 +274,7 @@ void ST_RenderAnimationNext(st_animation *animation, int x, int y)
 /* Draw the previous frame of an animation at given position */
 /*   Also subtracts 1 from the current frame */
 /* Takes a pointer to an animation and a position */
-void ST_RenderAnimationPrevious(st_animation *animation, int x, int y)
+void ST_RenderAnimationPrevious(st_animation *animation, s64 x, s64 y)
 {
   animation->currentFrame--;
   if(animation->currentFrame >= animation->length)
@@ -285,7 +285,7 @@ void ST_RenderAnimationPrevious(st_animation *animation, int x, int y)
 /* Plays an animation at given position */
 /*   This also accounts for the animation's speed */
 /* Takes a pointer to an animation and a position */
-void ST_RenderAnimationPlay(st_animation *animation, int x, int y)
+void ST_RenderAnimationPlay(st_animation *animation, s64 x, s64 y)
 {
   animation->ftn++;
   if (animation->fpf >= 0)
@@ -323,7 +323,7 @@ void ST_RenderAnimationPlay(st_animation *animation, int x, int y)
 /*   color to blend with */
 
 
-void ST_RenderAnimationCurrentAdvanced(st_animation *animation, int x, int y,
+void ST_RenderAnimationCurrentAdvanced(st_animation *animation, s64 x, s64 y,
   double scale, double rotate,
   u8 red, u8 green, u8 blue, u8 alpha)
 {
@@ -331,7 +331,7 @@ void ST_RenderAnimationCurrentAdvanced(st_animation *animation, int x, int y,
     x, y, scale, rotate, red, green, blue, alpha);
 }
 
-void ST_RenderAnimationNextAdvanced(st_animation *animation, int x, int y,
+void ST_RenderAnimationNextAdvanced(st_animation *animation, s64 x, s64 y,
   double scale, double rotate,
   u8 red, u8 green, u8 blue, u8 alpha)
 {
@@ -342,7 +342,7 @@ void ST_RenderAnimationNextAdvanced(st_animation *animation, int x, int y,
     scale, rotate, red, green, blue, alpha);
 }
 
-void ST_RenderAnimationPreviousAdvanced(st_animation *animation, int x, int y,
+void ST_RenderAnimationPreviousAdvanced(st_animation *animation, s64 x, s64 y,
   double scale, double rotate,
   u8 red, u8 green, u8 blue, u8 alpha)
 {
@@ -353,7 +353,7 @@ void ST_RenderAnimationPreviousAdvanced(st_animation *animation, int x, int y,
     scale, rotate, red, green, blue, alpha);
 }
 
-void ST_RenderAnimationPlayAdvanced(st_animation *animation, int x, int y,
+void ST_RenderAnimationPlayAdvanced(st_animation *animation, s64 x, s64 y,
   double scale, double rotate,
   u8 red, u8 green, u8 blue, u8 alpha)
 {
@@ -394,7 +394,7 @@ void ST_RenderAnimationPlayAdvanced(st_animation *animation, int x, int y,
 /* Plays the current animation of an entity by name */
 /* Takes a pointer to an entity */
 /* Returns 1 on success and 0 on failure */
-int ST_RenderEntity(st_entity *entity)
+u8 ST_RenderEntity(st_entity *entity)
 {
     ST_RenderAnimationPlayAdvanced(entity->animations[entity->currentAnim],
       entity->xpos, entity->ypos, entity->scale, entity->rotation, entity->red,

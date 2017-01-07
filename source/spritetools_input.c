@@ -54,8 +54,8 @@ void ST_InputScan(void)
 
   if (INPUTKeysHeld & KEY_TOUCH) /* Touch is currently held */
   {
-    unsigned int xdiff = abs(INPUTTouchPosition.px - INPUTTouchLastPosition.px);
-    unsigned int ydiff = abs(INPUTTouchPosition.py - INPUTTouchLastPosition.py);
+    u32 xdiff = abs(INPUTTouchPosition.px - INPUTTouchLastPosition.px);
+    u32 ydiff = abs(INPUTTouchPosition.py - INPUTTouchLastPosition.py);
     INPUTTouchLength += sqrt(xdiff * xdiff + ydiff * ydiff);
     hidTouchRead(&INPUTTouchLastPosition);
   }
