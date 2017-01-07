@@ -521,7 +521,7 @@ u16 ST_DebugDisplay(void)
   ST_DebugPrint(tempstr);
   sprintf(tempstr,"\x1b[18;17HDist: %d", ST_InputTouchDistance());
   ST_DebugPrint(tempstr);
-  sprintf(tempstr,"\x1b[18;27HLen: %d", ST_InputTouchLength());
+  sprintf(tempstr,"\x1b[18;27HLen: %lld", ST_InputTouchLength());
   ST_DebugPrint(tempstr);
   sprintf(tempstr, "\x1b[20;2HMemory: %9.3f KB used\x1b[21;10H%9.3f KB total\
     \x1b[22;10H%9.3f KB left",
