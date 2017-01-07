@@ -11,7 +11,7 @@
 
 /* Enables the Accelerometer and Gyroscope at startup */
 /* Returns 1 on success and 0 on failure */
-int ST_InputInit(void);
+u8 ST_InputInit(void);
 
 /* Scans Keys down, held, and up as well as circle and touch positions */
 /*   All values are stored in static variables */
@@ -20,55 +20,55 @@ void ST_InputScan(void);
 /* Checks for if a button was just pressed. Requires ST_InputScan before it */
 /* Takes key value enum from ctrulib to check */
 /* Returns 1 if the button has just been pressed. 0 if not */
-int ST_InputButtonPressed(u32 key);
+u8 ST_InputButtonPressed(u32 key);
 
 /* Checks for if a button is being pressed. Requires ST_InputScan before it */
 /* Takes key value enum from ctrulib to check */
 /* Returns 1 if the button is currently down. 0 if not */
-int ST_InputButtonDown(u32 key);
+u8 ST_InputButtonDown(u32 key);
 
 /* Checks for if a button was just released. Requires ST_InputScan before it */
 /* Takes key value enum from ctrulib to check */
 /* Returns 1 if the button was just released. 0 if not */
-int ST_InputButtonReleased(u32 key);
+u8 ST_InputButtonReleased(u32 key);
 
 /* Returns X position of touch. Requires ST_InputScan before it */
 /* Returns -1 if the touch screen is currently not being touched */
-int ST_InputTouchX(void);
+s16 ST_InputTouchX(void);
 
 /* Returns Y position of touch. Requires ST_InputScan before it */
 /* Returns -1 if the touch screen is currently not being touched */
-int ST_InputTouchY(void);
+s16 ST_InputTouchY(void);
 
 /* Returns X position of where the touch started. */
 /*   Requires ST_InputScan before it */
 /* Returns -1 if the touch screen is currently not being touched */
-int ST_InputTouchOriginX(void);
+s16 ST_InputTouchOriginX(void);
 
 /* Returns Y position of where the touch started. */
 /*   Requires ST_InputScan before it */
 /* Returns -1 if the touch screen is currently not being touched */
-int ST_InputTouchOriginY(void);
+s16 ST_InputTouchOriginY(void);
 
 /* Returns X difference between where the touch is and where it started. */
 /*   Requires ST_InputScan before it */
 /* Returns -1 if the touch screen is currently not being touched */
-int ST_InputTouchDistanceX(void);
+s16 ST_InputTouchDistanceX(void);
 
 /* Returns Y difference between where the touch is and where it started. */
 /*   Requires ST_InputScan before it */
 /* Returns -1 if the touch screen is currently not being touched */
-int ST_InputTouchDistanceY(void);
+s16 ST_InputTouchDistanceY(void);
 
 /* Returns distance between where the touch is and where it started. */
 /*   Requires ST_InputScan before it */
 /* Returns -1 if the touch screen is currently not being touched */
-int ST_InputTouchDistance(void);
+s16 ST_InputTouchDistance(void);
 
 /* Returns length of line drawn on touchscreen. */
 /*   Requires ST_InputScan before it */
 /* Returns -1 if the touch screen is currently not being touched */
-int ST_InputTouchLength(void);
+s64 ST_InputTouchLength(void);
 
 /* Returns X position of Circle Pad. Requires ST_InputScan before it */
 s16 ST_InputCirclePadX(void);
