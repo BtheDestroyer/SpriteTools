@@ -13,7 +13,7 @@
 static touchPosition INPUTTouchOrigin;
 static touchPosition INPUTTouchPosition;
 static touchPosition INPUTTouchLastPosition;
-static u32 INPUTTouchLength;
+static s64 INPUTTouchLength;
 static circlePosition INPUTCirclePosition;
 static accelVector INPUTAccelVector;
 static angularRate INPUTGyroRate;
