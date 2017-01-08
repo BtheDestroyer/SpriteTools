@@ -1,7 +1,7 @@
 # SpriteTools
 ![Icon](https://raw.githubusercontent.com/BtheDestroyer/SpriteTools/master/icon.128.png "SpriteTools icon")
 
-## Current Release: [Beta 2.1](https://github.com/BtheDestroyer/SpriteTools/releases/tag/β2.1)
+## Current Release: [Release 2.1](https://github.com/BtheDestroyer/SpriteTools/releases/tag/2.1)
 
 SpriteTools is an open source 3DS Homebrew library for C/C++. It's being developed by myself and Jemmysponz to make the development process easier, faster, and more accessible for ourselves and other developers.
 
