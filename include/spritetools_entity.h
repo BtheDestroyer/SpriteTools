@@ -13,7 +13,7 @@
 /********************\
 |*     Typedefs     *|
 \********************/
-/* Frame of animation from a spritesheet */
+/* Entity with a ton of rendering info */
 typedef struct {
   st_animation **animations;
   char **names;
