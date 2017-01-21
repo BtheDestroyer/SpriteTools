@@ -4,6 +4,10 @@
 * https://github.com/BtheDestroyer/SpriteTools
 */
 
+#if defined (__cplusplus)
+extern "C" {
+#endif
+
 #ifndef __spritetools_h
 
 #define __spritetools_h
@@ -26,4 +30,8 @@ u8 ST_Init(void);
 /* Returns 1 on success, 0 on failure */
 u8 ST_Fini(void);
 
+#endif
+
+#if defined (__cplusplus)
+}
 #endif

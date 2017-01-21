@@ -4,6 +4,10 @@
 * https://github.com/BtheDestroyer/SpriteTools
 */
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #ifndef __spritetools_render_h
 
 #define __spritetools_render_h
@@ -200,4 +204,8 @@ void ST_RenderAnimationPlayAdvanced(st_animation *animation, s64 x, s64 y,
 /* Returns 1 on success and 0 on failure */
 u8 ST_RenderEntity(st_entity *entity);
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif

@@ -4,6 +4,10 @@
 * https://github.com/BtheDestroyer/SpriteTools
 */
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #ifndef __spritetools_entity_h
 
 #define __spritetools_entity_h
@@ -209,4 +213,8 @@ void ST_EntityFlagToggle(st_entity *entity, u8 flag);
 /* Takes a pointer to an entity and the id of the flag */
 u8 ST_EntityFlagGet(st_entity *entity, u8 flag);
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif

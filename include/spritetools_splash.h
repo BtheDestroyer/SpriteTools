@@ -4,6 +4,10 @@
 * https://github.com/BtheDestroyer/SpriteTools
 */
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #ifndef __spritetools_splash_h
 
 #define __spritetools_splash_h
@@ -17,4 +21,8 @@
 /* Takes time to display in ms */
 void ST_Splashscreen(u64 time);
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif

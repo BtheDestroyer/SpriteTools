@@ -4,6 +4,10 @@
 * https://github.com/BtheDestroyer/SpriteTools
 */
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #ifndef __spritetools_spritesheet_h
 
 #define __spritetools_spritesheet_h
@@ -21,12 +25,12 @@
 /* Temporary define until this is split from sf2d */
 #define st_spritesheet sf2d_texture
 /* image structure */
-#define st_image struct {\
+typedef struct {\
   unsigned int width;\
   unsigned int height;\
   unsigned int bytes_per_pixel;\
   unsigned char pixel_data[];\
-}
+} st_image;
 
 /*********************************\
 |*     Spritesheet Functions     *|
@@ -41,4 +45,8 @@ st_spritesheet *ST_SpritesheetCreateSpritesheet(const unsigned char *pixel_data,
 /* Takes st_spritesheet */
 void ST_SpritesheetFreeSpritesheet(st_spritesheet *spritesheet);
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif

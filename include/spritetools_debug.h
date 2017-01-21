@@ -4,6 +4,10 @@
 * https://github.com/BtheDestroyer/SpriteTools
 */
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #ifndef __spritetools_debug_h
 
 #define __spritetools_debug_h
@@ -264,4 +268,8 @@ void ST_DebugButtonFormatted(void);
 /* Will print a formatted set of all buttons using the above functions */
 void ST_DebugButtonFormattedAtPosition(s8 x, s8 y);
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif
