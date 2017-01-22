@@ -4,6 +4,10 @@
 * https://github.com/BtheDestroyer/SpriteTools
 */
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #ifndef __spritetools_textcolors_h
 
 #define __spritetools_textcolors_h
@@ -105,4 +109,8 @@ void ST_TextNoStrikethrough(void);
 /* Text with all default settings */
 void ST_TextDefault(void);
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif

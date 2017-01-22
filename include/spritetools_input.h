@@ -4,6 +4,10 @@
 * https://github.com/BtheDestroyer/SpriteTools
 */
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #ifndef __spritetools_input_h
 
 #define __spritetools_input_h
@@ -100,4 +104,8 @@ s16 ST_InputGyroYaw(void);
 /* Returns z of Gyroscope's angular Rate. Requires ST_InputScan before it */
 s16 ST_InputGyroPitch(void);
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif

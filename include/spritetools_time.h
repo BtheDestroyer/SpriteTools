@@ -4,6 +4,10 @@
 * https://github.com/BtheDestroyer/SpriteTools
 */
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #ifndef __spritetools_time_h
 
 #define __spritetools_time_h
@@ -25,4 +29,8 @@ u64 ST_TimeStarted(void);
 /* Returns time since January 1st, 1990 in ms */
 u64 ST_TimeOS(void);
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif
