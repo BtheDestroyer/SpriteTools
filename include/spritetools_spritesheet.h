@@ -25,12 +25,12 @@ extern "C"{
 /* Temporary define until this is split from sf2d */
 #define st_spritesheet sf2d_texture
 /* image structure */
-typedef struct {\
+#define st_image struct {\
   unsigned int width;\
   unsigned int height;\
   unsigned int bytes_per_pixel;\
   unsigned char pixel_data[];\
-} st_image;
+};
 
 /*********************************\
 |*     Spritesheet Functions     *|
