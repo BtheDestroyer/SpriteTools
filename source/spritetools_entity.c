@@ -19,7 +19,7 @@ static u8 mystrcmp(char *strA, char *strB) /* bc standard strcmp is dumb */
     if (!*strA)
       return 1; /* Both strings have matched and reached \0 at the same time */
 
-      strA++, strB++;
+    strA++, strB++;
   }
 
   return 0; /* One of the strings didn't match */
