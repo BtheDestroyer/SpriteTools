@@ -4,6 +4,10 @@
 * https://github.com/BtheDestroyer/SpriteTools
 */
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #ifndef __spritetools_render_h
 
 #define __spritetools_render_h
@@ -212,4 +216,8 @@ u8 ST_RenderEntity(st_entity *entity);
 /* Returns 1 on success and 0 on failure */
 u8 ST_RenderEntityCamera(st_entity *entity, st_camera *cam);
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif

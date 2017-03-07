@@ -4,6 +4,10 @@
 * https://github.com/BtheDestroyer/SpriteTools
 */
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #ifndef __spritetools_spritesheet_h
 
 #define __spritetools_spritesheet_h
@@ -41,4 +45,8 @@ st_spritesheet *ST_SpritesheetCreateSpritesheet(const unsigned char *pixel_data,
 /* Takes st_spritesheet */
 void ST_SpritesheetFreeSpritesheet(st_spritesheet *spritesheet);
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif
