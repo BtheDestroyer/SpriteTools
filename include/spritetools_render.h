@@ -11,6 +11,7 @@
 #include <spritetools_spritesheet.h>
 #include <spritetools_animation.h>
 #include <spritetools_entity.h>
+#include <spritetools_camera.h>
 
 /*****************************\
 |*     General Functions     *|
@@ -31,6 +32,9 @@ void ST_RenderEndRender(void);
 
 /* Returns current screen */
 gfxScreen_t ST_RenderCurrentScreen(void);
+
+/* Returns width of given screen */
+u16 ST_RenderScreenWidth(gfxScreen_t screen);
 
 /* Returns current fps */
 float ST_RenderFPS(void);
@@ -199,5 +203,13 @@ void ST_RenderAnimationPlayAdvanced(st_animation *animation, s64 x, s64 y,
 /* Takes a pointer to an entity */
 /* Returns 1 on success and 0 on failure */
 u8 ST_RenderEntity(st_entity *entity);
+
+/****************************\
+|*     Camera Rendering     *|
+\****************************/
+/* Plays the current animation of an entity modified by a camera's values */
+/* Takes a pointer to an entity and a pointer to a camera */
+/* Returns 1 on success and 0 on failure */
+u8 ST_RenderEntityCamera(st_entity *entity, st_camera *cam);
 
 #endif

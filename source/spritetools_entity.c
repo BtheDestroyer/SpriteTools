@@ -8,7 +8,9 @@
 #include <stdlib.h>
 #include <spritetools_entity.h>
 
+#ifndef PI
 #define PI 3.1415926535897932384626433832795
+#endif
 
 /* Takes 2 strings and compares them */
 /* Returns 1 on match, 0 on difference */

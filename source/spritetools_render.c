@@ -61,6 +61,14 @@ gfxScreen_t ST_RenderCurrentScreen(void)
   return sf2d_get_current_screen();
 }
 
+u16 ST_RenderScreenWidth(gfxScreen_t screen)
+{
+  if (screen == GFX_TOP)
+    return 400;
+  else
+    return 240;
+}
+
 /* Returns current fps */
 float ST_RenderFPS(void)
 {
@@ -187,6 +195,10 @@ void ST_RenderSpriteAdvanced(st_spritesheet *spritesheet,
   double rotate,
   u8 red, u8 green, u8 blue, u8 alpha)
 {
+  /* This is a temporary fix until I rewrite the low level rendering (sf2d) */
+  width = (width + 1) / 2 * 2;
+  height = (height + 1) / 2 * 2;
+
   sf2d_draw_texture_part_rotate_scale_blend(spritesheet, x, y, rotate,
     xleft, ytop, width, height, scale, scale, RGBA8(red, green, blue, alpha));
 }
@@ -391,7 +403,7 @@ void ST_RenderAnimationPlayAdvanced(st_animation *animation, s64 x, s64 y,
 /****************************\
 |*     Entity Rendering     *|
 \****************************/
-/* Plays the current animation of an entity by name */
+/* Plays the current animation of an entity */
 /* Takes a pointer to an entity */
 /* Returns 1 on success and 0 on failure */
 u8 ST_RenderEntity(st_entity *entity)
@@ -399,5 +411,22 @@ u8 ST_RenderEntity(st_entity *entity)
     ST_RenderAnimationPlayAdvanced(entity->animations[entity->currentAnim],
       entity->xpos, entity->ypos, entity->scale, entity->rotation, entity->red,
       entity->green, entity->blue, entity->alpha);
+  return 0;
+}
+
+/****************************\
+|*     Camera Rendering     *|
+\****************************/
+/* Plays the current animation of an entity modified by a camera's values */
+/* Takes a pointer to an entity and a pointer to a camera */
+/* Returns 1 on success and 0 on failure */
+u8 ST_RenderEntityCamera(st_entity *entity, st_camera *cam)
+{
+    ST_RenderAnimationPlayAdvanced(entity->animations[entity->currentAnim],
+      entity->xpos - cam->x - (ST_RenderScreenWidth(ST_RenderCurrentScreen()) / 2),
+      entity->ypos - cam->y - (240 / 2),
+      entity->scale * cam->zoom, entity->rotation + cam->rotation,
+      entity->red, entity->green,
+      entity->blue, entity->alpha);
   return 0;
 }
