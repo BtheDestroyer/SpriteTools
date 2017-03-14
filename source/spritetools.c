@@ -4,7 +4,7 @@
 * https://github.com/BtheDestroyer/SpriteTools
 */
 
-#include <spritetools.h>
+#include "spritetools.h"
 
 /* Inits all modules */
 /* Returns 1 on success, 0 on failure */

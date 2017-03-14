@@ -12,10 +12,10 @@ extern "C"{
 
 #define __spritetools_render_h
 
-#include <spritetools_spritesheet.h>
-#include <spritetools_animation.h>
-#include <spritetools_entity.h>
-#include <spritetools_camera.h>
+#include <spritetools/spritetools_spritesheet.h>
+#include <spritetools/spritetools_animation.h>
+#include <spritetools/spritetools_entity.h>
+#include <spritetools/spritetools_camera.h>
 
 /*****************************\
 |*     General Functions     *|

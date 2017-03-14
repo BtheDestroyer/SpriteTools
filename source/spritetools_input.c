@@ -7,8 +7,8 @@
 #include <3ds.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <spritetools_input.h>
 #include <math.h>
+#include "spritetools/spritetools_input.h"
 
 static touchPosition INPUTTouchOrigin;
 static touchPosition INPUTTouchPosition;

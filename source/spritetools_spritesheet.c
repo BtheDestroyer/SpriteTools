@@ -5,7 +5,7 @@
 */
 
 #include <3ds.h>
-#include <spritetools_spritesheet.h>
+#include "spritetools/spritetools_spritesheet.h"
 
 /*********************************\
 |*     Spritesheet Functions     *|

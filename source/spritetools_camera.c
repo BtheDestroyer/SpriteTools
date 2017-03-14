@@ -6,8 +6,8 @@
 
 #include <3ds.h>
 #include <stdlib.h>
-#include <spritetools_entity.h>
-#include <spritetools_camera.h>
+#include "spritetools/spritetools_entity.h"
+#include "spritetools/spritetools_camera.h"
 
 #ifndef PI
 #define PI 3.1415926535897932384626433832795

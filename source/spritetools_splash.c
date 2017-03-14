@@ -5,8 +5,8 @@
 */
 
 #include <3ds.h>
-#include <spritetools_splash.h>
-#include <spritetools_time.h>
+#include "spritetools/spritetools_splash.h"
+#include "spritetools/spritetools_time.h"
 
 /*****************\
 |*     Image     *|

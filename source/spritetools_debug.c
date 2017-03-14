@@ -9,10 +9,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <inttypes.h>
-#include <spritetools_debug.h>
-#include <spritetools_input.h>
-#include <spritetools_textcolors.h>
-#include <spritetools_render.h>
+#include "spritetools/spritetools_debug.h"
+#include "spritetools/spritetools_input.h"
+#include "spritetools/spritetools_textcolors.h"
+#include "spritetools/spritetools_render.h"
 
 /*******************************\
 |*     Debugging Variables     *|

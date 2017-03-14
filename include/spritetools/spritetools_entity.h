@@ -12,7 +12,7 @@ extern "C"{
 
 #define __spritetools_entity_h
 
-#include <spritetools_animation.h>
+#include <spritetools/spritetools_animation.h>
 
 /********************\
 |*     Typedefs     *|

@@ -5,8 +5,8 @@
 */
 
 #include <3ds.h>
-#include <spritetools_render.h>
-#include <spritetools_entity.h>
+#include "spritetools/spritetools_render.h"
+#include "spritetools/spritetools_entity.h"
 
 static u32 st_background = 0;
 

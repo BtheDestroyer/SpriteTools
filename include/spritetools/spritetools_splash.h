@@ -12,7 +12,7 @@ extern "C"{
 
 #define __spritetools_splash_h
 
-#include <spritetools_render.h>
+#include <spritetools/spritetools_render.h>
 
 /************************\
 |*     Splashscreen     *|

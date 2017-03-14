@@ -107,18 +107,14 @@ clean:
 
 #---------------------------------------------------------------------------------
 install: $(BUILD)
+	@echo "Copying .a library..."
 	@cp $(OUTPUT) $(CTRULIB)/lib
-	@cp include/spritetools_animation.h $(CTRULIB)/include
-	@cp include/spritetools_debug.h $(CTRULIB)/include
-	@cp include/spritetools_entity.h $(CTRULIB)/include
-	@cp include/spritetools_input.h $(CTRULIB)/include
-	@cp include/spritetools_render.h $(CTRULIB)/include
-	@cp include/spritetools_splash.h $(CTRULIB)/include
-	@cp include/spritetools_spritesheet.h $(CTRULIB)/include
-	@cp include/spritetools_textcolors.h $(CTRULIB)/include
-	@cp include/spritetools_time.h $(CTRULIB)/include
-	@cp include/spritetools.h $(CTRULIB)/include
+	@echo "Done!"
+	@echo "Copying .h files..."
+	@cp -r include/* $(CTRULIB)/include
+	@echo "Done!"
 	@echo "Installed!"
+
 
 #---------------------------------------------------------------------------------
 docs:

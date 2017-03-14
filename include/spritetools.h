@@ -12,16 +12,16 @@ extern "C" {
 
 #define __spritetools_h
 
-#include <spritetools_debug.h>
-#include <spritetools_input.h>
-#include <spritetools_textcolors.h>
-#include <spritetools_spritesheet.h>
-#include <spritetools_render.h>
-#include <spritetools_splash.h>
-#include <spritetools_animation.h>
-#include <spritetools_time.h>
-#include <spritetools_entity.h>
-#include <spritetools_camera.h>
+#include <spritetools/spritetools_debug.h>
+#include <spritetools/spritetools_input.h>
+#include <spritetools/spritetools_textcolors.h>
+#include <spritetools/spritetools_spritesheet.h>
+#include <spritetools/spritetools_render.h>
+#include <spritetools/spritetools_splash.h>
+#include <spritetools/spritetools_animation.h>
+#include <spritetools/spritetools_time.h>
+#include <spritetools/spritetools_entity.h>
+#include <spritetools/spritetools_camera.h>
 
 /* Inits all modules and sets up */
 /* Returns 1 on success, 0 on failure */
