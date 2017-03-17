@@ -40,6 +40,8 @@ gfxScreen_t ST_RenderCurrentScreen(void);
 /* Returns width of given screen */
 u16 ST_RenderScreenWidth(gfxScreen_t screen);
 
+u16 ST_RenderScreenHeight(void);
+
 /* Returns current fps */
 float ST_RenderFPS(void);
 
@@ -215,6 +217,12 @@ u8 ST_RenderEntity(st_entity *entity);
 /* Takes a pointer to an entity and a pointer to a camera */
 /* Returns 1 on success and 0 on failure */
 u8 ST_RenderEntityCamera(st_entity *entity, st_camera *cam);
+
+/* Plays the current animation of an entity modified by a camera's values */
+/* Takes a pointer to an entity and a pointer to a camera */
+/* This version does not rotate sprites, just modifies their positions */
+/* Returns 1 on success and 0 on failure */
+u8 ST_RenderEntityCameraNoSpriteRot(st_entity *entity, st_camera *cam);
 
 #endif
 

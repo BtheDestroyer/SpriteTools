@@ -69,6 +69,11 @@ u16 ST_RenderScreenWidth(gfxScreen_t screen)
     return 240;
 }
 
+u16 ST_RenderScreenHeight(void)
+{
+  return 240;
+}
+
 /* Returns current fps */
 float ST_RenderFPS(void)
 {
@@ -422,11 +427,44 @@ u8 ST_RenderEntity(st_entity *entity)
 /* Returns 1 on success and 0 on failure */
 u8 ST_RenderEntityCamera(st_entity *entity, st_camera *cam)
 {
-    ST_RenderAnimationPlayAdvanced(entity->animations[entity->currentAnim],
-      entity->xpos - cam->x - (ST_RenderScreenWidth(ST_RenderCurrentScreen()) / 2),
-      entity->ypos - cam->y - (240 / 2),
-      entity->scale * cam->zoom, entity->rotation + cam->rotation,
-      entity->red, entity->green,
-      entity->blue, entity->alpha);
+  float c = cos(cam->rotation);
+  float s = sin(cam->rotation);
+  int xrend = (entity->xpos - cam->x);
+  int yrend = (entity->ypos - cam->y);
+  float px2 = (float)xrend * c - (float)yrend * s;
+  float py2 = (float)xrend * s + (float)yrend * c;
+  xrend = px2 * cam->zoom + ST_RenderScreenWidth(ST_RenderCurrentScreen()) / 2;
+  yrend = py2 * cam->zoom + ST_RenderScreenHeight() / 2;
+
+  ST_RenderAnimationPlayAdvanced(entity->animations[entity->currentAnim],
+    xrend,
+    yrend,
+    entity->scale * cam->zoom, entity->rotation + cam->rotation,
+    entity->red, entity->green,
+    entity->blue, entity->alpha);
+  return 0;
+}
+
+/* Plays the current animation of an entity modified by a camera's values */
+/* Takes a pointer to an entity and a pointer to a camera */
+/* This version does not rotate sprites, just modifies their positions */
+/* Returns 1 on success and 0 on failure */
+u8 ST_RenderEntityCameraNoSpriteRot(st_entity *entity, st_camera *cam)
+{
+  float c = cos(cam->rotation);
+  float s = sin(cam->rotation);
+  int xrend = (entity->xpos - cam->x);
+  int yrend = (entity->ypos - cam->y);
+  float px2 = (float)xrend * c - (float)yrend * s;
+  float py2 = (float)xrend * s + (float)yrend * c;
+  xrend = px2 * cam->zoom + ST_RenderScreenWidth(ST_RenderCurrentScreen()) / 2;
+  yrend = py2 * cam->zoom + ST_RenderScreenHeight() / 2;
+
+  ST_RenderAnimationPlayAdvanced(entity->animations[entity->currentAnim],
+    xrend,
+    yrend,
+    entity->scale * cam->zoom, entity->rotation,
+    entity->red, entity->green,
+    entity->blue, entity->alpha);
   return 0;
 }
