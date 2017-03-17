@@ -10,6 +10,15 @@
 
 static u32 st_background = 0;
 
+static u8 addu8(u8 num1, u8 num2)
+{
+  u8 newnum = num1 + num2;
+  if (num2 > 0 && num1 + num2 < num1)
+    newnum = 0xFF;
+
+  return newnum;
+}
+
 /*****************************\
 |*     General Functions     *|
 \*****************************/
@@ -464,7 +473,7 @@ u8 ST_RenderEntityCameraNoSpriteRot(st_entity *entity, st_camera *cam)
     xrend,
     yrend,
     entity->scale * cam->zoom, entity->rotation,
-    entity->red, entity->green,
-    entity->blue, entity->alpha);
+    addu8(entity->red, cam->red), addu8(entity->green, cam->green),
+    addu8(entity->blue, cam->blue), addu8(entity->alpha, cam->alpha));
   return 0;
 }
