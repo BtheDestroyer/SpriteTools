@@ -16,9 +16,9 @@ include $(DEVKITARM)/3ds_rules
 # INCLUDES is a list of directories containing header files
 #---------------------------------------------------------------------------------
 TARGET		:=	spritetools
-BUILD		:=	build
+BUILD			:=	build
 SOURCES		:=	source
-DATA		:=	data
+DATA			:=	data
 INCLUDES	:=	include
 
 #---------------------------------------------------------------------------------
@@ -44,6 +44,7 @@ LIBS 	:=	-lsf2d -lcitro3d -lctru -lm
 # include and lib
 #---------------------------------------------------------------------------------
 LIBDIRS	:=	$(CTRULIB)
+SF2DLIB :=  $(CTRULIB)/lib/libspritetools.a
 
 #---------------------------------------------------------------------------------
 # no real need to edit anything past this point unless you need to add additional
@@ -80,6 +81,14 @@ else
 endif
 #---------------------------------------------------------------------------------
 
+
+ifneq ($(OS),Windows_NT)
+	export DEPMKDIR := mkdir dependencies\
+else
+	export DEPMKDIR := mkdir -p dependencies/
+endif
+
+
 export OFILES	:=	$(addsuffix .o,$(BINFILES)) \
 			$(PICAFILES:.v.pica=.shbin.o) $(SHLISTFILES:.shlist=.shbin.o) \
 			$(CPPFILES:.cpp=.o) $(CFILES:.c=.o) $(SFILES:.s=.o)
@@ -96,14 +105,40 @@ all: $(BUILD)
 lib:
 	@[ -d $@ ] || mkdir -p $@
 
-$(BUILD): lib
+$(BUILD): $(CTRULIB)/lib/libctru.a $(CTRULIB)/lib/libcitro3d.a $(CTRULIB)/lib/libsf2d.a lib
 	@[ -d $@ ] || mkdir -p $@
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
 
 #---------------------------------------------------------------------------------
+
+$(CTRULIB)/lib/libctru.a:
+	@echo "Installing libctru dependency"
+	@echo "    Cloning ctrulib from smealum's github..."
+	-@git clone https://github.com/smealum/ctrulib dependencies/libctru/
+	@echo "    Making and installing..."
+	@$(MAKE) install -C dependencies/libctru/libctru/ -s
+	@echo ""
+
+$(CTRULIB)/lib/libcitro3d.a:
+	@echo "Installing libcitro3d dependency"
+	@echo "    Cloning libcitro3d from fincs' github..."
+	-@git clone https://github.com/fincs/citro3d dependencies/libcitro3d/
+	@echo "    Making and installing..."
+	@$(MAKE) install -C dependencies/libcitro3d/ -s
+	@echo ""
+
+$(CTRULIB)/lib/libsf2d.a:
+	@echo "Installing libsf2d dependency"
+	@echo "    Cloning sf2dlib from xerpi's github..."
+	-@git clone https://github.com/xerpi/sf2dlib dependencies/libsf2d/
+	@echo "    Making and installing..."
+	@$(MAKE) install -C dependencies/libsf2d/libsf2d/ -s
+	@echo ""
+
+#---------------------------------------------------------------------------------
 clean:
 	@echo clean ...
-	@rm -fr $(BUILD) lib latex html
+	@rm -rf $(BUILD) dependencies lib latex html
 
 #---------------------------------------------------------------------------------
 install: $(BUILD)
