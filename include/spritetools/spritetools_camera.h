@@ -22,9 +22,11 @@ typedef struct {
 } st_camera;
 
 typedef enum {
-  CFF_ROTATE_WITH_ENTITY,
-  CFF_OFFSET_WITH_ROTATION,
-  CFF_COUNT,
+  CFF_ROTATE_WITH_ENTITY = 0x1,
+  CFF_OFFSET_WITH_ROTATION = 0x10,
+  CFF_INVERT_SCALE_WITH_ENTITY = 0x100,
+  CFF_OFFSET_WITH_SCALE = 0x1000,
+  CFF_ALL = 0x11111111
 } CAMERA_FOLLOW_FLAGS;
 
 /****************************\
@@ -72,5 +74,29 @@ void ST_CameraColorChange(st_camera *cam, u8 r, u8 g, u8 b, u8 a);
 /* Set a given camera's blend color */
 /* Takes a camera pointer and rgba values to set its color to */
 void ST_CameraColorSet(st_camera *cam, u8 r, u8 g, u8 b, u8 a);
+
+/***********************************\
+|*     Follow Entity Functions     *|
+\***********************************/
+
+/* Set a given camera's entity to follow */
+/* Takes a camera pointer and pointer of the entity to follow */
+void ST_CameraSetFollowEntity(st_camera *cam, st_entity *ent);
+
+/* Clears a given camera's entity to follow */
+/* Takes a camera pointer */
+void ST_CameraClearFollowEntity(st_camera *cam);
+
+/* Move a given camera's follow offset by a given amount */
+/* Takes a camera pointer and position to move it's offset by */
+void ST_CameraMoveFollowOffsetBy(st_camera *cam, s32 x, s32 y);
+
+/* Move a given camera's follow offset to a given position */
+/* Takes a camera pointer and position to move it's offset to */
+void ST_CameraMoveFollowOffsetTo(st_camera *cam, s32 x, s32 y);
+
+/* Clears a given camera's entity to follow */
+/* Takes a camera pointer */
+void ST_CameraMoveToFollow(st_camera *cam);
 
 #endif

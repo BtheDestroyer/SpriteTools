@@ -122,3 +122,45 @@ void ST_CameraColorSet(st_camera *cam, u8 r, u8 g, u8 b, u8 a)
   cam->blue = b;
   cam->alpha = a;
 }
+
+/***********************************\
+|*     Follow Entity Functions     *|
+\***********************************/
+
+/* Set a given camera's entity to follow */
+/* Takes a camera pointer and pointer of the entity to follow */
+void ST_CameraSetFollowEntity(st_camera *cam, st_entity *ent)
+{
+  cam->following = ent;
+}
+
+/* Clears a given camera's entity to follow */
+/* Takes a camera pointer */
+void ST_CameraClearFollowEntity(st_camera *cam)
+{
+  ST_CameraSetFollowEntity(cam, NULL);
+}
+
+/* Move a given camera's follow offset by a given amount */
+/* Takes a camera pointer and position to move it's offset by */
+void ST_CameraMoveFollowOffsetBy(st_camera *cam, s32 x, s32 y)
+{
+  cam->followXOff += x;
+  cam->followYOff += y;
+}
+
+/* Move a given camera's follow offset to a given position */
+/* Takes a camera pointer and position to move it's offset to */
+void ST_CameraMoveFollowOffsetTo(st_camera *cam, s32 x, s32 y)
+{
+  cam->followXOff = x;
+  cam->followYOff = y;
+}
+
+/* Clears a given camera's entity to follow */
+/* Takes a camera pointer */
+void ST_CameraMoveToFollow(st_camera *cam)
+{
+  cam->x = cam->following->xpos + cam->followXOff;
+  cam->x = cam->following->xpos + cam->followXOff;
+}
