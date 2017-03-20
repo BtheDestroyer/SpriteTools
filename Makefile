@@ -105,11 +105,14 @@ all: $(BUILD)
 lib:
 	@[ -d $@ ] || mkdir -p $@
 
-$(BUILD): $(CTRULIB)/lib/libctru.a $(CTRULIB)/lib/libcitro3d.a $(CTRULIB)/lib/libsf2d.a lib
+$(BUILD): $(CTRULIB)/lib/libctru.a $(CTRULIB)/lib/libcitro3d.a $(CTRULIB)/lib/libsf2d.a $(CTRULIB)/lib/libsfil.a lib
 	@[ -d $@ ] || mkdir -p $@
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
 
 #---------------------------------------------------------------------------------
+
+libctru:
+	@$(MAKE) $(CTRULIB)/lib/libctru.a
 
 $(CTRULIB)/lib/libctru.a:
 	@echo "Installing libctru dependency"
@@ -119,7 +122,10 @@ $(CTRULIB)/lib/libctru.a:
 	@$(MAKE) install -C dependencies/libctru/libctru/ -s
 	@echo ""
 
-$(CTRULIB)/lib/libcitro3d.a:
+libcitro3d:
+	@$(MAKE) $(CTRULIB)/lib/libcitro3d.a
+
+$(CTRULIB)/lib/libcitro3d.a: $(CTRULIB)/lib/libctru.a
 	@echo "Installing libcitro3d dependency"
 	@echo "    Cloning libcitro3d from fincs' github..."
 	-@git clone https://github.com/fincs/citro3d dependencies/libcitro3d/
@@ -127,12 +133,44 @@ $(CTRULIB)/lib/libcitro3d.a:
 	@$(MAKE) install -C dependencies/libcitro3d/ -s
 	@echo ""
 
-$(CTRULIB)/lib/libsf2d.a:
+libsf2d:
+	@$(MAKE) $(CTRULIB)/lib/libsf2d.a
+
+$(CTRULIB)/lib/libsf2d.a: $(CTRULIB)/lib/libctru.a $(CTRULIB)/lib/libcitro3d.a
 	@echo "Installing libsf2d dependency"
 	@echo "    Cloning sf2dlib from xerpi's github..."
 	-@git clone https://github.com/xerpi/sf2dlib dependencies/libsf2d/
 	@echo "    Making and installing..."
 	@$(MAKE) install -C dependencies/libsf2d/libsf2d/ -s
+	@echo ""
+
+portlibs:
+	@$(MAKE) $(DEVKITPRO)/portlibs/armv6k
+
+$(DEVKITPRO)/portlibs/armv6k:
+	@echo "Installing 3ds_portlibs dependency"
+	@echo "    Cloning 3ds_portlibs from devkitPro's github..."
+	-@git clone https://github.com/devkitpro/3ds_portlibs dependencies/3ds_portlibs/
+	@echo "    Making and installing..."
+	@echo "        Making zlib..."
+	@$(MAKE) zlib -C dependencies/3ds_portlibs/ -s
+	@echo "        Installing zlib..."
+	@$(MAKE) install-zlib -C dependencies/3ds_portlibs/ -s
+	@echo "        Making sqlite, libpng, libjpeg-turbo, libexif, and freetype..."
+	@$(MAKE) sqlite libpng libjpeg-turbo libexif freetype -C dependencies/3ds_portlibs/ -s
+	@echo "        Installing sqlite, libpng, libjpeg-turbo, libexif, and freetype..."
+	@$(MAKE) install -C dependencies/3ds_portlibs/ -s
+	@echo ""
+
+sfillib:
+	@$(MAKE) $(CTRULIB)/lib/libsfil.a
+
+$(CTRULIB)/lib/libsfil.a: $(CTRULIB)/lib/libctru.a $(CTRULIB)/lib/libcitro3d.a $(CTRULIB)/lib/libsf2d.a $(DEVKITPRO)/portlibs/armv6k
+	@echo "Installing libsfil dependency"
+	@echo "    Cloning libsfil from xerpi's github..."
+	-@git clone https://github.com/xerpi/sfillib dependencies/libsfil/
+	@echo "    Making and installing..."
+	@$(MAKE) install -C dependencies/libsfil/libsfil/ -s
 	@echo ""
 
 #---------------------------------------------------------------------------------
