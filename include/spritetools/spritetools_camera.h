@@ -13,12 +13,12 @@
 \********************/
 /* Frame of animation from a spritesheet */
 typedef struct {
-  s32 x, y;
+  double x, y;
   float zoom, rotation;
   u8 red, green, blue, alpha;
   st_entity *following;
   u8 followFlags;
-  s32 followXOff, followYOff;
+  double followXOff, followYOff;
 } st_camera;
 
 typedef enum {
@@ -35,7 +35,7 @@ typedef enum {
 /* Create a new camera */
 /* Takes x and y positions of the new camera */
 /* Returns created camera */
-st_camera *ST_CameraCreate(s32 x, s32 y);
+st_camera *ST_CameraCreate(double x, double y);
 
 /* Free a given camera */
 /* Takes a pointer to a camera to free */
@@ -43,11 +43,11 @@ void ST_CameraFree(st_camera *cam);
 
 /* Move a given camera by a given amount */
 /* Takes a camera pointer and position to move it by */
-void ST_CameraMoveBy(st_camera *cam, s32 x, s32 y);
+void ST_CameraMoveBy(st_camera *cam, double x, double y);
 
 /* Move a given camera to a given position */
 /* Takes a camera pointer and position to move it to */
-void ST_CameraMoveTo(st_camera *cam, s32 x, s32 y);
+void ST_CameraMoveTo(st_camera *cam, double x, double y);
 
 /* Rotate a given camera to a given amount */
 /*   Will wrap */
@@ -89,11 +89,11 @@ void ST_CameraClearFollowEntity(st_camera *cam);
 
 /* Move a given camera's follow offset by a given amount */
 /* Takes a camera pointer and position to move it's offset by */
-void ST_CameraMoveFollowOffsetBy(st_camera *cam, s32 x, s32 y);
+void ST_CameraMoveFollowOffsetBy(st_camera *cam, double x, double y);
 
 /* Move a given camera's follow offset to a given position */
 /* Takes a camera pointer and position to move it's offset to */
-void ST_CameraMoveFollowOffsetTo(st_camera *cam, s32 x, s32 y);
+void ST_CameraMoveFollowOffsetTo(st_camera *cam, double x, double y);
 
 /* Clears a given camera's entity to follow */
 /* Takes a camera pointer */

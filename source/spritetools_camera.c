@@ -35,7 +35,7 @@ static void addU8(u8 *lhs, u8 rhs)
 |*     Camera Functions     *|
 \****************************/
 /* Create a new camera */
-st_camera *ST_CameraCreate(s32 x, s32 y)
+st_camera *ST_CameraCreate(double x, double y)
 {
   st_camera *tempcam = calloc(1, sizeof(st_camera));
 
@@ -58,14 +58,14 @@ void ST_CameraFree(st_camera *cam)
 }
 
 /* Move a given camera by a given amount */
-void ST_CameraMoveBy(st_camera *cam, s32 x, s32 y)
+void ST_CameraMoveBy(st_camera *cam, double x, double y)
 {
   cam->x += x;
   cam->y += y;
 }
 
 /* Move a given camera to a given position */
-void ST_CameraMoveTo(st_camera *cam, s32 x, s32 y)
+void ST_CameraMoveTo(st_camera *cam, double x, double y)
 {
   cam->x = x;
   cam->y = y;
@@ -143,7 +143,7 @@ void ST_CameraClearFollowEntity(st_camera *cam)
 
 /* Move a given camera's follow offset by a given amount */
 /* Takes a camera pointer and position to move it's offset by */
-void ST_CameraMoveFollowOffsetBy(st_camera *cam, s32 x, s32 y)
+void ST_CameraMoveFollowOffsetBy(st_camera *cam, double x, double y)
 {
   cam->followXOff += x;
   cam->followYOff += y;
@@ -151,7 +151,7 @@ void ST_CameraMoveFollowOffsetBy(st_camera *cam, s32 x, s32 y)
 
 /* Move a given camera's follow offset to a given position */
 /* Takes a camera pointer and position to move it's offset to */
-void ST_CameraMoveFollowOffsetTo(st_camera *cam, s32 x, s32 y)
+void ST_CameraMoveFollowOffsetTo(st_camera *cam, double x, double y)
 {
   cam->followXOff = x;
   cam->followYOff = y;
@@ -164,13 +164,19 @@ void ST_CameraMoveToFollow(st_camera *cam)
   if (!cam->following)
     return;
   cam->x = cam->following->xpos + cam->followXOff;
-  cam->x = cam->following->xpos + cam->followXOff;
+  cam->y = cam->following->ypos + cam->followYOff;
 
   if (ST_CameraCheckFollowFlag(cam, CFF_ROTATE_WITH_ENTITY))
     cam->rotation = cam->following->rotation;
 
-  if (ST_CameraCheckFollowFlag(cam, CFF_ROTATE_WITH_ENTITY))
-    cam->rotation = cam->following->rotation;
+  if (ST_CameraCheckFollowFlag(cam, CFF_OFFSET_WITH_ROTATION))
+  {
+    cam->x = cam->x * cos(cam->following->rotation) - cam->y * sin(cam->following->rotation);
+    cam->y = cam->y * sin(cam->following->rotation) + cam->x * cos(cam->following->rotation);
+  }
+
+  if (ST_CameraCheckFollowFlag(cam, CFF_INVERT_SCALE_WITH_ENTITY))
+    cam->zoom = (float) (1.0 / cam->following->scale);
 }
 
 /* Set's a camera's given follow flag to the given state */

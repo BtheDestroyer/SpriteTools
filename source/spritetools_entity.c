@@ -18,7 +18,7 @@
 /* Returns a pointer to an entity */
 /*   Returns NULL if failed */
 /* Takes a position and number of animations */
-st_entity *ST_EntityCreateEntity(s64 x, s64 y, u8 animCount)
+st_entity *ST_EntityCreateEntity(double x, double y, u8 animCount)
 {
   st_entity *tempent = calloc(sizeof(st_entity), 1);
   if (!tempent)
@@ -80,21 +80,21 @@ u8 ST_EntityAddAnimation(st_entity *entity, st_animation *anim, char *name)
 \**************************/
 /* Sets the x position of a given entity */
 /* Takes a pointer to an entity and a position */
-void ST_EntitySetXPosition(st_entity *entity, s64 x)
+void ST_EntitySetXPosition(st_entity *entity, double x)
 {
   entity->xpos = x;
 }
 
 /* Sets the y position of a given entity */
 /* Takes a pointer to an entity and a position */
-void ST_EntitySetYPosition(st_entity *entity, s64 y)
+void ST_EntitySetYPosition(st_entity *entity, double y)
 {
   entity->ypos = y;
 }
 
 /* Sets the position of a given entity */
 /* Takes a pointer to an entity and a position */
-void ST_EntitySetPosition(st_entity *entity, s64 x, s64 y)
+void ST_EntitySetPosition(st_entity *entity, double x, double y)
 {
   entity->xpos = x;
   entity->ypos = y;
@@ -271,21 +271,21 @@ u8 ST_EntitySetAnimationId(st_entity *entity, u8 id)
 \****************************/
 /* Modifies the x position of a given entity by a given amount */
 /* Takes a pointer to an entity and an amount to change the position by */
-void ST_EntityModifyXPosition(st_entity *entity, s64 x)
+void ST_EntityModifyXPosition(st_entity *entity, double x)
 {
   entity->xpos += x;
 }
 
 /* Modifies the y position of a given entity by a given amount */
 /* Takes a pointer to an entity and an amount to change the position by */
-void ST_EntityModifyYPosition(st_entity *entity, s64 y)
+void ST_EntityModifyYPosition(st_entity *entity, double y)
 {
   entity->ypos += y;
 }
 
 /* Modifies the position of a given entity by a given amount */
 /* Takes a pointer to an entity and an amount to change the position by */
-void ST_EntityModifyPosition(st_entity *entity, s64 x, s64 y)
+void ST_EntityModifyPosition(st_entity *entity, double x, double y)
 {
   entity->xpos += x;
   entity->ypos += y;
