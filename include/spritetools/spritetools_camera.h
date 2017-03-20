@@ -22,11 +22,11 @@ typedef struct {
 } st_camera;
 
 typedef enum {
-  CFF_ROTATE_WITH_ENTITY = 0x1,
-  CFF_OFFSET_WITH_ROTATION = 0x10,
-  CFF_INVERT_SCALE_WITH_ENTITY = 0x100,
-  CFF_OFFSET_WITH_SCALE = 0x1000,
-  CFF_ALL = 0x11111111
+  CFF_ROTATE_WITH_ENTITY = 0x1,         /* Sets the camera's rotation to the followed entity's rotation */
+  CFF_OFFSET_WITH_ROTATION = 0x10,      /* Modifies the camera's offset by rotating it around the entity by the camera's rotation value */
+  CFF_INVERT_SCALE_WITH_ENTITY = 0x100, /* Sets the camera's scale to be the inverse of the followed entity's scale */
+  CFF_OFFSET_WITH_SCALE = 0x1000,       /* Modifies the camera's offset by scaling it by the camera's scale value */
+  CFF_ALL = 0x11111111                  /* For use when setting or */
 } CAMERA_FOLLOW_FLAGS;
 
 /****************************\
