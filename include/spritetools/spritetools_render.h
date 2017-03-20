@@ -233,7 +233,7 @@ u8 ST_RenderEntityMainCamera(st_entity *entity);
 /* Takes a pointer to an entity and a pointer to a camera */
 /* This version does not rotate sprites, just modifies their positions */
 /* Returns 1 on success and 0 on failure */
-u8 ST_RenderEntityCameraNoSpriteRot(st_entity *entity, st_camera *cam);
+u8 ST_RenderEntityMainCameraNoSpriteRot(st_entity *entity, st_camera *cam);
 
 #endif
 
