@@ -35,7 +35,7 @@ extern "C"{
 /*********************************\
 |*     Spritesheet Functions     *|
 \*********************************/
-/* Load spritesheet from image */
+/* Load spritesheet from image as a C file */
 /* Takes image */
 /* Returns pointer to st_spritesheet */
 st_spritesheet *ST_SpritesheetCreateSpritesheet(const unsigned char *pixel_data,
@@ -44,6 +44,31 @@ st_spritesheet *ST_SpritesheetCreateSpritesheet(const unsigned char *pixel_data,
 /* Free spritesheet */
 /* Takes st_spritesheet */
 void ST_SpritesheetFreeSpritesheet(st_spritesheet *spritesheet);
+
+#ifdef SFIL_H
+/**********************************\
+|*     SFILLIB Implimentation     *|
+\**********************************/
+/* To use these, include sfil.h before spritetools_spritesheet.h */
+/* Check out the sfillib example for an example */
+/* https://github.com/xerpi/sfillib/tree/master/sample */
+
+/* Load spritesheet from image as a PNG file */
+/* Takes buffer */
+/* Returns pointer to st_spritesheet */
+st_spritesheet *ST_SpritesheetCreateSpritesheetPNG(const void *buffer);
+
+/* Load spritesheet from image as a BMP file */
+/* Takes filename */
+/* Returns pointer to st_spritesheet */
+st_spritesheet *ST_SpritesheetCreateSpritesheetBMP(const void *buffer);
+
+/* Load spritesheet from image as a JPEG file */
+/* Takes filename */
+/* Returns pointer to st_spritesheet */
+st_spritesheet *ST_SpritesheetCreateSpritesheetJPEG(const void *buffer, unsigned long buffer_size);
+
+#endif
 
 #endif
 
