@@ -99,4 +99,12 @@ void ST_CameraMoveFollowOffsetTo(st_camera *cam, s32 x, s32 y);
 /* Takes a camera pointer */
 void ST_CameraMoveToFollow(st_camera *cam);
 
+/* Set's a camera's given follow flag to the given state */
+/* Takes a camera pointer, flag to set, and state to set the flag to */
+void ST_CameraSetFollowFlag(st_camera *cam, CAMERA_FOLLOW_FLAGS flag, bool state);
+
+/* Toggles's a camera's given follow flag */
+/* Takes a camera pointer and flag to toggle */
+void ST_CameraToggleFollowFlag(st_camera *cam, CAMERA_FOLLOW_FLAGS flag);
+
 #endif

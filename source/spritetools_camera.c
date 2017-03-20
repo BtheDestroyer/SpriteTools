@@ -166,3 +166,20 @@ void ST_CameraMoveToFollow(st_camera *cam)
   cam->x = cam->following->xpos + cam->followXOff;
   cam->x = cam->following->xpos + cam->followXOff;
 }
+
+/* Set's a camera's given follow flag to the given state */
+/* Takes a camera pointer, flag to set, and state to set the flag to */
+void ST_CameraSetFollowFlag(st_camera *cam, CAMERA_FOLLOW_FLAGS flag, bool state)
+{
+  if (state)
+    cam->followFlags |= flag;
+  else
+    cam->followFlags &= !flag;
+}
+
+/* Toggles's a camera's given follow flag */
+/* Takes a camera pointer and flag to toggle */
+void ST_CameraToggleFollowFlag(st_camera *cam, CAMERA_FOLLOW_FLAGS flag)
+{
+  ST_CameraSetFollowFlag(cam, flag, !(cam->followFlags & flag));
+}
