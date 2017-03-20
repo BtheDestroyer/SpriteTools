@@ -177,6 +177,12 @@ void ST_CameraMoveToFollow(st_camera *cam)
 
   if (ST_CameraCheckFollowFlag(cam, CFF_INVERT_SCALE_WITH_ENTITY))
     cam->zoom = (float) (1.0 / cam->following->scale);
+
+  if (ST_CameraCheckFollowFlag(cam, CFF_OFFSET_WITH_SCALE))
+  {
+    cam->x *= cam->following->scale;
+    cam->y *= cam->following->scale;
+  }
 }
 
 /* Set's a camera's given follow flag to the given state */
