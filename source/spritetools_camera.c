@@ -161,6 +161,8 @@ void ST_CameraMoveFollowOffsetTo(st_camera *cam, s32 x, s32 y)
 /* Takes a camera pointer */
 void ST_CameraMoveToFollow(st_camera *cam)
 {
+  if (!cam->following)
+    return;
   cam->x = cam->following->xpos + cam->followXOff;
   cam->x = cam->following->xpos + cam->followXOff;
 }
