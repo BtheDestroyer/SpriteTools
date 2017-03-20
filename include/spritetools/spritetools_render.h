@@ -224,6 +224,17 @@ u8 ST_RenderEntityCamera(st_entity *entity, st_camera *cam);
 /* Returns 1 on success and 0 on failure */
 u8 ST_RenderEntityCameraNoSpriteRot(st_entity *entity, st_camera *cam);
 
+/* Plays the current animation of an entity modified by a main camera's values */
+/* Takes a pointer to an entity */
+/* Returns 1 on success and 0 on failure */
+u8 ST_RenderEntityMainCamera(st_entity *entity);
+
+/* Plays the current animation of an entity modified by a main camera's values */
+/* Takes a pointer to an entity and a pointer to a camera */
+/* This version does not rotate sprites, just modifies their positions */
+/* Returns 1 on success and 0 on failure */
+u8 ST_RenderEntityCameraNoSpriteRot(st_entity *entity, st_camera *cam);
+
 #endif
 
 #ifdef __cplusplus

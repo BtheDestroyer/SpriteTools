@@ -436,6 +436,8 @@ u8 ST_RenderEntity(st_entity *entity)
 /* Returns 1 on success and 0 on failure */
 u8 ST_RenderEntityCamera(st_entity *entity, st_camera *cam)
 {
+  if (!cam)
+    return 0;
   float c = cos(cam->rotation);
   float s = sin(cam->rotation);
   int xrend = (entity->xpos - cam->x);
@@ -451,7 +453,7 @@ u8 ST_RenderEntityCamera(st_entity *entity, st_camera *cam)
     entity->scale * cam->zoom, entity->rotation + cam->rotation,
     entity->red, entity->green,
     entity->blue, entity->alpha);
-  return 0;
+  return 1;
 }
 
 /* Plays the current animation of an entity modified by a camera's values */
@@ -460,6 +462,8 @@ u8 ST_RenderEntityCamera(st_entity *entity, st_camera *cam)
 /* Returns 1 on success and 0 on failure */
 u8 ST_RenderEntityCameraNoSpriteRot(st_entity *entity, st_camera *cam)
 {
+  if (!cam)
+    return 0;
   float c = cos(cam->rotation);
   float s = sin(cam->rotation);
   int xrend = (entity->xpos - cam->x);
@@ -475,5 +479,22 @@ u8 ST_RenderEntityCameraNoSpriteRot(st_entity *entity, st_camera *cam)
     entity->scale * cam->zoom, entity->rotation,
     addu8(entity->red, cam->red), addu8(entity->green, cam->green),
     addu8(entity->blue, cam->blue), addu8(entity->alpha, cam->alpha));
-  return 0;
+  return 1;
+}
+
+/* Plays the current animation of an entity modified by a main camera's values */
+/* Takes a pointer to an entity */
+/* Returns 1 on success and 0 on failure */
+u8 ST_RenderEntityMainCamera(st_entity *entity)
+{
+  return ST_RenderEntityCamera(entity, ST_MainCameraGet());
+}
+
+/* Plays the current animation of an entity modified by a main camera's values */
+/* Takes a pointer to an entity and a pointer to a camera */
+/* This version does not rotate sprites, just modifies their positions */
+/* Returns 1 on success and 0 on failure */
+u8 ST_RenderEntityCameraNoSpriteRot(st_entity *entity, st_camera *cam)
+{
+  return ST_RenderEntityCameraNoSpriteRot(entity, ST_MainCameraGet());
 }
