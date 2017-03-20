@@ -13,6 +13,7 @@
 #define PI 3.1415926535897932384626433832795
 #endif
 
+/* Used for adding U8s and preventing underflow/overflow */
 static void addU8(u8 *lhs, u8 rhs)
 {
   if (rhs > 0)
@@ -30,6 +31,8 @@ static void addU8(u8 *lhs, u8 rhs)
       *lhs += rhs;
   }
 }
+
+static st_camera *MainCamera = NULL;
 
 /****************************\
 |*     Camera Functions     *|
@@ -207,4 +210,26 @@ void ST_CameraToggleFollowFlag(st_camera *cam, CAMERA_FOLLOW_FLAGS flag)
 u8 ST_CameraCheckFollowFlag(st_camera *cam, CAMERA_FOLLOW_FLAGS flag)
 {
   return (cam->followFlags & flag) != 0;
+}
+
+/*********************************\
+|*     Main Camera Functions     *|
+\*********************************/
+/* Sets the main camera to a given camera */
+/* Takes the camera to set it to */
+void ST_MainCameraSet(st_camera *cam)
+{
+  MainCamera = cam;
+}
+
+/* Clears the main camera */
+void ST_MainCameraClear(void)
+{
+  ST_MainCameraSet(NULL);
+}
+
+/* Returns the Main Camera */
+st_camera *ST_MainCameraGet(void)
+{
+  return MainCamera;
 }

@@ -111,4 +111,17 @@ void ST_CameraToggleFollowFlag(st_camera *cam, CAMERA_FOLLOW_FLAGS flag);
 /* Takes a camera pointer and flag to check */
 u8 ST_CameraCheckFollowFlag(st_camera *cam, CAMERA_FOLLOW_FLAGS flag);
 
+/*********************************\
+|*     Main Camera Functions     *|
+\*********************************/
+/* Sets the main camera to a given camera */
+/* Takes the camera to set it to */
+void ST_MainCameraSet(st_camera *cam);
+
+/* Clears the main camera */
+void ST_MainCameraClear(void);
+
+/* Returns the Main Camera */
+st_camera *ST_MainCameraGet(void);
+
 #endif
