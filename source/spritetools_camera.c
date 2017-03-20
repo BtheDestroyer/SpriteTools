@@ -183,3 +183,10 @@ void ST_CameraToggleFollowFlag(st_camera *cam, CAMERA_FOLLOW_FLAGS flag)
 {
   ST_CameraSetFollowFlag(cam, flag, !(cam->followFlags & flag));
 }
+
+/* Checks a camera's given follow flag. Returns 0 if it's not set and 1 if it is */
+/* Takes a camera pointer and flag to check */
+u8 ST_CameraCheckFollowFlag(st_camera *cam, CAMERA_FOLLOW_FLAGS flag)
+{
+  return (cam->followFlags & flag) != 0;
+}
