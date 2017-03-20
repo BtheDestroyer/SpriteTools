@@ -12,21 +12,6 @@
 #define PI 3.1415926535897932384626433832795
 #endif
 
-/* Takes 2 strings and compares them */
-/* Returns 1 on match, 0 on difference */
-static u8 mystrcmp(char *strA, char *strB) /* bc standard strcmp is dumb */
-{
-  while (*strA == *strB)
-  {
-    if (!(*strA))
-      return 1; /* Both strings have matched and reached \0 at the same time */
-
-    strA++, strB++;
-  }
-
-  return 0; /* One of the strings didn't match */
-}
-
 /***************************\
 |*     Entity Creation     *|
 \***************************/
@@ -172,10 +157,10 @@ void ST_EntitySetColor(st_entity *entity, u8 red, u8 green, u8 blue, u8 alpha)
 /* Returns 1 on success and 0 on failure */
 u8 ST_EntitySetDirection(st_entity *entity, char *dir)
 {
-  if (mystrcmp(dir, "east") || mystrcmp(dir, "south east") ||
-    mystrcmp(dir, "south") || mystrcmp(dir, "south west") ||
-    mystrcmp(dir, "west") || mystrcmp(dir, "north west") ||
-    mystrcmp(dir, "north") || mystrcmp(dir, "north east"))
+  if (!strcmp(dir, "east") || !strcmp(dir, "south east") ||
+    !strcmp(dir, "south") || !strcmp(dir, "south west") ||
+    !strcmp(dir, "west") || !strcmp(dir, "north west") ||
+    !strcmp(dir, "north") || !strcmp(dir, "north east"))
   {
     entity->dir = dir;
     return 1;
@@ -245,7 +230,7 @@ u8 ST_EntitySetAnimationName(st_entity *entity, char *name)
   u8 i;
   for (i = 0; i < entity->animationCount; i++)
   {
-    if (mystrcmp(entity->names[i], name))
+    if (!strcmp(entity->names[i], name))
     {
       if (entity->currentAnim != i)
       {
@@ -371,21 +356,21 @@ void ST_EntityModifyDirection(st_entity *entity, s8 dir)
     u8 i;
     for (i = 0; i < dir; i++)
     {
-      if (mystrcmp(entity->dir, "east"))
+      if (!strcmp(entity->dir, "east"))
         entity->dir = "south east";
-      else if (mystrcmp(entity->dir, "south east"))
+      else if (!strcmp(entity->dir, "south east"))
         entity->dir = "south";
-      else if (mystrcmp(entity->dir, "south"))
+      else if (!strcmp(entity->dir, "south"))
         entity->dir = "south west";
-      else if (mystrcmp(entity->dir, "south west"))
+      else if (!strcmp(entity->dir, "south west"))
         entity->dir = "west";
-      else if (mystrcmp(entity->dir, "west"))
+      else if (!strcmp(entity->dir, "west"))
         entity->dir = "north west";
-      else if (mystrcmp(entity->dir, "north west"))
+      else if (!strcmp(entity->dir, "north west"))
         entity->dir = "north";
-      else if (mystrcmp(entity->dir, "north"))
+      else if (!strcmp(entity->dir, "north"))
         entity->dir = "north east";
-      else if (mystrcmp(entity->dir, "north east"))
+      else if (!strcmp(entity->dir, "north east"))
         entity->dir = "east";
     }
   }
@@ -394,21 +379,21 @@ void ST_EntityModifyDirection(st_entity *entity, s8 dir)
     u8 i;
     for (i = 0; i > dir; i--)
     {
-      if (mystrcmp(entity->dir, "east"))
+      if (!strcmp(entity->dir, "east"))
         entity->dir = "south east";
-      else if (mystrcmp(entity->dir, "south east"))
+      else if (!strcmp(entity->dir, "south east"))
         entity->dir = "south";
-      else if (mystrcmp(entity->dir, "south"))
+      else if (!strcmp(entity->dir, "south"))
         entity->dir = "south west";
-      else if (mystrcmp(entity->dir, "south west"))
+      else if (!strcmp(entity->dir, "south west"))
         entity->dir = "west";
-      else if (mystrcmp(entity->dir, "west"))
+      else if (!strcmp(entity->dir, "west"))
         entity->dir = "north west";
-      else if (mystrcmp(entity->dir, "north west"))
+      else if (!strcmp(entity->dir, "north west"))
         entity->dir = "north";
-      else if (mystrcmp(entity->dir, "north"))
+      else if (!strcmp(entity->dir, "north"))
         entity->dir = "north east";
-      else if (mystrcmp(entity->dir, "north east"))
+      else if (!strcmp(entity->dir, "north east"))
         entity->dir = "east";
     }
   }
