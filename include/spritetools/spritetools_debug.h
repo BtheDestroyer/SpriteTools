@@ -15,7 +15,7 @@ extern "C"{
 #include <3ds/types.h>
 
 /* Current version of SpriteTools */
-#define SPRITETOOLS_VERSION "Release 2.1"
+#define SPRITETOOLS_VERSION "Release 2.2"
 
 /* Maximum number of variables that can be debugged at once */
 #define ST_DEBUG_MAX_VAR 64
