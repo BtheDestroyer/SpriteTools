@@ -18,6 +18,7 @@ extern "C"{
 /* only using spritetools functions and types means you will be able to */
 /* more easily and safely update */
 #include <sf2d.h>
+#include <sfil.h>
 
 /*******************************\
 |*     Spritesheet Defines     *|
@@ -45,7 +46,6 @@ st_spritesheet *ST_SpritesheetCreateSpritesheet(const unsigned char *pixel_data,
 /* Takes st_spritesheet */
 void ST_SpritesheetFreeSpritesheet(st_spritesheet *spritesheet);
 
-#ifdef SFIL_H
 /**********************************\
 |*     SFILLIB Implimentation     *|
 \**********************************/
@@ -67,8 +67,6 @@ st_spritesheet *ST_SpritesheetCreateSpritesheetBMP(const void *buffer);
 /* Takes filename */
 /* Returns pointer to st_spritesheet */
 st_spritesheet *ST_SpritesheetCreateSpritesheetJPEG(const void *buffer, unsigned long buffer_size);
-
-#endif
 
 #endif
 

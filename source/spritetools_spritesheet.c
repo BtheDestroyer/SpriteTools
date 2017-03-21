@@ -6,6 +6,7 @@
 
 #include <3ds.h>
 #include "spritetools/spritetools_spritesheet.h"
+#include <sfil.h>
 
 /*********************************\
 |*     Spritesheet Functions     *|
@@ -27,7 +28,6 @@ void ST_SpritesheetFreeSpritesheet(st_spritesheet *spritesheet)
   sf2d_free_texture(spritesheet);
 }
 
-#ifdef SFIL_H
 /**********************************\
 |*     SFILLIB Implimentation     *|
 \**********************************/
@@ -58,5 +58,3 @@ st_spritesheet *ST_SpritesheetCreateSpritesheetJPEG(const void *buffer, unsigned
 {
   return sfil_load_JPEG_buffer(buffer, buffer_size, SF2D_PLACE_RAM);
 }
-
-#endif
