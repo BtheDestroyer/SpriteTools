@@ -22,6 +22,7 @@ extern "C" {
 #include <spritetools/spritetools_time.h>
 #include <spritetools/spritetools_entity.h>
 #include <spritetools/spritetools_camera.h>
+#include <spritetools/spritetools_collision.h>
 
 /* Inits all modules and sets up */
 /* Returns 1 on success, 0 on failure */

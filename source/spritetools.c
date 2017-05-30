@@ -18,6 +18,8 @@ u8 ST_Init(void)
     return 0;
   if (!ST_TimeInit())
     return 0;
+  if (!ST_CollisionInit())
+    return 0;
 
   return 1;
 }
