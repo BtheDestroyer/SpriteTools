@@ -43,10 +43,12 @@ st_entity *ST_EntityCreateEntity(double x, double y, u8 animCount)
   return tempent;
 }
 
-/* Frees frame from memory */
-/* Takes a pointer to a frame */
+/* Frees entity from memory */
+/* Takes a pointer to a entity */
 void ST_EntityFreeEntity(st_entity *entity)
 {
+  if (!entity)
+    return;
   u8 i;
   for (i = 0; i < entity->animationCount; i++)
   {

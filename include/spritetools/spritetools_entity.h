@@ -44,8 +44,8 @@ typedef struct {
 /* Takes a position and number of animations */
 st_entity *ST_EntityCreateEntity(double x, double y, u8 animCount);
 
-/* Frees frame from memory */
-/* Takes a pointer to a frame */
+/* Frees entity from memory */
+/* Takes a pointer to a entity */
 void ST_EntityFreeEntity(st_entity *entity);
 
 /* Adds an animation to an entity */
