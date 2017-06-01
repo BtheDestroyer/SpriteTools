@@ -5,10 +5,19 @@
 */
 
 #include <3ds.h>
-#include <spritetools_render.h>
-#include <spritetools_entity.h>
+#include "spritetools/spritetools_render.h"
+#include "spritetools/spritetools_entity.h"
 
 static u32 st_background = 0;
+
+static u8 addu8(u8 num1, u8 num2)
+{
+  u8 newnum = num1 + num2;
+  if (num2 > 0 && num1 + num2 < num1)
+    newnum = 0xFF;
+
+  return newnum;
+}
 
 /*****************************\
 |*     General Functions     *|
@@ -59,6 +68,19 @@ void ST_RenderEndRender(void)
 gfxScreen_t ST_RenderCurrentScreen(void)
 {
   return sf2d_get_current_screen();
+}
+
+u16 ST_RenderScreenWidth(gfxScreen_t screen)
+{
+  if (screen == GFX_TOP)
+    return 400;
+  else
+    return 240;
+}
+
+u16 ST_RenderScreenHeight(void)
+{
+  return 240;
 }
 
 /* Returns current fps */
@@ -187,6 +209,10 @@ void ST_RenderSpriteAdvanced(st_spritesheet *spritesheet,
   double rotate,
   u8 red, u8 green, u8 blue, u8 alpha)
 {
+  /* This is a temporary fix until I rewrite the low level rendering (sf2d) */
+  width = (width + 1) / 2 * 2;
+  height = (height + 1) / 2 * 2;
+
   sf2d_draw_texture_part_rotate_scale_blend(spritesheet, x, y, rotate,
     xleft, ytop, width, height, scale, scale, RGBA8(red, green, blue, alpha));
 }
@@ -391,7 +417,7 @@ void ST_RenderAnimationPlayAdvanced(st_animation *animation, s64 x, s64 y,
 /****************************\
 |*     Entity Rendering     *|
 \****************************/
-/* Plays the current animation of an entity by name */
+/* Plays the current animation of an entity */
 /* Takes a pointer to an entity */
 /* Returns 1 on success and 0 on failure */
 u8 ST_RenderEntity(st_entity *entity)
@@ -409,4 +435,75 @@ u8 ST_RenderEntity(st_entity *entity)
     entity->xpos, entity->ypos);
 
   return 1;
+}
+
+/****************************\
+|*     Camera Rendering     *|
+\****************************/
+/* Plays the current animation of an entity modified by a camera's values */
+/* Takes a pointer to an entity and a pointer to a camera */
+/* Returns 1 on success and 0 on failure */
+u8 ST_RenderEntityCamera(st_entity *entity, st_camera *cam)
+{
+  if (!cam)
+    return 0;
+  float c = cos(cam->rotation);
+  float s = sin(cam->rotation);
+  int xrend = (entity->xpos - cam->x);
+  int yrend = (entity->ypos - cam->y);
+  float px2 = (float)xrend * c - (float)yrend * s;
+  float py2 = (float)xrend * s + (float)yrend * c;
+  xrend = px2 * cam->zoom + ST_RenderScreenWidth(ST_RenderCurrentScreen()) / 2;
+  yrend = py2 * cam->zoom + ST_RenderScreenHeight() / 2;
+
+  ST_RenderAnimationPlayAdvanced(entity->animations[entity->currentAnim],
+    xrend,
+    yrend,
+    entity->scale * cam->zoom, entity->rotation + cam->rotation,
+    entity->red, entity->green,
+    entity->blue, entity->alpha);
+  return 1;
+}
+
+/* Plays the current animation of an entity modified by a camera's values */
+/* Takes a pointer to an entity and a pointer to a camera */
+/* This version does not rotate sprites, just modifies their positions */
+/* Returns 1 on success and 0 on failure */
+u8 ST_RenderEntityCameraNoSpriteRot(st_entity *entity, st_camera *cam)
+{
+  if (!cam)
+    return 0;
+  float c = cos(cam->rotation);
+  float s = sin(cam->rotation);
+  int xrend = (entity->xpos - cam->x);
+  int yrend = (entity->ypos - cam->y);
+  float px2 = (float)xrend * c - (float)yrend * s;
+  float py2 = (float)xrend * s + (float)yrend * c;
+  xrend = px2 * cam->zoom + ST_RenderScreenWidth(ST_RenderCurrentScreen()) / 2;
+  yrend = py2 * cam->zoom + ST_RenderScreenHeight() / 2;
+
+  ST_RenderAnimationPlayAdvanced(entity->animations[entity->currentAnim],
+    xrend,
+    yrend,
+    entity->scale * cam->zoom, entity->rotation,
+    addu8(entity->red, cam->red), addu8(entity->green, cam->green),
+    addu8(entity->blue, cam->blue), addu8(entity->alpha, cam->alpha));
+  return 1;
+}
+
+/* Plays the current animation of an entity modified by a main camera's values */
+/* Takes a pointer to an entity */
+/* Returns 1 on success and 0 on failure */
+u8 ST_RenderEntityMainCamera(st_entity *entity)
+{
+  return ST_RenderEntityCamera(entity, ST_MainCameraGet());
+}
+
+/* Plays the current animation of an entity modified by a main camera's values */
+/* Takes a pointer to an entity */
+/* This version does not rotate sprites, just modifies their positions */
+/* Returns 1 on success and 0 on failure */
+u8 ST_RenderEntityMainCameraNoSpriteRot(st_entity *entity)
+{
+  return ST_RenderEntityCameraNoSpriteRot(entity, ST_MainCameraGet());
 }

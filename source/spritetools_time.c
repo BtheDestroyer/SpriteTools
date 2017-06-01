@@ -5,7 +5,7 @@
 */
 
 #include <3ds.h>
-#include <spritetools_time.h>
+#include "spritetools/spritetools_time.h"
 
 /* Time from January 1st, 1990 until the program was started in ms */
 static u64 ST_StartTime = 0;

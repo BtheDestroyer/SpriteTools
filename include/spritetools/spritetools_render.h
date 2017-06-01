@@ -4,13 +4,18 @@
 * https://github.com/BtheDestroyer/SpriteTools
 */
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #ifndef __spritetools_render_h
 
 #define __spritetools_render_h
 
-#include <spritetools_spritesheet.h>
-#include <spritetools_animation.h>
-#include <spritetools_entity.h>
+#include <spritetools/spritetools_spritesheet.h>
+#include <spritetools/spritetools_animation.h>
+#include <spritetools/spritetools_entity.h>
+#include <spritetools/spritetools_camera.h>
 
 /*****************************\
 |*     General Functions     *|
@@ -31,6 +36,11 @@ void ST_RenderEndRender(void);
 
 /* Returns current screen */
 gfxScreen_t ST_RenderCurrentScreen(void);
+
+/* Returns width of given screen */
+u16 ST_RenderScreenWidth(gfxScreen_t screen);
+
+u16 ST_RenderScreenHeight(void);
 
 /* Returns current fps */
 float ST_RenderFPS(void);
@@ -200,4 +210,33 @@ void ST_RenderAnimationPlayAdvanced(st_animation *animation, s64 x, s64 y,
 /* Returns 1 on success and 0 on failure */
 u8 ST_RenderEntity(st_entity *entity);
 
+/****************************\
+|*     Camera Rendering     *|
+\****************************/
+/* Plays the current animation of an entity modified by a camera's values */
+/* Takes a pointer to an entity and a pointer to a camera */
+/* Returns 1 on success and 0 on failure */
+u8 ST_RenderEntityCamera(st_entity *entity, st_camera *cam);
+
+/* Plays the current animation of an entity modified by a camera's values */
+/* Takes a pointer to an entity and a pointer to a camera */
+/* This version does not rotate sprites, just modifies their positions */
+/* Returns 1 on success and 0 on failure */
+u8 ST_RenderEntityCameraNoSpriteRot(st_entity *entity, st_camera *cam);
+
+/* Plays the current animation of an entity modified by a main camera's values */
+/* Takes a pointer to an entity */
+/* Returns 1 on success and 0 on failure */
+u8 ST_RenderEntityMainCamera(st_entity *entity);
+
+/* Plays the current animation of an entity modified by a main camera's values */
+/* Takes a pointer to an entity */
+/* This version does not rotate sprites, just modifies their positions */
+/* Returns 1 on success and 0 on failure */
+u8 ST_RenderEntityMainCameraNoSpriteRot(st_entity *entity);
+
+#endif
+
+#ifdef __cplusplus
+}
 #endif

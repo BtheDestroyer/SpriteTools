@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <spritetools_textcolors.h>
+#include "spritetools/spritetools_textcolors.h"
 
 /**************************************\
 |*     Standard Foreground Colors     *|

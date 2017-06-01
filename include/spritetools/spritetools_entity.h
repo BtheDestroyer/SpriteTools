@@ -4,11 +4,15 @@
 * https://github.com/BtheDestroyer/SpriteTools
 */
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #ifndef __spritetools_entity_h
 
 #define __spritetools_entity_h
 
-#include <spritetools_animation.h>
+#include <spritetools/spritetools_animation.h>
 
 /********************\
 |*     Typedefs     *|
@@ -40,8 +44,8 @@ typedef struct {
 /* Takes a position and number of animations */
 st_entity *ST_EntityCreateEntity(double x, double y, u8 animCount);
 
-/* Frees frame from memory */
-/* Takes a pointer to a frame */
+/* Frees entity from memory */
+/* Takes a pointer to a entity */
 void ST_EntityFreeEntity(st_entity *entity);
 
 /* Adds an animation to an entity */
@@ -209,4 +213,8 @@ void ST_EntityFlagToggle(st_entity *entity, u8 flag);
 /* Takes a pointer to an entity and the id of the flag */
 u8 ST_EntityFlagGet(st_entity *entity, u8 flag);
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif

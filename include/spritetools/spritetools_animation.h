@@ -4,11 +4,15 @@
 * https://github.com/BtheDestroyer/SpriteTools
 */
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #ifndef __spritetools_animation_h
 
 #define __spritetools_animation_h
 
-#include <spritetools_spritesheet.h>
+#include <spritetools/spritetools_spritesheet.h>
 
 /********************\
 |*     Typedefs     *|
@@ -91,4 +95,8 @@ void ST_AnimationPreviousFrame(st_animation *animation);
 /* Takes a pointer to an animation and frame to go to */
 void ST_AnimationSetSpeed(st_animation *animation, s16 speed);
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif

@@ -4,7 +4,7 @@
 * https://github.com/BtheDestroyer/SpriteTools
 */
 
-#include <spritetools.h>
+#include "spritetools.h"
 
 /* Inits all modules */
 /* Returns 1 on success, 0 on failure */
@@ -17,6 +17,8 @@ u8 ST_Init(void)
   if (!ST_RenderInit())
     return 0;
   if (!ST_TimeInit())
+    return 0;
+  if (!ST_CollisionInit())
     return 0;
 
   return 1;

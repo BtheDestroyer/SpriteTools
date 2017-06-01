@@ -6,7 +6,7 @@
 
 #include <stdlib.h>
 #include <stdarg.h>
-#include <spritetools_animation.h>
+#include "spritetools/spritetools_animation.h"
 
 /***************************\
 |*     Frame Functions     *|

@@ -4,6 +4,10 @@
 * https://github.com/BtheDestroyer/SpriteTools
 */
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #ifndef __spritetools_spritesheet_h
 
 #define __spritetools_spritesheet_h
@@ -14,6 +18,7 @@
 /* only using spritetools functions and types means you will be able to */
 /* more easily and safely update */
 #include <sf2d.h>
+#include <sfil.h>
 
 /*******************************\
 |*     Spritesheet Defines     *|
@@ -31,7 +36,7 @@
 /*********************************\
 |*     Spritesheet Functions     *|
 \*********************************/
-/* Load spritesheet from image */
+/* Load spritesheet from image as a C file */
 /* Takes image */
 /* Returns pointer to st_spritesheet */
 st_spritesheet *ST_SpritesheetCreateSpritesheet(const unsigned char *pixel_data,
@@ -41,4 +46,30 @@ st_spritesheet *ST_SpritesheetCreateSpritesheet(const unsigned char *pixel_data,
 /* Takes st_spritesheet */
 void ST_SpritesheetFreeSpritesheet(st_spritesheet *spritesheet);
 
+/**********************************\
+|*     SFILLIB Implimentation     *|
+\**********************************/
+/* To use these, include sfil.h before spritetools_spritesheet.h */
+/* Check out the sfillib example for an example */
+/* https://github.com/xerpi/sfillib/tree/master/sample */
+
+/* Load spritesheet from image as a PNG file */
+/* Takes buffer */
+/* Returns pointer to st_spritesheet */
+st_spritesheet *ST_SpritesheetCreateSpritesheetPNG(const void *buffer);
+
+/* Load spritesheet from image as a BMP file */
+/* Takes filename */
+/* Returns pointer to st_spritesheet */
+st_spritesheet *ST_SpritesheetCreateSpritesheetBMP(const void *buffer);
+
+/* Load spritesheet from image as a JPEG file */
+/* Takes filename */
+/* Returns pointer to st_spritesheet */
+st_spritesheet *ST_SpritesheetCreateSpritesheetJPEG(const void *buffer, unsigned long buffer_size);
+
+#endif
+
+#ifdef __cplusplus
+}
 #endif
