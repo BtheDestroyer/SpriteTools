@@ -18,8 +18,8 @@ typedef struct {
   st_animation **animations;
   char **names;
   char *dir;
-  s64 xpos;
-  s64 ypos;
+  double xpos;
+  double ypos;
   double scale;
   double rotation;
   u32 flags;
@@ -38,7 +38,7 @@ typedef struct {
 /* Returns a pointer to an entity */
 /*   Returns NULL if failed */
 /* Takes a position and number of animations */
-st_entity *ST_EntityCreateEntity(s64 x, s64 y, u8 animCount);
+st_entity *ST_EntityCreateEntity(double x, double y, u8 animCount);
 
 /* Frees frame from memory */
 /* Takes a pointer to a frame */
@@ -55,15 +55,15 @@ u8 ST_EntityAddAnimation(st_entity *entity, st_animation *anim, char *name);
 \**************************/
 /* Sets the x position of a given entity */
 /* Takes a pointer to an entity and a position */
-void ST_EntitySetXPosition(st_entity *entity, s64 x);
+void ST_EntitySetXPosition(st_entity *entity, double x);
 
 /* Sets the y position of a given entity */
 /* Takes a pointer to an entity and a position */
-void ST_EntitySetYPosition(st_entity *entity, s64 y);
+void ST_EntitySetYPosition(st_entity *entity, double y);
 
 /* Sets the position of a given entity */
 /* Takes a pointer to an entity and a position */
-void ST_EntitySetPosition(st_entity *entity, s64 x, s64 y);
+void ST_EntitySetPosition(st_entity *entity, double x, double y);
 
 /* Sets the scale of an entity */
 /* Takes a pointer to an entity and a scale */
@@ -126,15 +126,15 @@ u8 ST_EntitySetAnimationId(st_entity *entity, u8 id);
 \****************************/
 /* Modifies the x position of a given entity by a given amount */
 /* Takes a pointer to an entity and an amount to change the position by */
-void ST_EntityModifyXPosition(st_entity *entity, s64 x);
+void ST_EntityModifyXPosition(st_entity *entity, double x);
 
 /* Modifies the y position of a given entity by a given amount */
 /* Takes a pointer to an entity and an amount to change the position by */
-void ST_EntityModifyYPosition(st_entity *entity, s64 y);
+void ST_EntityModifyYPosition(st_entity *entity, double y);
 
 /* Modifies the position of a given entity by a given amount */
 /* Takes a pointer to an entity and an amount to change the position by */
-void ST_EntityModifyPosition(st_entity *entity, s64 x, s64 y);
+void ST_EntityModifyPosition(st_entity *entity, double x, double y);
 
 /* Modifies the scale of an entity by a given amount */
 /* Takes a pointer to an entity and a value to modify its scale by */

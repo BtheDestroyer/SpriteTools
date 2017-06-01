@@ -396,8 +396,17 @@ void ST_RenderAnimationPlayAdvanced(st_animation *animation, s64 x, s64 y,
 /* Returns 1 on success and 0 on failure */
 u8 ST_RenderEntity(st_entity *entity)
 {
+  if (entity->red != 0xFF || entity->green != 0xFF || entity->blue != 0xFF || 
+    entity->alpha != 0xFF || entity->rotation != 0.0 || entity->scale != 0.0)
+  {
     ST_RenderAnimationPlayAdvanced(entity->animations[entity->currentAnim],
       entity->xpos, entity->ypos, entity->scale, entity->rotation, entity->red,
       entity->green, entity->blue, entity->alpha);
-  return 0;
+    return 1;
+  }
+
+  ST_RenderAnimationPlay(entity->animations[entity->currentAnim],
+    entity->xpos, entity->ypos);
+
+  return 1;
 }
