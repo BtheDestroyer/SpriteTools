@@ -1,6 +1,8 @@
 # SpriteTools
 ![Icon](https://raw.githubusercontent.com/BtheDestroyer/SpriteTools/master/icon.128.png "SpriteTools icon")
 
+## NOTE: Due to the deprecation of SF2D, this project is being put on hold. I'm currently doing a lot of stuff for school and don't want to make promises I can't keep. Follow the project's twitter account (below) for more updates.
+
 ## Current Release: [Release 2.2](https://github.com/BtheDestroyer/SpriteTools/releases/tag/2.2)
 
 SpriteTools is an open source 3DS Homebrew library for C/C++. It's being developed to make the development process easier, faster, and more accessible for ourselves and other developers.
