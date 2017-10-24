@@ -1,7 +1,7 @@
 # SpriteTools
 ![Icon](https://raw.githubusercontent.com/BtheDestroyer/SpriteTools/master/icon.128.png "SpriteTools icon")
 
-## NOTE: Due to the deprecation of SF2D, this project is being put on hold. I'm currently doing a lot of stuff for school and don't want to make promises I can't keep. Follow the project's twitter account (below) for more updates.
+## NOTE: Due to the deprecation of SF2D among other things, this project is being cancelled. It will be revamped at some point next year. I'm currently doing a lot of stuff for school and don't want to make promises I can't keep. That being said, I have some *big* plans for the future. Follow the project's twitter account (below) for more updates.
 
 ## Current Release: [Release 2.2](https://github.com/BtheDestroyer/SpriteTools/releases/tag/2.2)
 
